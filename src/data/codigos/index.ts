@@ -12,12 +12,16 @@ export interface ArticuloImportado {
   texto: string;
   notas: string[];
   derogado: boolean;
+  /** Epígrafe literal (el CPPBA los trae dentro del texto del artículo). */
+  epigrafe?: string;
 }
 
 export interface CodigoImportado {
   codigo: 'CP' | 'CPPBA';
   nombre: string;
   ley: string;
+  /** "Texto actualizado con las modificaciones introducidas por las Leyes …" */
+  version?: string | null;
   fuente: string;
   ultimaReformaDetectada: string | null;
   importadoEl: string;
@@ -62,6 +66,13 @@ function epigrafeCP(a: ArticuloImportado) {
   return a.titulo?.split(' · ')[1] ?? 'Código Penal';
 }
 
+/** Rótulo de la versión del CPPBA importado (p. ej., "…Leyes 11.982 a 13.078"). */
+export function fuenteCPPBA(c: CodigoImportado): string {
+  const leyes = c.version?.match(/\d{2}\.?\d{3}/g)?.map((l) => (l.includes('.') ? l : `${l.slice(0, 2)}.${l.slice(2)}`));
+  const rango = leyes && leyes.length ? ` (texto actualizado con las Leyes ${leyes[0]} a ${leyes[leyes.length - 1]}, año 2003 aprox.)` : '';
+  return `Texto literal del documento provisto${rango}. No incluye reformas posteriores.`;
+}
+
 /** Construye el registro de artículos a partir de los códigos cargados. */
 export function construirRegistro(cp: CodigoImportado | null, cppbaOficial: CodigoImportado | null) {
   const registro = new Map<string, Articulo>();
@@ -69,20 +80,28 @@ export function construirRegistro(cp: CodigoImportado | null, cppbaOficial: Codi
   for (const a of ARTICULOS_CPPBA) registro.set(a.id, a);
 
   if (cppbaOficial) {
+    const fuente = fuenteCPPBA(cppbaOficial);
     for (const o of cppbaOficial.articulos) {
       if (o.derogado || !o.texto) continue;
       const id = idDe('cppba', o.numero);
-      const previo = registro.get(id);
+      const actualizado = registro.get(id);
       const bloque = bloqueDeArticulo(o.numero);
+      if (actualizado) {
+        // Reformado después del documento: la lección usa la versión actualizada
+        // y la tarjeta permite ver el texto literal del documento.
+        registro.set(id, { ...actualizado, textoDocumento: o.texto, notas: o.notas, fuente });
+        continue;
+      }
       registro.set(id, {
         id,
         codigo: 'CPPBA',
         numero: o.numero,
-        epigrafe: previo?.epigrafe ?? bloque?.capitulo?.split(' · ')[1] ?? bloque?.titulo.split(' · ')[1] ?? 'CPPBA',
+        epigrafe: o.epigrafe ?? bloque?.capitulo?.split(' · ')[1] ?? bloque?.titulo.split(' · ')[1] ?? 'CPPBA',
         texto: o.texto,
         fidelidad: 'oficial',
-        ubicacion: previo?.ubicacion ?? (bloque ? `${bloque.libro} · ${bloque.titulo}` : undefined),
+        ubicacion: bloque ? [bloque.libro.split(' · ')[0], bloque.titulo, bloque.capitulo].filter(Boolean).join(' · ') : undefined,
         notas: o.notas,
+        fuente,
       });
     }
   }
@@ -101,6 +120,7 @@ export function construirRegistro(cp: CodigoImportado | null, cppbaOficial: Codi
         ubicacion: ubicacionCP(a),
         notas: a.notas,
         avisoVigencia: META_CP[a.numero]?.avisoVigencia,
+        fuente: AVISO_CP_GENERAL,
       });
     }
   }

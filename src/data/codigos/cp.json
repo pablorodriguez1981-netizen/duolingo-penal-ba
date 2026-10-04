@@ -2,9 +2,10 @@
  "codigo": "CP",
  "nombre": "Código Penal de la Nación Argentina",
  "ley": "Ley 11.179 (T.O. 1984 actualizado)",
- "fuente": "PDF importado: 0dcb1453-Codigo_Penal_de_la_Republica_Argentina.pdf",
+ "version": null,
+ "fuente": "Documento importado: 0dcb1453-Codigo_Penal_de_la_Republica_Argentina.pdf",
  "ultimaReformaDetectada": "Ley 26.551 (B.O. 27/11/2009)",
- "importadoEl": "2026-10-03",
+ "importadoEl": "2026-10-04",
  "articulos": [
   {
    "numero": "1",

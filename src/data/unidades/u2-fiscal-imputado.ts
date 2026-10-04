@@ -28,7 +28,7 @@ export const U2: Unidad = {
             enLaPractica:
               'Cuando la policía de una comisaría de Quilmes detiene a alguien, inmediatamente da aviso a la UFI de turno: desde ese momento el Fiscal dirige la investigación.',
           },
-          foco: 'promoverá y ejercerá la acción penal de carácter público',
+          foco: 'promoverá y ejercerá la acción penal',
           preguntas: [
             op(
               '¿Quién practica la Investigación Penal Preparatoria en el CPPBA?',
@@ -64,18 +64,18 @@ export const U2: Unidad = {
             titulo: 'Acusar no es perseguir a cualquier costo',
             parrafos: [
               'El Fiscal debe actuar con criterio objetivo: buscar la verdad, también lo que favorece al imputado.',
-              'Por eso el código le exige pedir el sobreseimiento o la absolución cuando corresponde, y fundar específicamente sus requerimientos.',
-              'Además, en ciertos supuestos puede archivar actuaciones (por ejemplo, aplicando criterios de oportunidad previstos en el código).',
+              'Por eso el art. 56 le exige formular sus requerimientos conforme a ese criterio «aún a favor del imputado» (por ejemplo, pidiendo el sobreseimiento o la absolución), y fundarlos de manera que se basten a sí mismos.',
+              'Reformas posteriores a tu documento agregaron además criterios de oportunidad para archivar ciertos casos (art. 56 bis).',
             ],
             enLaPractica:
               'Si en el debate la prueba demuestra que el imputado actuó en legítima defensa, el Fiscal objetivo debe pedir la absolución aunque él mismo haya acusado.',
           },
-          foco: 'Adecuará sus actos a un criterio objetivo',
+          foco: 'adecuará sus actos a un criterio objetivo',
           preguntas: [
             vf(
               'El Fiscal debe pedir la absolución si la prueba favorece al imputado.',
               true,
-              'Verdadero. El criterio objetivo lo obliga a requerir el sobreseimiento o la absolución cuando corresponde.',
+              'Verdadero. El art. 56 le exige formular sus requerimientos conforme al criterio objetivo, «aún a favor del imputado».',
             ),
             comp(
               'Completá el art. 56.',
@@ -85,8 +85,8 @@ export const U2: Unidad = {
             ),
             op(
               '¿Cómo deben ser los requerimientos del Fiscal?',
-              ['Motivados y específicos', 'Verbales e informales', 'Secretos para la defensa', 'Idénticos en todas las causas'],
-              'Debe fundar sus pedidos para que la defensa pueda contradecirlos y el juez controlarlos.',
+              ['Motivados, de manera que se basten a sí mismos', 'Verbales e informales', 'Secretos para la defensa', 'Idénticos en todas las causas'],
+              'El art. 56 le exige formular motivadamente sus requerimientos y conclusiones, «de manera que se basten a sí mismos»: así la defensa puede contradecirlos y el juez controlarlos.',
             ),
           ],
         }),
@@ -161,7 +161,7 @@ export const U2: Unidad = {
           intro: {
             titulo: 'Los derechos llegan antes que la indagatoria',
             parrafos: [
-              'Para el CPPBA es imputado toda persona señalada o detenida como autora o partícipe de un delito, en cualquier acto o procedimiento.',
+              'Para el CPPBA es imputado toda persona a la que, en cualquier acto o procedimiento, se la indique o detenga como autora o partícipe de un delito.',
               'La clave: los derechos se pueden ejercer desde el primer momento de la persecución, aunque todavía nadie le haya tomado declaración ni haya una resolución formal.',
             ],
             enLaPractica:
@@ -172,7 +172,7 @@ export const U2: Unidad = {
             vf(
               'Una persona recién adquiere la calidad de imputado cuando el juez lo declara formalmente.',
               false,
-              'Falso. Basta con ser señalado o detenido como autor o partícipe en cualquier acto o procedimiento.',
+              'Falso. Basta con que se lo indique o detenga como autor o partícipe en cualquier acto o procedimiento.',
             ),
             op(
               '¿Desde cuándo puede el imputado ejercer sus derechos?',
@@ -186,9 +186,9 @@ export const U2: Unidad = {
             ),
             comp(
               'Completá.',
-              'Es imputado quien sea señalado o ___ como autor o partícipe de un delito.',
-              ['detenido', 'absuelto', 'indemnizado', 'citado como testigo'],
-              'Señalado o detenido: cualquiera de las dos situaciones activa sus derechos.',
+              'Se considerará imputado a toda persona que en cualquier acto o procedimiento se lo indique o ___ como autor o partícipe de la comisión de un delito.',
+              ['detenga', 'absuelva', 'indemnice', 'cite como testigo'],
+              'Indicado o detenido: cualquiera de las dos situaciones activa sus derechos.',
             ),
           ],
         }),
@@ -199,8 +199,8 @@ export const U2: Unidad = {
           intro: {
             titulo: 'El kit básico de derechos',
             parrafos: [
-              'La autoridad que interviene debe informarle al imputado sus garantías mínimas: saber sin demora y en un idioma que entienda de qué se lo acusa; tener un defensor de confianza o, si no, uno oficial; comunicarse en privado con él; callar sin que eso lo perjudique; y contar con intérprete si lo necesita.',
-              'Además, no puede ser sometido a técnicas que afecten su voluntad (amenazas, presiones, engaños).',
+              'Desde la detención (o desde la primera diligencia, si el delito no admite detención), la autoridad debe informarle sus garantías mínimas: 1) saber sin demora, en un idioma que comprenda y en detalle, de qué se lo acusa; 2) comunicarse libremente con un abogado de su elección o con el Defensor Oficial; 3) que no está obligado a declarar contra sí mismo ni a confesarse culpable; 4) sus derechos frente al responsable civil y la aseguradora, si los hubiera.',
+              'Si está detenido, puede presentar sus pedidos ante quien lo custodia, que debe comunicarlos de inmediato al órgano que interviene.',
             ],
             enLaPractica:
               'Si el imputado sólo habla guaraní, la declaración ante la UFI debe hacerse con intérprete. Sin él, el acto puede ser nulo.',
@@ -211,7 +211,7 @@ export const U2: Unidad = {
               [
                 'Ser obligado a declarar bajo juramento de decir verdad',
                 'Ser informado de la imputación en un idioma que comprenda',
-                'Comunicarse en privado con su defensor',
+                'Comunicarse libremente con un abogado de su elección',
                 'Abstenerse de declarar',
               ],
               'El imputado nunca declara bajo juramento: hacerlo violaría la garantía contra la autoincriminación (art. 18 CN).',
@@ -219,7 +219,7 @@ export const U2: Unidad = {
             vf(
               'Si el imputado elige callar, el tribunal puede tomar ese silencio como indicio de culpabilidad.',
               false,
-              'Falso. El silencio es un derecho y no puede generar presunción en su contra.',
+              'Falso. El art. 60 le garantiza que no está obligado a declarar contra sí mismo: su silencio no puede usarse como indicio de culpabilidad.',
             ),
             op(
               'Una persona no puede pagar un abogado. ¿Qué pasa?',
@@ -229,7 +229,7 @@ export const U2: Unidad = {
                 'Se suspende el proceso hasta que consiga dinero',
                 'La víctima le paga el abogado',
               ],
-              'El derecho de defensa técnica es irrenunciable en la práctica: si no hay defensor de confianza, interviene la defensa oficial.',
+              'El art. 60 inc. 2 le asegura el derecho a ser asistido y comunicarse con el Defensor Oficial si no tiene un abogado de confianza.',
             ),
             comp(
               'Completá.',
@@ -261,9 +261,9 @@ export const U2: Unidad = {
           intro: {
             titulo: 'La declaración del imputado',
             parrafos: [
-              'Cuando hay motivos suficientes para sospechar que una persona participó en un delito, el Fiscal debe recibirle declaración.',
-              'Si está detenida, la regla es la inmediatez: a más tardar dentro de las 24 horas desde que fue puesta a disposición del Fiscal, con una prórroga posible por otro tanto en supuestos puntuales.',
-              'En el sistema bonaerense, la declaración la recibe el Fiscal (no el juez).',
+              'Cuando existen elementos suficientes o indicios vehementes de un delito y motivo bastante para sospechar que una persona participó, el Fiscal debe recibirle declaración, previa notificación al defensor.',
+              'Si está aprehendida o detenida, la regla es la inmediatez: a más tardar dentro de las 24 horas desde que se produjo la restricción de la libertad, prorrogables por otro tanto si el Fiscal no pudo recibirla o si el imputado lo pide para proponer defensor.',
+              'En el sistema bonaerense la declaración la recibe el Fiscal; si el imputado lo pide motivadamente, puede declarar ante el Juez de Garantías.',
             ],
             enLaPractica:
               'Un aprehendido en flagrancia un viernes a la noche debe ser llevado ante la UFI para declarar dentro del plazo legal, aunque sea fin de semana: el turno no se interrumpe.',
@@ -273,18 +273,18 @@ export const U2: Unidad = {
             op(
               '¿Quién recibe la declaración del imputado en el CPPBA?',
               ['El Agente Fiscal', 'El Juez de Garantías', 'El comisario', 'El Tribunal en lo Criminal'],
-              'El art. 308 pone ese acto en cabeza del Fiscal, coherente con su rol de director de la IPP.',
+              'El art. 308 pone ese acto en cabeza del Fiscal, coherente con su rol de director de la IPP (salvo que el imputado pida motivadamente declarar ante el Juez de Garantías).',
             ),
             comp(
               'Completá el plazo para el detenido.',
-              'Deberá recibírsele declaración a más tardar dentro de las ___ desde que fue puesto a disposición del Fiscal.',
+              'Cuando el imputado se encuentre aprehendido o detenido, el acto deberá cumplirse inmediatamente o a más tardar dentro de las ___ desde el momento en que se produjo la restricción de la libertad.',
               ['veinticuatro (24) horas', 'setenta y dos (72) horas', 'diez (10) días', 'dos (2) horas'],
-              'La regla es 24 horas, prorrogables por otro tanto en casos excepcionales.',
+              'La regla es 24 horas desde la restricción de la libertad, prorrogables por otro tanto en los supuestos del art. 308.',
             ),
             vf(
               'Para citar a declarar al imputado basta una mera intuición del Fiscal.',
               false,
-              'Falso. Se requieren motivos suficientes para sospechar su participación en el delito.',
+              'Falso. Se requieren elementos suficientes o indicios vehementes de la perpetración de un delito y motivo bastante para sospechar de su participación.',
             ),
           ],
         }),
@@ -296,18 +296,18 @@ export const U2: Unidad = {
             titulo: 'Un acto de defensa, no de confesión',
             parrafos: [
               'La declaración del imputado es, ante todo, un medio de defensa: allí conoce el hecho y la prueba en su contra y decide si habla o calla.',
-              'Debe recibirse con el defensor presente, bajo pena de nulidad. Y nunca bajo juramento, coacción, amenaza o engaño.',
+              'Debe recibirse previa notificación al defensor, bajo sanción de nulidad, y ningún interrogatorio puede tomarse en cuenta si el abogado no pudo asesorarlo sobre si le conviene declarar. Nunca bajo juramento, coacción, amenaza o engaño.',
               'Una «declaración» tomada por la policía sin defensor no vale como declaración del imputado.',
             ],
             enLaPractica:
               'Si en la comisaría le hacen firmar a un detenido una «declaración espontánea» autoincriminatoria sin abogado, la defensa pide su nulidad y exclusión.',
           },
-          foco: 'La declaración se recibirá con la presencia del defensor, bajo sanción de nulidad.',
+          foco: 'previa notificación al Defensor bajo sanción de nulidad',
           preguntas: [
             op(
-              '¿Qué consecuencia tiene recibir la declaración sin defensor?',
+              '¿Qué pasa si se le recibe declaración sin notificar previamente al defensor?',
               ['Es nula', 'Es válida si el imputado firmó', 'Es válida si el delito es grave', 'Sólo genera una multa al Fiscal'],
-              'La presencia del defensor es requisito bajo sanción de nulidad.',
+              'El art. 308 exige la notificación previa al defensor bajo sanción de nulidad, y no vale ningún interrogatorio si el abogado no pudo asesorarlo.',
             ),
             vf(
               'El imputado declara bajo juramento de decir verdad.',
@@ -317,7 +317,7 @@ export const U2: Unidad = {
             ord(
               'Ordená cómo se desarrolla la declaración:',
               [
-                'Se verifica la presencia del defensor',
+                'Se notifica al defensor, que lo asesora antes del acto',
                 'Se le informa el hecho atribuido y la prueba en su contra',
                 'Se le hace saber que puede abstenerse de declarar',
                 'El imputado decide si declara o calla',

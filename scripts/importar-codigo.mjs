@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 /**
- * Importa el articulado de un código desde un PDF (o un .txt extraído con
- * `pdftotext -layout`) y lo guarda como JSON en src/data/codigos/.
+ * Importa el articulado de un código desde un PDF, un .docx o un .txt y lo
+ * guarda como JSON en src/data/codigos/.
  *
  * Uso:
  *   node scripts/importar-codigo.mjs --codigo CP    --pdf Codigo_Penal.pdf
- *   node scripts/importar-codigo.mjs --codigo CPPBA --pdf Ley_11922.pdf
+ *   node scripts/importar-codigo.mjs --codigo CPPBA --docx Ley_11922.docx
  *   node scripts/importar-codigo.mjs --codigo CPPBA --txt cppba.txt
+ *
+ * Requiere `pdftotext` (poppler-utils) para PDF y `python3` para .docx.
  *
  * El texto de cada artículo se conserva literal: sólo se reconstruyen los
  * párrafos cortados por el salto de línea del PDF y se separan las notas de
@@ -26,10 +28,13 @@ const args = Object.fromEntries(
 );
 
 const codigo = (args.codigo || '').toUpperCase();
-if (!['CP', 'CPPBA'].includes(codigo) || (!args.pdf && !args.txt)) {
-  console.error('Uso: node scripts/importar-codigo.mjs --codigo CP|CPPBA --pdf archivo.pdf | --txt archivo.txt');
+if (!['CP', 'CPPBA'].includes(codigo) || (!args.pdf && !args.txt && !args.docx)) {
+  console.error('Uso: node scripts/importar-codigo.mjs --codigo CP|CPPBA --pdf archivo.pdf | --docx archivo.docx | --txt archivo.txt');
   process.exit(1);
 }
+
+/** En PDF (pdftotext -layout) los encabezados se reconocen por estar centrados; en texto plano, por su forma. */
+const modoPlano = !args.pdf;
 
 const META = {
   CP: {
@@ -83,6 +88,12 @@ export function ordenDe(numero) {
 
 function extraerTexto() {
   if (args.txt) return readFileSync(args.txt, 'utf8');
+  if (args.docx) {
+    return execFileSync('python3', [resolve(raiz, 'scripts/docx-a-texto.py'), args.docx], {
+      encoding: 'utf8',
+      maxBuffer: 64 * 1024 * 1024,
+    });
+  }
   return execFileSync('pdftotext', ['-layout', '-enc', 'UTF-8', args.pdf, '-'], {
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,
@@ -119,7 +130,33 @@ function parsear(texto) {
     parrafo = [];
   };
 
+  let previaEsEncabezado = false;
   for (const original of lineas) {
+    if (modoPlano) {
+      const l = limpiarLinea(original);
+      if (!l) {
+        cerrarParrafo();
+        continue;
+      }
+      // Fin del articulado: fórmula de promulgación o notas finales.
+      if (/^(Dada en la Sala|REGISTRADA bajo|NOTA\s*:)/i.test(l)) {
+        cerrarParrafo();
+        actual = null;
+        continue;
+      }
+      if (!RE_ARTICULO.test(l)) {
+        const esEncabezado =
+          /^(LIBRO|T[IÍ]TULO|CAP[IÍ]TULO|Cap[ií]tulo|SECCI[OÓ]N|Secci[oó]n)\b/.test(l) ||
+          (/[A-ZÁÉÍÓÚÑ]/.test(l) && !/[a-záéíóúñ]/.test(l) && l.length <= 140) ||
+          (previaEsEncabezado && l.length <= 90 && !/[.:;]$/.test(l) && !/^\d/.test(l));
+        if (esEncabezado) {
+          cerrarParrafo();
+          previaEsEncabezado = true;
+          continue;
+        }
+      }
+      previaEsEncabezado = false;
+    }
     const cap = original.match(RE_CAPITULO);
     if (cap) {
       cerrarParrafo();
@@ -201,12 +238,43 @@ function normalizar(articulos) {
       )
       .map((p) => p.replace(/\s+/g, ' ').replace(/^[-–—.\s]+/, '').replace(/\.-$/, '.').trim())
       .filter((p) => p && !/^Ver Antecedentes Normativos$/i.test(p));
-    const texto = parrafos.join('\n\n');
-    const derogado = !texto || /^derogado\.?$/i.test(texto) || /^\(?\s*art[ií]culo derogado/i.test(texto) || (notas.some((n) => /derogad/i.test(n)) && texto.length < 5);
+    // CPPBA: "(Texto según Ley 12.059) Acción pública.- La acción penal..." → nota + epígrafe + texto.
+    let epigrafe = null;
+    if (parrafos.length) {
+      let primero = parrafos[0];
+      const segun = primero.match(/^\(\s*(Texto(?:\s+seg[uú]n)?\s+Ley[^)]*|Texto seg[uú]n[^)]*|Incorporado[^)]*|Sustituido[^)]*)\)\s*[-–.]*\s*/i);
+      if (segun) {
+        notas.unshift(segun[1].replace(/\s+/g, ' ').trim());
+        primero = primero.slice(segun[0].length);
+      }
+      const conGuion = primero.match(/^([^.]{0,40}?[A-ZÁÉÍÓÚÑ][^]{2,170}?)\s*\.\s*-\s*(?=\S)/);
+      const corto = primero.match(/^([A-ZÁÉÍÓÚÑ][^.:;]{2,90}?)\.\s+(?=[A-ZÁÉÍÓÚÑ(])/);
+      const mayusculas = primero.match(/^([A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ ]{2,40}?)\s*:\s*/);
+      const soloGuion = primero.match(/^([A-ZÁÉÍÓÚÑ][^.:;]{2,90}?)-\s+(?=[A-ZÁÉÍÓÚÑ])/);
+      if (codigo === 'CPPBA' && mayusculas) {
+        const e = mayusculas[1].trim().toLowerCase();
+        epigrafe = e.charAt(0).toUpperCase() + e.slice(1);
+        primero = primero.slice(mayusculas[0].length);
+      } else if (codigo === 'CPPBA' && conGuion && !/\b(será|podrá|deberá|se\s+\w+rá)\b/i.test(conGuion[1])) {
+        epigrafe = conGuion[1].trim();
+        primero = primero.slice(conGuion[0].length);
+      } else if (codigo === 'CPPBA' && corto && corto[1].split(/\s+/).length <= 10) {
+        epigrafe = corto[1].trim();
+        primero = primero.slice(corto[0].length);
+      } else if (codigo === 'CPPBA' && soloGuion && soloGuion[1].split(/\s+/).length <= 8) {
+        epigrafe = soloGuion[1].trim();
+        primero = primero.slice(soloGuion[0].length);
+      }
+      parrafos[0] = primero.replace(/^[-–—.\s]+/, '');
+      if (!parrafos[0]) parrafos.shift();
+    }
+    const texto = parrafos.join('\n\n').replace(/\s*\.-$/, '.');
+    const derogado = !texto || /^\(?\s*derogado\b/i.test(texto) || /^\(?\s*art[ií]culo derogado/i.test(texto) || (notas.some((n) => /derogad/i.test(n)) && texto.length < 5);
     const ubicacion = codigo === 'CP' ? ubicarCP(a.numero) : { libro: null, titulo: null };
     resultado.push({
       numero: a.numero,
       orden: ordenDe(a.numero),
+      ...(epigrafe ? { epigrafe } : {}),
       ...ubicacion,
       capitulo: a.capitulo,
       texto,
@@ -229,10 +297,14 @@ const ultimaReforma = [...texto.matchAll(/Ley N?°?\s*(\d{2}\.\d{3})[^)]{0,40}?B
   .map((m) => ({ ley: m[1], fecha: m[2], n: Number(m[1].replace('.', '')) }))
   .sort((a, b) => b.n - a.n)[0];
 
+// "(Texto actualizado con las modificaciones introducidas por las Leyes ...)" al inicio del documento.
+const version = texto.slice(0, 3000).match(/\(\s*(Texto\s+actualizado[^)]+)\)/i)?.[1].replace(/\s+/g, ' ').replace(/\s+,/g, ',').trim() ?? null;
+
 const salida = {
   codigo,
   ...META[codigo],
-  fuente: args.pdf ? `PDF importado: ${args.pdf.split('/').pop()}` : 'Texto importado',
+  version,
+  fuente: `Documento importado: ${(args.pdf ?? args.docx ?? args.txt).split('/').pop()}`,
   ultimaReformaDetectada: ultimaReforma ? `Ley ${ultimaReforma.ley} (B.O. ${ultimaReforma.fecha})` : null,
   importadoEl: new Date().toISOString().slice(0, 10),
   articulos,

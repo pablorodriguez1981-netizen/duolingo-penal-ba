@@ -258,7 +258,7 @@ export const GLOSARIO: TerminoGlosario[] = [
     'sana-critica',
     'Sana crítica',
     ['sana crítica racional'],
-    'Sistema de valoración de la prueba: el juez es libre de convencerse, pero debe razonar según la lógica, la experiencia y la ciencia, y explicar por qué.',
+    'Forma de valorar la prueba: el juez es libre de convencerse, pero debe explicar razonadamente por qué (lógica, experiencia y ciencia). El art. 210 CPPBA exige «la convicción sincera» con «desarrollo escrito de las razones».',
     'Art. 210 CPPBA',
   ),
   t(
@@ -328,7 +328,7 @@ export const GLOSARIO: TerminoGlosario[] = [
     'juicio-abreviado',
     'Juicio abreviado',
     ['abreviado'],
-    'Acuerdo entre Fiscal, imputado y defensor sobre el hecho, la calificación y la pena, que evita el debate. El tribunal no puede imponer una pena mayor a la acordada.',
+    'Acuerdo entre Fiscal, imputado y defensor sobre la calificación y la pena, que evita el debate. El tribunal puede absolver, pero no imponer una pena superior a la pedida por el Fiscal.',
     'Arts. 395 a 403 CPPBA',
   ),
   t(
@@ -349,7 +349,7 @@ export const GLOSARIO: TerminoGlosario[] = [
     'casacion',
     'Recurso de casación',
     ['casación'],
-    'Recurso contra sentencias definitivas por errónea aplicación de la ley de fondo o por violación de formas procesales esenciales. Desde el fallo «Casal», debe permitir una revisión amplia de la condena.',
+    'Recurso contra sentencias definitivas por inobservancia o errónea aplicación de un precepto legal o de la doctrina jurisprudencial, o por nuevos hechos o pruebas (art. 448). Se interpone en 20 días. Desde el fallo «Casal», debe permitir una revisión amplia de la condena.',
     'Arts. 448 y ss. CPPBA',
   ),
   t(

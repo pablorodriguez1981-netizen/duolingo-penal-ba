@@ -58,7 +58,7 @@ export const U4: Unidad = {
             op(
               'Una persona se entera de que la investigan por una causa determinada y teme ser detenida. ¿Qué puede pedir?',
               ['La eximición de prisión', 'La excarcelación', 'La casación', 'El juicio abreviado'],
-              'El art. 185 permite pedir la eximición de prisión a quien considera que puede ser imputado en una causa determinada.',
+              'El art. 185 permite pedir la eximición de prisión a toda persona que se considere imputada en una causa penal determinada; se resuelve en tres días.',
             ),
           ],
         }),

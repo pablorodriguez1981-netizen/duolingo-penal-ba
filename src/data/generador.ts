@@ -399,6 +399,8 @@ function leccionDeBloque(b: BloqueCPPBA, idLeccion: string): Leccion {
 // Módulos
 // ---------------------------------------------------------------------------
 
+const rango = (desde: string, hasta: string) => (desde === hasta ? `art. ${desde}` : `arts. ${desde} a ${hasta}`);
+
 function slug(s: string) {
   return s
     .toLowerCase()
@@ -437,7 +439,7 @@ function plantillasCP(excluir: Set<string>): Plantilla[] {
       out.push({
         id,
         titulo: `${nombre}${partes.length > 1 ? ` (${i + 1}/${partes.length})` : ''}`,
-        subtitulo: `Código Penal · arts. ${parte[0].numero} a ${parte[parte.length - 1].numero}`,
+        subtitulo: `Código Penal · ${rango(parte[0].numero, parte[parte.length - 1].numero)}`,
         etapa: lista[0].libro?.startsWith('Libro Segundo') ? 'Código Penal · Parte especial' : 'Código Penal · Parte general',
         icono: '📕',
         aviso: 'Módulo generado a partir del texto literal del Código Penal (PDF provisto, actualizado a 2009).',
@@ -481,10 +483,10 @@ function plantillasCPPBA(excluir: Set<string>): Plantilla[] {
         out.push({
           id,
           titulo: `${nombreBloque(b)}${partes.length > 1 ? ` (${i + 1}/${partes.length})` : ''}`,
-          subtitulo: `CPPBA · arts. ${parte[0].numero} a ${parte[parte.length - 1].numero}`,
+          subtitulo: `CPPBA · ${rango(parte[0].numero, parte[parte.length - 1].numero)}`,
           etapa: b.libro,
           icono: '📘',
-          aviso: 'Módulo generado a partir del texto oficial importado del CPPBA.',
+          aviso: 'Módulo generado a partir del texto literal del CPPBA que cargaste (versión 2003): puede no reflejar reformas posteriores.',
           temas: () => {
             const vecinos = delBloque.map((p) => articulo(idDe('cppba', p.numero))).filter((x): x is Articulo => !!x);
             return parte

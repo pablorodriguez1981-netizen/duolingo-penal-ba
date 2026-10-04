@@ -22,7 +22,7 @@ export const U7: Unidad = {
             titulo: 'El corazón del proceso',
             parrafos: [
               'El debate es oral y público, bajo sanción de nulidad. La prueba se produce frente a los jueces, que escuchan directamente a testigos y peritos (inmediación), y las partes pueden contradecirla.',
-              'La publicidad permite el control ciudadano. Pero el tribunal puede disponer, incluso de oficio, que el debate sea total o parcialmente a puertas cerradas cuando la publicidad afecte la moral pública, la intimidad de las partes o víctimas, el orden público o la seguridad.',
+              'La publicidad permite el control ciudadano. Pero el tribunal puede resolver que el debate sea total o parcialmente a puertas cerradas cuando la publicidad pudiere afectar el normal desarrollo del juicio, la moral, la intimidad de la víctima o de un testigo, o por razones de seguridad. En caso de duda, siempre se está por la publicidad, y la prensa no puede ser excluida fuera de esos supuestos.',
             ],
             enLaPractica:
               'En un juicio con una víctima menor de edad, el Tribunal en lo Criminal puede cerrar la sala sólo durante su declaración y reabrirla después.',
@@ -37,11 +37,16 @@ export const U7: Unidad = {
             vf(
               'El tribunal puede ordenar que una parte del debate se haga a puertas cerradas para proteger la intimidad de una víctima.',
               true,
-              'Verdadero: es una de las causales del art. 342, y puede disponerse de oficio.',
+              'Verdadero: la intimidad de la víctima o de un testigo es una de las causales del art. 342.',
+            ),
+            vf(
+              'En caso de duda, debe estarse por la publicidad del debate.',
+              true,
+              'Verdadero: lo dice expresamente el art. 342.',
             ),
             comp(
               'Completá.',
-              'Desaparecida la causa de la clausura, se deberá permitir el acceso al ___.',
+              'Desaparecido el motivo de la resolución, se permitirá el acceso del ___.',
               ['público', 'imputado', 'fiscal', 'perito'],
               'La clausura dura sólo lo necesario.',
             ),
@@ -54,7 +59,7 @@ export const U7: Unidad = {
           intro: {
             titulo: 'El recorrido del juicio común',
             parrafos: [
-              'Recibida la causa, las partes ofrecen la prueba. En la audiencia preliminar (art. 338) se depura: se admite o rechaza prueba y se discuten nulidades y la validez constitucional de los actos de la IPP.',
+              'Recibida la causa e integrado el tribunal, las partes tienen diez días para recusar y ofrecer prueba. En la audiencia preliminar (art. 338) se depura la prueba y se discuten las nulidades y la validez constitucional de los actos de la IPP.',
               'Luego viene el debate: apertura, declaración del imputado (si quiere), recepción de la prueba, alegatos finales y última palabra del imputado.',
               'Si en el debate surge un hecho nuevo que integra el delito, el Fiscal puede ampliar la acusación, pero respetando el derecho de defensa (principio de congruencia).',
             ],
@@ -109,14 +114,14 @@ export const U7: Unidad = {
           intro: {
             titulo: 'Un orden lógico para decidir',
             parrafos: [
-              'Terminado el debate, los jueces deliberan en secreto y votan las cuestiones esenciales en este orden: 1) existencia del hecho; 2) participación del procesado; 3) eximentes; 4) atenuantes; 5) agravantes.',
-              'Cada cuestión depende de la anterior: si el hecho no existió, no tiene sentido discutir la participación; si hay una eximente, no hay pena que graduar.',
-              'Las cuestiones se deciden por mayoría y la prueba se valora según la sana crítica.',
+              'Terminado el debate, el tribunal delibera en sesión secreta (su quebrantamiento es causal de nulidad) y vota las cuestiones esenciales: 1) existencia del hecho en su exteriorización material; 2) participación de los procesados; 3) eximentes; 4) atenuantes; 5) agravantes.',
+              'Cada cuestión depende de la anterior: si se resuelve negativamente la primera o la segunda, o afirmativamente la tercera, no se tratan las demás.',
+              'Si el veredicto es absolutorio, se ordena la libertad del imputado y el cese de las restricciones.',
             ],
             enLaPractica:
               'Las sentencias de los Tribunales en lo Criminal bonaerenses se estructuran siguiendo estas cuestiones: «Primera cuestión: ¿Está probada la existencia del hecho…?»',
           },
-          foco: 'plantearán y votarán las cuestiones esenciales en el siguiente orden',
+          foco: 'El Tribunal procederá a plantear y votar las cuestiones esenciales referidas a',
           preguntas: [
             ord(
               'Ordená las cuestiones del veredicto (art. 371):',
@@ -135,9 +140,9 @@ export const U7: Unidad = {
               'El orden es lógico y escalonado.',
             ),
             vf(
-              'Las cuestiones del veredicto se deciden por mayoría de votos.',
+              'Si el tribunal resuelve que hubo una eximente (tercera cuestión), no trata atenuantes ni agravantes.',
               true,
-              'Verdadero en el tribunal técnico (colegiado). En el juicio por jurados rigen reglas propias.',
+              'Verdadero: el art. 371 dispone que, resuelta afirmativamente la tercera cuestión, no se tratan las demás.',
             ),
           ],
         }),
@@ -150,7 +155,7 @@ export const U7: Unidad = {
             parrafos: [
               'El veredicto puede ser absolutorio o condenatorio. Si es condenatorio, se dicta luego la sentencia con la pena (a veces en una audiencia separada: la cesura del juicio).',
               'Según la doctrina «Tarifeño»/«Mostaccio», si el Fiscal pide la absolución en el alegato y no hay otro acusador, el tribunal no puede condenar.',
-              'Además, en la Provincia los delitos con pena máxima superior a 15 años se juzgan, como regla, por jurados populares (Ley 14.543).',
+              'Además, una reforma posterior a tu documento (Ley 14.543) estableció que los delitos con pena máxima superior a 15 años se juzgan, como regla, por jurados populares.',
             ],
           },
           preguntas: [

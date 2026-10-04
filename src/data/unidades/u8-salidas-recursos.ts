@@ -22,7 +22,7 @@ export const U8: Unidad = {
             parrafos: [
               'Si el Fiscal estima suficiente una pena privativa de libertad no mayor de 15 años (o una pena no privativa, aun conjunta), puede proponer el juicio abreviado. El imputado y su defensor también pueden pedirlo.',
               'Hace falta acuerdo de los tres: Fiscal, imputado y defensor. El imputado presta conformidad con el hecho, su participación, la calificación y la pena.',
-              'Ojo con versiones viejas del código: el tope original era menor (8 años) y fue elevado a 15.',
+              'Ojo: tu documento (versión 2003) dice 8 años; las reformas posteriores lo elevaron a 15. En la tarjeta de lectura podés ver las dos versiones.',
             ],
             enLaPractica:
               'En los departamentos judiciales bonaerenses, una gran parte de las condenas se dicta por juicio abreviado. Por eso es clave que la defensa explique al imputado qué está firmando.',
@@ -33,7 +33,7 @@ export const U8: Unidad = {
               'Completá el art. 395.',
               'Procede si el Fiscal estima suficiente una pena privativa de la libertad no mayor de ___.',
               ['quince (15) años', 'tres (3) años', 'ocho (8) años', 'veinticinco (25) años'],
-              'El tope actual es de 15 años (versiones antiguas del código decían 8).',
+              'El tope actual es de 15 años (tu documento, versión 2003, dice 8).',
             ),
             op(
               '¿Quiénes deben estar de acuerdo para el juicio abreviado?',
@@ -54,31 +54,36 @@ export const U8: Unidad = {
           intro: {
             titulo: 'El techo es la pena acordada',
             parrafos: [
-              'El tribunal controla el acuerdo: verifica que el imputado lo prestó libremente y conociendo sus consecuencias, y puede rechazarlo si no corresponde.',
-              'Si lo admite, dicta sentencia sobre la base de la prueba reunida en la IPP. Puede absolver, pero si condena no puede imponer una pena mayor que la acordada.',
-              'El imputado renuncia al debate oral, pero no a recurrir la sentencia.',
+              'Formalizado el acuerdo, el Juez de Garantías remite la causa al Tribunal o al Juez Correccional, que puede desestimarlo (resolución inimpugnable) o admitirlo (art. 398).',
+              'Si lo admite, dicta sentencia en cinco días, fundada en las constancias de la IPP. Puede absolver, pero no puede imponer una pena superior a la solicitada por el Fiscal (art. 399).',
+              'Si el acuerdo se desestima, nada de lo que admitió el imputado puede usarse en su contra. Y contra la sentencia procede el recurso de casación (art. 401).',
             ],
           },
           preguntas: [
             op(
-              'El acuerdo fija 3 años de prisión. ¿Puede el tribunal imponer 4?',
-              ['No: no puede superar la pena acordada', 'Sí, si lo considera justo', 'Sí, si la víctima lo pide', 'Sí, sumando un año por cada agravante'],
-              'La pena acordada funciona como techo.',
+              'El Fiscal pidió 3 años y el imputado prestó conformidad. ¿Puede el tribunal imponer 4?',
+              ['No: no puede superar la pena solicitada por el Fiscal', 'Sí, si lo considera justo', 'Sí, si la víctima lo pide', 'Sí, sumando un año por cada agravante'],
+              'Art. 399: «No se podrá imponer una pena superior a la pena solicitada por el Agente Fiscal».',
             ),
             vf(
               'En un juicio abreviado el tribunal puede absolver.',
               true,
-              'Verdadero: el acuerdo no obliga a condenar si la prueba no lo sostiene.',
+              'Verdadero: el art. 399 lo prevé expresamente («se podrá absolver al imputado cuando así correspondiere»).',
             ),
             ord(
               'Ordená el trámite del abreviado:',
               [
-                'Acuerdo entre Fiscal, imputado y defensor',
-                'Audiencia de conocimiento personal del imputado',
-                'El tribunal admite o rechaza el acuerdo',
-                'Sentencia, que no puede superar la pena acordada',
+                'Acuerdo de Fiscal, imputado y defensor sobre pena y calificación',
+                'El Juez de Garantías remite la causa al Tribunal o Juez Correccional',
+                'El tribunal admite o desestima el acuerdo',
+                'Sentencia en cinco días, sin superar la pena pedida por el Fiscal',
               ],
-              'El control judicial de la voluntad del imputado es esencial.',
+              'Es el trámite de los arts. 396 a 399.',
+            ),
+            vf(
+              'Si el tribunal desestima el juicio abreviado, las admisiones del imputado pueden usarse en su contra en el juicio común.',
+              false,
+              'Falso. El art. 398 dispone que ninguna conformidad o admisión podrá tomarse en su contra como reconocimiento de culpabilidad.',
             ),
           ],
         }),
@@ -193,14 +198,14 @@ export const U8: Unidad = {
           intro: {
             titulo: 'La revisión de la sentencia',
             parrafos: [
-              'El recurso de casación se dirige contra sentencias definitivas y se resuelve en el Tribunal de Casación Penal de la Provincia.',
-              'Motivos clásicos: 1) inobservancia o errónea aplicación de la ley sustantiva (por ejemplo, calificar como robo un hurto) o de la doctrina jurisprudencial; 2) inobservancia de normas procesales previstas bajo pena de inadmisibilidad, caducidad o nulidad, con reclamo oportuno de subsanación (salvo nulidades absolutas).',
-              'Se interpone por escrito fundado dentro de 20 días.',
+              'El recurso de casación procede contra sentencias definitivas y ciertos autos que ponen fin a la acción o a la pena (art. 450), y lo resuelve el Tribunal de Casación Penal.',
+              'Motivos del art. 448: 1) inobservancia o errónea aplicación de un precepto legal o de la doctrina jurisprudencial (si es un defecto del procedimiento, hay que haber reclamado su subsanación o hecho protesta de recurrir); 2) nuevos hechos o elementos de prueba que evidencien que el hecho no existió o que el imputado no lo cometió.',
+              'Plazo (art. 451): escrito fundado dentro de 20 días de notificada la resolución, manifestando la intención de recurrir dentro de los primeros 7 días.',
             ],
             enLaPractica:
-              'Si un Tribunal en lo Criminal aplicó la agravante de arma (art. 166 inc. 2) a un objeto que no lo era, la defensa recurre en casación por errónea aplicación de la ley sustantiva.',
+              'Si un Tribunal en lo Criminal aplicó la agravante de arma (art. 166 inc. 2 CP) a un objeto que no lo era, la defensa recurre en casación por errónea aplicación de un precepto legal.',
           },
-          foco: 'La inobservancia o errónea aplicación de la ley sustantiva',
+          foco: 'Inobservancia o errónea aplicación de un precepto legal o de la doctrina jurisprudencial',
           preguntas: [
             op(
               '¿Ante qué tribunal se resuelve el recurso de casación en la Provincia?',
@@ -208,20 +213,25 @@ export const U8: Unidad = {
               'El Tribunal de Casación Penal bonaerense es el órgano de casación.',
             ),
             comp(
-              'Completá.',
-              'El recurso de casación se interpone dentro del plazo de ___.',
+              'Completá el art. 451.',
+              'La presentación del recurso de casación deberá ser efectuada dentro del plazo de ___ de notificada la resolución judicial.',
               ['veinte (20) días', 'tres (3) días', 'seis (6) meses', 'un (1) año'],
-              'Veinte días desde la notificación de la sentencia.',
+              'Veinte días, bajo sanción de inadmisibilidad.',
             ),
             op(
               'El tribunal calificó como robo un hecho sin violencia ni fuerza. ¿Qué motivo de casación corresponde?',
               [
-                'Errónea aplicación de la ley sustantiva',
-                'Inobservancia de normas procesales',
-                'Revisión por hecho nuevo',
-                'Recusación',
+                'Inobservancia o errónea aplicación de un precepto legal (art. 448 inc. 1)',
+                'Nuevos hechos o elementos de prueba (art. 448 inc. 2)',
+                'Recusación del tribunal',
+                'Queja por retardo de justicia',
               ],
-              'Encuadrar mal el hecho en el Código Penal es un error de derecho sustantivo.',
+              'Encuadrar mal el hecho en el Código Penal es una errónea aplicación de un precepto legal.',
+            ),
+            vf(
+              'Quien quiere recurrir en casación debe manifestar su intención de hacerlo dentro de los primeros 7 días del plazo.',
+              true,
+              'Verdadero: según el art. 451, si no lo manifiesta, la resolución se reputa firme y consentida a su respecto.',
             ),
           ],
         }),
@@ -351,9 +361,9 @@ export const U8: Unidad = {
         pregunta: '¿Qué recurso interponés?',
         opciones: [
           {
-            texto: 'Recurso de casación ante el Tribunal de Casación Penal, dentro de 20 días, por errónea aplicación de la ley sustantiva (art. 166 en lugar de 164).',
+            texto: 'Recurso de casación ante el Tribunal de Casación Penal por errónea aplicación de un precepto legal (art. 166 en lugar de 164), en 20 días y manifestando la intención de recurrir en los primeros 7.',
             puntaje: 2,
-            devolucion: 'Correcto: error de calificación = ley sustantiva mal aplicada (art. 448).',
+            devolucion: 'Correcto: el error de calificación es una errónea aplicación de un precepto legal (art. 448 inc. 1); plazos del art. 451.',
           },
           {
             texto: 'Apelación ante la Cámara de Garantías.',

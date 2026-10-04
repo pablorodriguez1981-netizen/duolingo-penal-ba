@@ -247,7 +247,7 @@ export function PantallaCodigos() {
           {pestana === 'CP'
             ? `📄 ${info.avisoCP}`
             : info.cppbaOficial
-              ? `📄 Texto oficial importado (${info.cppbaOficial.fuente}).`
+              ? `📄 Texto literal del documento que cargaste (versión 2003 aprox.: ${info.cppbaOficial.version ?? info.cppbaOficial.fuente}). Puede no reflejar reformas posteriores.`
               : '🧭 Del CPPBA se incluyen versiones de estudio de los artículos centrales y la estructura completa. Importá el PDF oficial para ver el texto literal de todo el código.'}
         </p>
       </div>

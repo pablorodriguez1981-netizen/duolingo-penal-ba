@@ -21,7 +21,7 @@ La mascota es **Carpi**, un carpincho con toga.
 | Modo 1: Simulador de audiencias | 8 casos ficticios bonaerenses (uno por unidad), con decisiones valoradas como óptimas, viables o equivocadas, y las normas aplicables. |
 | Modo 2: El Fallo Clave | Síntesis de fallos (CSJN, Corte IDH, CIDH) en los artículos más densos + banco de jurisprudencia. |
 | Modo 3: Supervivencia | 2 minutos a contrarreloj con preguntas ya vistas, priorizando errores. |
-| Módulos dinámicos | Después de las 8 unidades centrales, el mapa genera nuevos módulos a partir del articulado (137 hoy). |
+| Módulos dinámicos | Después de las 8 unidades centrales, el mapa genera nuevos módulos a partir del articulado completo del CPPBA y del Código Penal (260 hoy). |
 | Offline / PWA | Service worker con precache de toda la app, manifiesto instalable, atajos, recordatorios locales de racha. |
 | Progreso local | IndexedDB (con respaldo en localStorage). Nada sale del dispositivo. |
 
@@ -39,25 +39,22 @@ La mascota es **Carpi**, un carpincho con toga.
 ## Fuentes y fidelidad de los textos ⚠️
 
 - **Código Penal**: texto **literal**, importado del PDF provisto (`src/data/codigos/cp.json`). Ese PDF está actualizado hasta 2009 aprox. (última reforma detectada: Ley 26.551), así que **no refleja reformas posteriores** (p. ej., Ley 27.147 sobre los arts. 59 y 71, Ley 26.791 sobre el art. 80). Los artículos que se usan en las lecciones y tienen reformas conocidas muestran un aviso.
-- **CPPBA**: no se adjuntó el texto oficial. Los artículos centrales se muestran en una **versión de estudio** (marcada 🧭 en la app) que hay que cotejar con el texto vigente. El resto del código se recorre por su estructura (índice de libros, títulos y capítulos).
+- **CPPBA**: texto **literal** importado del documento provisto (`src/data/codigos/cppba.json`, 539 artículos con su epígrafe). Ese documento es el "texto actualizado con las modificaciones introducidas por las Leyes 11.982 a 13.078", es decir, la versión de **2003 aprox.**. Seis artículos centrales se reformaron sustancialmente después (**144, 148, 157, 169, 171 y 395**): las lecciones enseñan una **versión actualizada de estudio** (marcada 🧭, a cotejar con el texto vigente) y la tarjeta de lectura tiene una pestaña para ver el texto literal del documento.
 - **Jurisprudencia**: síntesis didácticas; verificá siempre el fallo completo antes de citarlo.
 - **Casos prácticos**: ficticios.
 
-### Cargar el texto oficial del CPPBA
+### Actualizar el texto de un código
 
-Con el PDF oficial de la Ley 11.922 (texto actualizado):
+Con un PDF o un Word del código (por ejemplo, una versión más nueva del CPPBA):
 
 ```bash
-npm run importar:codigo -- --codigo CPPBA --pdf ruta/al/CPPBA.pdf
+npm run importar:codigo -- --codigo CPPBA --docx ruta/al/CPPBA.docx   # o --pdf archivo.pdf
 npm run build
 ```
 
-El script (requiere `pdftotext`, de poppler-utils) genera `src/data/codigos/cppba.json`. Desde ese momento:
+El script genera `src/data/codigos/cppba.json` (o `cp.json` con `--codigo CP`): separa cada artículo, su epígrafe y las notas de reforma ("Texto según Ley…"). Las lecciones muestran ese texto literal y los módulos dinámicos se regeneran artículo por artículo. Requiere `pdftotext` (poppler-utils) para PDF y `python3` para Word.
 
-- las lecciones muestran el texto **literal** de cada artículo (desaparece la marca 🧭);
-- los módulos dinámicos del CPPBA se generan **artículo por artículo** a partir del texto oficial.
-
-El mismo comando sirve para actualizar el Código Penal (`--codigo CP`).
+Un test verifica que cada fragmento resaltado en las lecciones aparezca literalmente en el artículo que se lee: si una versión nueva cambia la redacción, el test indica qué lección revisar.
 
 ## Desarrollo
 

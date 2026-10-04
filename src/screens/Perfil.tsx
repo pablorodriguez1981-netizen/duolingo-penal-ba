@@ -259,13 +259,13 @@ export function PantallaPerfil() {
           <p>
             <b>CPPBA (Ley 11.922):</b>{' '}
             {info.cppbaOficial
-              ? `texto oficial importado (${info.cppbaOficial.fuente}, ${info.cppbaOficial.importadoEl}).`
-              : 'los artículos centrales se muestran en una versión de estudio (marcada 🧭) que debe cotejarse con el texto oficial vigente; el resto del código se recorre por su estructura.'}
+              ? `texto literal del documento que cargaste (${info.cppbaOficial.version ?? info.cppbaOficial.fuente}). Esa versión es de 2003 aprox.: los artículos que se reformaron después y se usan en las lecciones (144, 148, 157, 169, 171 y 395) muestran una versión actualizada de estudio, con una pestaña para ver el texto de tu documento.`
+              : 'los artículos centrales se muestran en una versión de estudio (marcada 🧭) que debe cotejarse con el texto oficial vigente.'}
           </p>
           <p>
-            Para cargar el texto oficial completo del CPPBA, poné el PDF en el proyecto y ejecutá:
-            <code className="mt-1 block rounded-lg bg-superficie-2 p-2 text-xs">npm run importar:codigo -- --codigo CPPBA --pdf ruta/al/CPPBA.pdf</code>
-            Las lecciones pasan a mostrar el texto literal y los módulos dinámicos se generan artículo por artículo.
+            Para cargar una versión más nueva del CPPBA (PDF o Word), ejecutá en el proyecto:
+            <code className="mt-1 block rounded-lg bg-superficie-2 p-2 text-xs">npm run importar:codigo -- --codigo CPPBA --docx ruta/al/CPPBA.docx</code>
+            Las lecciones y los módulos dinámicos se regeneran con ese texto.
           </p>
           <p>
             <b>Jurisprudencia:</b> síntesis didácticas de fallos conocidos (CSJN, Corte IDH, CIDH) y de líneas jurisprudenciales; verificá siempre el fallo completo antes de citarlo.

@@ -7,9 +7,10 @@ import { extraerPena } from './generador';
 import { GLOSARIO } from './glosario';
 import type { Pregunta, Unidad } from './tipos';
 
+const leer = (archivo: string) => JSON.parse(readFileSync(resolve(__dirname, 'codigos', archivo), 'utf8')) as CodigoImportado;
+
 beforeAll(() => {
-  const cp = JSON.parse(readFileSync(resolve(__dirname, 'codigos/cp.json'), 'utf8')) as CodigoImportado;
-  inicializarCodigos(cp, null);
+  inicializarCodigos(leer('cp.json'), leer('cppba.json'));
 });
 
 function validarPregunta(p: Pregunta) {
@@ -66,7 +67,24 @@ describe('unidades centrales', () => {
   it('el texto del CP es literal del PDF importado', () => {
     expect(articulo('cp-164')?.texto).toMatch(/^Será reprimido con prisión de un mes a seis años/);
     expect(articulo('cp-76-bis')?.fidelidad).toBe('oficial');
-    expect(articulo('cppba-169')?.fidelidad).toBe('referencia');
+  });
+
+  it('el CPPBA usa el texto literal del documento y conserva las versiones actualizadas de los reformados', () => {
+    expect(articulo('cppba-1')).toMatchObject({ fidelidad: 'oficial', epigrafe: expect.stringMatching(/^Juez natural/) });
+    expect(articulo('cppba-308')?.texto).toMatch(/previa notificación al Defensor bajo sanción de nulidad/);
+    for (const n of ['144', '148', '157', '169', '171', '395']) {
+      const a = articulo(`cppba-${n}`)!;
+      expect(a.fidelidad, n).toBe('referencia');
+      expect(a.textoDocumento, n).toBeTruthy();
+      expect(a.avisoVigencia, n).toBeTruthy();
+    }
+    expect(articulo('cppba-169')?.textoDocumento).toMatch(/seis \(6\) años/);
+  });
+
+  it('cada fragmento resaltado aparece literalmente en el artículo que se lee', () => {
+    for (const u of UNIDADES_NUCLEO)
+      for (const t of u.temas)
+        for (const l of t.lecciones) if (l.foco) expect(articulo(t.articuloId)?.texto, `${l.id}: «${l.foco}»`).toContain(l.foco);
   });
 });
 
@@ -102,7 +120,8 @@ describe('camino', () => {
 describe('módulos generados', () => {
   it('se generan desde el articulado y son válidos', () => {
     const gen = generados();
-    expect(gen.total).toBeGreaterThan(60);
+    expect(gen.total).toBeGreaterThan(150);
+    expect(gen.ids.some((id) => id.startsWith('g-cppba-l'))).toBe(true);
     for (let i = 0; i < gen.total; i++) validarUnidad(gen.unidad(i)!);
     const ids = Array.from({ length: gen.total }, (_, i) => preguntasDeUnidad(gen.unidad(i)!)).flat().map((q) => q.pregunta.id);
     expect(new Set(ids).size).toBe(ids.length);

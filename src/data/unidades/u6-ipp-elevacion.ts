@@ -105,36 +105,42 @@ export const U6: Unidad = {
           titulo: 'Duración de la IPP',
           minutos: 3,
           intro: {
-            titulo: 'Cuatro meses (prorrogables)',
+            titulo: 'Cuatro meses (y prórrogas acotadas)',
             parrafos: [
-              'La IPP debe practicarse en cuatro meses desde la detención o la declaración del imputado.',
-              'Si no alcanza, el Fiscal pide prórroga al Juez de Garantías, que puede concederla por otro período igual según las causas de la demora. En casos de suma gravedad y muy difícil investigación, excepcionalmente puede extenderse más.',
+              'La IPP debe practicarse en cuatro meses desde la detención o la declaración del imputado (art. 308).',
+              'Si no alcanza, el propio Fiscal dispone la prórroga, en forma motivada y fundada, con conocimiento del Juez de Garantías: hasta dos meses más, según las causas de la demora. En casos excepcionales, justificados por su gravedad o difícil investigación, la prórroga puede llegar a seis meses.',
             ],
             enLaPractica:
-              'Con detenido, la defensa controla el vencimiento de los 4 meses: si no hay prórroga fundada, puede reclamar ante el Juez de Garantías.',
+              'Con detenido, la defensa controla los vencimientos (y el tope del art. 141): una prórroga sin motivación puede cuestionarse ante el Juez de Garantías.',
           },
-          foco: 'en el término de cuatro (4) meses',
+          foco: 'en el plazo de cuatro (4) meses',
           preguntas: [
             comp(
               'Completá el art. 282.',
-              'La IPP deberá practicarse en el término de ___ a contar de la detención o declaración del imputado.',
+              'La Investigación Penal Preparatoria deberá practicarse en el plazo de ___ a contar de la detención o declaración del imputado.',
               ['cuatro (4) meses', 'dos (2) años', 'diez (10) días', 'un (1) mes'],
               'Cuatro meses es el plazo ordinario.',
             ),
             op(
-              '¿Quién concede la prórroga de la IPP?',
-              ['El Juez de Garantías, a pedido del Fiscal', 'El Fiscal General', 'La víctima', 'El Tribunal de Casación'],
-              'El Fiscal la solicita y el Juez de Garantías decide según las causas de la demora.',
+              '¿Quién dispone la prórroga de la IPP?',
+              ['El propio Fiscal, en forma motivada y con conocimiento del Juez de Garantías', 'La víctima', 'El Tribunal de Casación', 'La Policía'],
+              'Según el art. 282, el Fiscal «dispondrá motivada y fundadamente su prórroga, con conocimiento del Juez de Garantías».',
+            ),
+            comp(
+              'Completá.',
+              'La prórroga ordinaria puede ser de hasta ___ más.',
+              ['dos (2) meses', 'seis (6) meses', 'un (1) año', 'quince (15) días'],
+              'Hasta dos meses; sólo en casos excepcionales, por gravedad o difícil investigación, hasta seis meses.',
             ),
             ord(
               'Ordená el cómputo de la IPP:',
               [
                 'Detención o declaración del imputado',
                 'Vencen los 4 meses ordinarios',
-                'Prórroga por otro período igual (si se justifica)',
-                'Prórroga excepcional en casos de suma gravedad',
+                'Prórroga motivada de hasta 2 meses',
+                'En casos excepcionales, prórroga de hasta 6 meses',
               ],
-              'La regla son 4 meses; las prórrogas deben justificarse y son cada vez más excepcionales.',
+              'La regla son 4 meses; las prórrogas deben motivarse y son cada vez más excepcionales.',
             ),
           ],
         }),
@@ -142,7 +148,7 @@ export const U6: Unidad = {
     },
     {
       articuloId: 'cppba-334',
-      relacionados: ['cppba-336'],
+      relacionados: ['cppba-335'],
       lecciones: [
         leccion({
           id: 'u6-a334-l1',
@@ -151,14 +157,14 @@ export const U6: Unidad = {
           intro: {
             titulo: 'La acusación que abre la puerta del juicio',
             parrafos: [
-              'Cuando el Fiscal considera que tiene elementos suficientes —y no corresponde un criterio de oportunidad ni un procedimiento abreviado—, formula por escrito el requerimiento de citación a juicio.',
-              'Debe contener, bajo sanción de nulidad: datos del imputado, una relación clara, precisa y circunstanciada del hecho, los fundamentos de la acusación y la calificación legal.',
+              'Si el Fiscal estima contar con elementos suficientes para ejercer la acción, formula por escrito su requisitoria de citación a juicio ante el Juez de Garantías (art. 334).',
+              'Según el art. 335, debe contener, bajo sanción de nulidad: los datos del imputado, una relación clara, precisa, circunstanciada y específica del hecho, los fundamentos de la acusación y la calificación legal; y aclarar si debe juzgarlo un Tribunal o un Juez Correccional.',
               'La descripción del hecho es la base del principio de congruencia: no se podrá condenar por un hecho distinto.',
             ],
             enLaPractica:
-              'Una requisitoria que dice sólo «el imputado robó» sin indicar lugar, fecha, modo y objeto impide la defensa: la defensa puede pedir su nulidad.',
+              'Una requisitoria que dice sólo «el imputado robó», sin lugar, fecha, modo ni objeto, impide la defensa: puede pedirse su nulidad.',
           },
-          foco: 'una relación clara, precisa y circunstanciada del hecho',
+          foco: 'formular por escrito su requisitoria de citación a juicio',
           preguntas: [
             op(
               '¿Qué debe contener la requisitoria de elevación a juicio?',
@@ -168,21 +174,27 @@ export const U6: Unidad = {
                 'La pena que el juez debe imponer, sin fundamentos',
                 'La declaración de la víctima transcripta',
               ],
-              'Son los requisitos del art. 334, exigidos bajo sanción de nulidad.',
+              'Son los requisitos del art. 335, exigidos bajo sanción de nulidad.',
             ),
             vf(
               'Si el Fiscal no tiene elementos suficientes para acusar, igual debe requerir la elevación a juicio.',
               false,
-              'Falso. Si no hay mérito, por objetividad, debe pedir el sobreseimiento o, si corresponde, archivar.',
+              'Falso. El art. 334 condiciona la requisitoria a contar con elementos suficientes; si no los hay, por objetividad, debe pedir el sobreseimiento.',
             ),
             comp(
-              'Completá.',
-              'La relación del hecho debe ser clara, precisa y ___.',
+              'Completá el art. 335.',
+              'La relación del hecho debe ser clara, precisa, ___ y específica.',
               ['circunstanciada', 'breve', 'secreta', 'verbal'],
               'Circunstanciada: con tiempo, lugar, modo y participación.',
             ),
           ],
         }),
+      ],
+    },
+    {
+      articuloId: 'cppba-336',
+      relacionados: ['cppba-337'],
+      lecciones: [
         leccion({
           id: 'u6-a336-l1',
           titulo: 'Oposición y elevación',
@@ -190,34 +202,39 @@ export const U6: Unidad = {
           intro: {
             titulo: 'La defensa tiene 15 días',
             parrafos: [
-              'Notificada la requisitoria, la defensa puede oponerse dentro de 15 días, pidiendo el sobreseimiento o un cambio de calificación.',
-              'El Juez de Garantías resuelve: si rechaza la oposición, dispone la elevación a juicio; si la acepta, puede sobreseer o modificar la calificación.',
+              'Notificada la requisitoria, la defensa puede oponerse dentro de 15 días: pedir el sobreseimiento, el cambio de calificación legal u oponer excepciones.',
+              'El Juez de Garantías resuelve en cinco días. Si rechaza la oposición, eleva la causa a juicio por auto, apelable por el defensor que se opuso. Si no hubo oposición, la causa pasa al tribunal de juicio por simple decreto (art. 337).',
             ],
             enLaPractica:
               'Si la prueba muestra legítima defensa (art. 34 inc. 6 CP), la defensa se opone a la elevación y pide el sobreseimiento por causa de justificación.',
           },
-          foco: 'en el plazo de quince (15) días',
+          foco: 'en el término de quince (15) días',
           preguntas: [
             comp(
-              'Completá.',
-              'La defensa puede oponerse a la requisitoria en el plazo de ___.',
+              'Completá el art. 336.',
+              'El defensor podrá, en el término de ___, oponerse instando al sobreseimiento o el cambio de calificación legal.',
               ['quince (15) días', 'tres (3) días', 'seis (6) meses', 'veinticuatro (24) horas'],
               'Quince días para preparar una oposición fundada.',
             ),
             op(
               '¿Qué puede pedir la defensa al oponerse?',
-              ['El sobreseimiento o el cambio de calificación legal', 'La condena de la víctima', 'La prisión del Fiscal', 'La suspensión de la feria judicial'],
-              'Son las dos pretensiones típicas de la oposición.',
+              ['El sobreseimiento, el cambio de calificación u oponer excepciones', 'La condena de la víctima', 'La prisión del Fiscal', 'La suspensión de la feria judicial'],
+              'Son las pretensiones que prevé el art. 336.',
             ),
             op(
-              '¿Quién resuelve la oposición?',
-              ['El Juez de Garantías', 'El Fiscal que acusó', 'El Tribunal de Casación', 'La Policía'],
-              'El Juez de Garantías controla la acusación antes de que el caso vaya a juicio.',
+              '¿Quién resuelve la oposición y en qué plazo?',
+              ['El Juez de Garantías, en cinco días', 'El Fiscal que acusó, en un mes', 'El Tribunal de Casación, en veinte días', 'La Policía, en el acto'],
+              'Art. 337: el Juez de Garantías resuelve en cinco días; si rechaza la oposición, eleva la causa a juicio por auto.',
+            ),
+            vf(
+              'Si la defensa no se opone, la causa se remite al tribunal de juicio por simple decreto.',
+              true,
+              'Verdadero, según el art. 337.',
             ),
             vf(
               'La legítima defensa (art. 34 inc. 6 CP) puede fundar un pedido de sobreseimiento.',
               true,
-              'Verdadero: es una causa de justificación, y el sobreseimiento procede cuando media una causa de justificación.',
+              'Verdadero: es una causa de justificación.',
             ),
           ],
         }),
@@ -242,14 +259,14 @@ export const U6: Unidad = {
         pregunta: '¿Qué hacés?',
         opciones: [
           {
-            texto: 'Pido prórroga fundada al Juez de Garantías, explicando qué diligencias faltan (art. 282).',
+            texto: 'Dispongo una prórroga motivada de hasta 2 meses, con conocimiento del Juez de Garantías, explicando qué diligencias faltan (art. 282).',
             puntaje: 2,
-            devolucion: 'Correcto. La prórroga debe pedirse y justificarse ante el Juez de Garantías.',
+            devolucion: 'Correcto. En el CPPBA la prórroga la dispone el propio Fiscal, en forma motivada y fundada, con conocimiento del Juez de Garantías.',
           },
           {
             texto: 'Sigo investigando sin pedir nada: los plazos son orientativos.',
             puntaje: 0,
-            devolucion: 'El plazo de la IPP es legal; investigar sin prórroga expone la validez de lo actuado.',
+            devolucion: 'El plazo de la IPP es legal: vencido, hace falta una prórroga motivada; si no, se expone la validez de lo actuado.',
           },
           {
             texto: 'Archivo la causa porque se venció el plazo.',
@@ -316,7 +333,7 @@ export const U6: Unidad = {
           {
             texto: 'El Juez de Garantías resuelve la oposición y, si la rechaza, eleva la causa a juicio.',
             puntaje: 2,
-            devolucion: 'Exacto: es el control jurisdiccional de la acusación (art. 336/337).',
+            devolucion: 'Exacto: es el control jurisdiccional de la acusación. Resuelve en cinco días y el auto de elevación es apelable por el defensor (arts. 336 y 337).',
           },
           {
             texto: 'Como Fiscal, resuelvo yo la oposición.',

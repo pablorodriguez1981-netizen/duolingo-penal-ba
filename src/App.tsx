@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { lazy, Suspense, useEffect } from 'react';
-import { HashRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { HashRouter, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { Boton } from './components/Boton';
 import { GlosarioProvider } from './components/Glosario';
 import { configurarSonido } from './lib/sonido';
@@ -107,6 +107,12 @@ function AvisoPWA() {
   );
 }
 
+/** Reinicia la pantalla cuando cambia el parámetro (p. ej., al pasar de una lección a otra). */
+function ConClave({ param, children }: { param: string; children: React.ReactElement }) {
+  const params = useParams();
+  return <div key={params[param]} className="contents">{children}</div>;
+}
+
 function Rutas() {
   const ubicacion = useLocation();
   useEffect(() => {
@@ -117,10 +123,10 @@ function Rutas() {
     <Suspense fallback={<Cargando />}>
       <Routes>
         <Route path="/" element={<PantallaCamino />} />
-        <Route path="/leccion/:leccionId" element={<PantallaLeccion />} />
-        <Route path="/repaso/:unidadId" element={<PantallaRepaso />} />
-        <Route path="/caso/:unidadId" element={<PantallaCaso />} />
-        <Route path="/practica" element={<PantallaPractica />} />
+        <Route path="/leccion/:leccionId" element={<ConClave param="leccionId"><PantallaLeccion /></ConClave>} />
+        <Route path="/repaso/:unidadId" element={<ConClave param="unidadId"><PantallaRepaso /></ConClave>} />
+        <Route path="/caso/:unidadId" element={<ConClave param="unidadId"><PantallaCaso /></ConClave>} />
+        <Route path="/practica" element={<PantallaPractica key={ubicacion.search} />} />
         <Route path="/supervivencia" element={<PantallaSupervivencia />} />
         <Route path="/entrenar" element={<PantallaEntrenar />} />
         <Route path="/fallos" element={<PantallaFallos />} />

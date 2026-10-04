@@ -19,6 +19,14 @@ export interface Articulo {
   ubicacion?: string; // 'Libro I · Título VI · Medidas de coerción'
   notas?: string[]; // notas de reforma
   avisoVigencia?: string; // reformas posteriores conocidas que el texto no refleja
+  /**
+   * Texto literal del documento importado cuando el artículo fue reformado
+   * después de esa versión: `texto` lleva la versión actualizada de estudio
+   * (la que usan las lecciones) y acá queda el texto del documento.
+   */
+  textoDocumento?: string;
+  /** Rótulo de la fuente del texto literal (p. ej., "Documento provisto, versión 2003"). */
+  fuente?: string;
 }
 
 interface PreguntaBase {

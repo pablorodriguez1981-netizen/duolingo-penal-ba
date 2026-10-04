@@ -32,23 +32,23 @@ export const U1: Unidad = {
             titulo: '¿Quién puede juzgarte?',
             parrafos: [
               'El artículo 1 del CPPBA es la puerta de entrada al código: reúne las garantías que la Constitución reconoce a cualquier persona acusada de un delito.',
-              'La primera es el juez natural: sólo pueden juzgarte los jueces que la ley designó ANTES del hecho. Nadie puede armar un tribunal especial para un caso.',
-              'La segunda es el juicio previo: para que haya pena tiene que haber antes un juicio con acusación, defensa, prueba y sentencia, basado en una ley anterior al hecho.',
+              'La primera es el juez natural: sólo pueden juzgarte los jueces designados de acuerdo con la Constitución de la Provincia y competentes según sus leyes. El art. 18 de la Constitución Nacional agrega que deben estar designados por ley ANTES del hecho: nadie puede armar un tribunal especial para un caso.',
+              'La segunda es el juicio previo: para que haya pena tiene que haber antes un juicio con acusación, defensa, prueba y sentencia, fundado en una ley anterior al hecho y tramitado conforme al código.',
             ],
             enLaPractica:
               'Si una causa de Lomas de Zamora se asignara a un juzgado creado especialmente después del hecho para «ese» imputado, la defensa podría objetarlo por violar el juez natural.',
           },
-          foco: 'Nadie podrá ser juzgado por otros jueces que los instituidos por la ley antes del hecho',
+          foco: 'Nadie podrá ser juzgado por otros jueces que los designados de acuerdo con la Constitución de la Provincia y competentes según sus leyes reglamentarias',
           preguntas: [
             op(
               '¿Qué exige la garantía del juez natural?',
               [
-                'Que el juez haya sido designado por ley antes del hecho',
+                'Que el juez haya sido designado conforme a la Constitución y sea competente según la ley',
                 'Que el juez viva en el mismo barrio que el imputado',
                 'Que el imputado elija a su juez',
                 'Que el juez sea elegido por la víctima',
               ],
-              'El juez natural es el instituido por la ley ANTES del hecho y designado según la Constitución. Lo que se prohíbe son los tribunales «a medida».',
+              'El art. 1 CPPBA exige jueces designados de acuerdo con la Constitución de la Provincia y competentes según sus leyes; el art. 18 CN agrega que deben estar designados por ley antes del hecho de la causa. Lo que se prohíbe son los tribunales «a medida».',
             ),
             vf(
               'Se puede aplicar una pena sin juicio si el imputado confiesa en la comisaría.',
@@ -62,14 +62,9 @@ export const U1: Unidad = {
               'Es la garantía de juicio previo: primero el juicio, después (si corresponde) la pena.',
             ),
             op(
-              '¿Qué tiene que ser ANTERIOR al hecho según el art. 1?',
-              [
-                'La ley que funda el juicio y el juez que lo juzgará',
-                'Solamente la denuncia',
-                'La sentencia',
-                'La detención',
-              ],
-              'Tanto la ley penal como el órgano judicial deben existir antes del hecho: es la base de la legalidad y del juez natural.',
+              'Según el art. 1 CPPBA, ¿qué tiene que ser ANTERIOR al hecho del proceso?',
+              ['La ley en que se funda el juicio', 'La denuncia', 'La sentencia', 'La detención'],
+              'El art. 1 exige un juicio previo «fundado en ley anterior al hecho del proceso». Que también el juez exista antes del hecho surge del art. 18 de la Constitución Nacional.',
             ),
           ],
         }),
@@ -177,7 +172,6 @@ export const U1: Unidad = {
     },
     {
       articuloId: 'cppba-2',
-      relacionados: ['cppba-141'],
       falloClave: {
         tribunal: 'Corte Suprema de Justicia de la Nación',
         caso: '«Mattei» (1968) y «Mozzatti» (1978)',
@@ -195,8 +189,8 @@ export const U1: Unidad = {
           intro: {
             titulo: 'Un proceso no puede durar para siempre',
             parrafos: [
-              'Estar imputado genera angustia, gastos y estigma. Por eso el art. 2 reconoce el derecho a ser juzgado en un plazo razonable y sin dilaciones indebidas.',
-              'Para el código, los retrasos reiterados de quienes deben resolver no son un detalle: constituyen falta grave.',
+              'Estar imputado genera angustia, gastos y estigma. Por eso el art. 2 reconoce el derecho a ser juzgado en un tiempo razonable y sin dilaciones indebidas.',
+              'Para el código, el retardo en dictar sentencia y las dilaciones indebidas, cuando son reiteradas, no son un detalle: constituyen falta grave.',
               '¿Qué es «razonable»? No hay un número mágico: se mira la complejidad del caso, lo que hizo el imputado y lo que hicieron (o no) los fiscales y jueces.',
             ],
             enLaPractica:
@@ -206,17 +200,17 @@ export const U1: Unidad = {
             op(
               '¿Qué derecho reconoce el art. 2 del CPPBA?',
               [
-                'A ser juzgado en un plazo razonable y sin dilaciones indebidas',
+                'A ser juzgado en un tiempo razonable y sin dilaciones indebidas',
                 'A elegir la fecha del juicio',
                 'A que el juicio dure exactamente un año',
                 'A suspender el proceso cuando lo desee',
               ],
-              'El art. 2 consagra el plazo razonable, en línea con el art. 8.1 de la Convención Americana.',
+              'El art. 2 consagra el derecho a ser juzgado en un tiempo razonable (el «plazo razonable» del art. 8.1 de la Convención Americana).',
             ),
             vf(
-              'Las dilaciones indebidas reiteradas de los magistrados constituyen falta grave.',
+              'El retardo en dictar sentencia y las dilaciones indebidas, cuando son reiteradas, constituyen falta grave.',
               true,
-              'Verdadero: el código las califica expresamente como falta grave.',
+              'Verdadero: el art. 2 las califica expresamente como falta grave.',
             ),
             op(
               '¿Qué pautas se usan para medir si un plazo es razonable?',
@@ -231,11 +225,17 @@ export const U1: Unidad = {
             comp(
               'Completá el art. 2.',
               'Toda persona sometida a proceso tendrá derecho a ser juzgada en un ___ y sin dilaciones indebidas.',
-              ['plazo razonable', 'plazo de diez días', 'tribunal federal', 'horario nocturno'],
-              'La fórmula es «plazo razonable»: un estándar flexible que se analiza caso por caso.',
+              ['tiempo razonable', 'plazo de diez días', 'tribunal federal', 'horario nocturno'],
+              'El art. 2 habla de «tiempo razonable»: un estándar flexible que se analiza caso por caso.',
             ),
           ],
         }),
+      ],
+    },
+    {
+      articuloId: 'cppba-141',
+      relacionados: ['cppba-2'],
+      lecciones: [
         leccion({
           id: 'u1-a2-l2',
           titulo: 'Plazos fatales con detenido (art. 141)',
@@ -244,13 +244,13 @@ export const U1: Unidad = {
             titulo: 'Cuando hay alguien preso, el reloj corre más fuerte',
             parrafos: [
               'Si el imputado está privado de su libertad, el código endurece los tiempos: los términos de la IPP y la duración total del proceso pasan a ser plazos fatales.',
-              'Según el art. 141, en ese caso el proceso no puede durar más de dos años, salvo causas de extrema complejidad (muchos imputados, hechos muy complejos), donde se vuelve al estándar del plazo razonable del art. 2.',
-              'Ojo: este artículo tuvo varias reformas. La idea central —más urgencia cuando hay una persona presa— es la que tenés que dominar.',
+              'Según el art. 141, en ese caso el proceso no puede durar más de 2 años, salvo casos de suma complejidad (muchos imputados, hechos muy complejos), donde se está al plazo razonable del art. 2, sujeto a la apreciación judicial.',
+              'La idea central —más urgencia cuando hay una persona presa— es la que tenés que dominar.',
             ],
             enLaPractica:
               'Ante una prisión preventiva que se estira sin juicio a la vista, la defensa controla los plazos del art. 141 y del art. 282 (duración de la IPP) para pedir el cese de la detención.',
           },
-          foco: 'el proceso no podrá durar más de dos (2) años',
+          foco: 'el cual no podrá durar más de 2 años',
           preguntas: [
             op(
               'Según el art. 141, ¿cuándo se vuelven fatales los plazos de la IPP y del proceso?',
@@ -269,9 +269,9 @@ export const U1: Unidad = {
               'Dos años es el tope general; la excepción son los casos de extrema complejidad.',
             ),
             vf(
-              'En una causa de extrema complejidad con muchos imputados puede aplicarse, en lugar del tope fijo, el plazo razonable del art. 2.',
+              'En un caso de suma complejidad con muchos imputados puede aplicarse, en lugar del tope fijo, el plazo razonable del art. 2.',
               true,
-              'Verdadero: la complejidad (pluralidad de imputados, naturaleza de los hechos) habilita a estar al plazo razonable bajo apreciación judicial.',
+              'Verdadero: la suma complejidad (pluralidad de imputados, naturaleza o circunstancias de los hechos) habilita a estar al plazo razonable, sujeto a la apreciación judicial.',
             ),
             op(
               '¿Qué es un plazo fatal?',

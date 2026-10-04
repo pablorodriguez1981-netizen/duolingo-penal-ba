@@ -76,7 +76,7 @@ export const U3: Unidad = {
             titulo: 'Los cuatro filtros (art. 146)',
             parrafos: [
               'Antes de ordenar cualquier medida de coerción, el juez verifica condiciones que vienen del derecho cautelar:',
-              '1) Apariencia de responsabilidad: indicios serios de que el imputado participó. 2) Peligro cierto de frustración del proceso si no se adopta la medida. 3) Proporcionalidad entre la medida y lo que se quiere proteger. 4) Contracautela, si la medida es sobre bienes (coerción real).',
+              '1) Apariencia de responsabilidad: indicios serios de que el imputado participó. 2) Peligro cierto de frustración del proceso si no se adopta la medida. 3) Proporcionalidad entre la medida y lo que se quiere proteger. 4) Contracautela, cuando la medida la piden el particular damnificado o el actor civil.',
               'Y la medida se ordena a pedido de parte: el juez no actúa por iniciativa propia.',
             ],
             enLaPractica:
@@ -246,8 +246,8 @@ export const U3: Unidad = {
             titulo: 'Detener sin orden judicial',
             parrafos: [
               'Como regla, privar de la libertad requiere orden judicial. La excepción más importante es la flagrancia: la policía (y en ciertos casos un particular) puede aprehender sin orden.',
-              'Hay flagrancia cuando el autor es sorprendido cometiendo el hecho o inmediatamente después; mientras es perseguido por la fuerza pública, el ofendido o el clamor público; o mientras tiene objetos o rastros que hacen presumir vehementemente que acaba de participar.',
-              'La aprehensión debe comunicarse de inmediato al Fiscal y al Juez de Garantías.',
+              'Hay flagrancia cuando el autor es sorprendido cometiendo el hecho o inmediatamente después; mientras es perseguido por la fuerza pública, el ofendido o el público; o mientras tiene objetos o presenta rastros que hagan presumir que acaba de participar en un delito.',
+              'El aprehendido debe quedar de inmediato a disposición de la autoridad judicial: desde la restricción de la libertad corren las 24 horas del art. 308 para recibirle declaración.',
             ],
             enLaPractica:
               'En la Provincia, muchos casos de flagrancia tramitan por un procedimiento especial más rápido, con audiencias orales ante el Juez de Garantías.',
@@ -269,7 +269,7 @@ export const U3: Unidad = {
               [
                 'La policía sorprende al autor cometiendo el hecho',
                 'Lo aprehende sin orden judicial',
-                'Da inmediato aviso al Fiscal y al Juez de Garantías',
+                'Lo pone de inmediato a disposición de la autoridad judicial',
                 'El Fiscal le recibe declaración en el plazo legal',
               ],
               'La aprehensión sin orden es excepcional y debe ser inmediatamente controlada por la autoridad judicial.',
@@ -277,13 +277,18 @@ export const U3: Unidad = {
             vf(
               'En flagrancia, la policía puede mantener al aprehendido sin avisar al Fiscal hasta terminar el sumario.',
               false,
-              'Falso. El aviso al Fiscal y al Juez de Garantías debe ser inmediato.',
+              'Falso. El aprehendido debe quedar de inmediato a disposición de la autoridad judicial; además, desde la restricción de la libertad corre el plazo de 24 horas del art. 308.',
             ),
             comp(
               'Completá la definición del art. 154.',
-              'También hay flagrancia mientras es ___ por la fuerza pública, el ofendido o el clamor público.',
+              'También hay flagrancia mientras es ___ por la fuerza pública, el ofendido o el público.',
               ['perseguido', 'investigado', 'citado', 'buscado por edictos'],
               'La persecución ininterrumpida mantiene la flagrancia.',
+            ),
+            vf(
+              'Si el delito es de instancia privada y quien puede promover la acción no denuncia en el acto, el aprehendido debe ser liberado.',
+              true,
+              'Verdadero: lo dice el último párrafo del art. 153. Sin la instancia de la víctima no puede seguir la persecución.',
             ),
           ],
         }),
@@ -371,14 +376,14 @@ export const U3: Unidad = {
             ),
             comp(
               'Completá el art. 159.',
-              'Si el peligro pudiera evitarse por otra medida ___ gravosa, el juez la impondrá en lugar de la prisión.',
+              'Si el peligro pudiera evitarse por otra medida ___ gravosa, el juez de garantías podrá imponer tales alternativas en lugar de la prisión.',
               ['menos', 'más', 'igualmente', 'nada'],
-              'La alternativa menos gravosa tiene prioridad.',
+              'La alternativa menos gravosa debe preferirse si alcanza para neutralizar el peligro (art. 159).',
             ),
             vf(
               'El arresto domiciliario es una alternativa a la prisión preventiva.',
               true,
-              'Verdadero. Está entre las modalidades previstas para morigerar la coerción.',
+              'Verdadero: el art. 159 admite limitar la libertad a una vivienda, zona o región, incluso con control electrónico.',
             ),
           ],
         }),
@@ -392,39 +397,42 @@ export const U3: Unidad = {
           titulo: 'El auto de prisión preventiva',
           minutos: 3,
           intro: {
-            titulo: 'Una resolución fundada o nula',
+            titulo: 'Plazo y contenido del auto',
             parrafos: [
-              'La resolución que impone la prisión preventiva debe ser fundada y contener, bajo sanción de nulidad: datos del imputado, una enunciación de los hechos, los fundamentos (con los elementos de convicción y los peligros procesales concretos), la calificación legal y la parte resolutiva.',
-              'Una preventiva con fórmulas genéricas («dada la gravedad del hecho y sus características») es atacable por falta de fundamentación.',
+              'El auto que decreta la prisión preventiva se dicta a solicitud del Agente Fiscal, dentro de los quince días (prorrogables por igual plazo) desde que se efectivizó la detención.',
+              'Según el art. 158, el auto debe: 1) expresar cuáles son los elementos que acreditan el delito y su autor o partícipe; 2) si toma en cuenta la declaración del imputado, extraer la parte pertinente; 3) si se apoya en testimonios o pericias, mencionar sintéticamente lo que resulta de ellos; 4) si usa otros elementos probatorios, señalar cuáles son y cómo resultan acreditados.',
+              'Es decir: no alcanza con afirmar que hay prueba; hay que mostrarla.',
             ],
             enLaPractica:
-              'Al apelar una preventiva ante la Cámara de Garantías, la defensa revisa punto por punto si el auto explica qué peligro procesal concreto existe y en qué prueba se apoya.',
+              'Al apelar una preventiva ante la Cámara de Garantías, la defensa revisa punto por punto si el auto explica de qué prueba surgen el hecho y la autoría, y si se dictó dentro del plazo.',
           },
+          foco: 'dentro del plazo de quince (15) días prorrogables por igual plazo',
           preguntas: [
+            comp(
+              'Completá el art. 158.',
+              'El auto que decrete la prisión preventiva será dictado a solicitud del Agente Fiscal dentro del plazo de ___ prorrogables por igual plazo.',
+              ['quince (15) días', 'cinco (5) días', 'treinta (30) días', 'veinticuatro (24) horas'],
+              'Quince días desde que se efectivizó la detención, prorrogables por igual plazo.',
+            ),
             op(
-              '¿Cuál de estos elementos debe contener el auto de prisión preventiva?',
+              '¿A pedido de quién se dicta el auto de prisión preventiva?',
+              ['Del Agente Fiscal', 'De la víctima', 'Del juez, de oficio y sin pedido', 'De la Policía'],
+              'El art. 158 lo dice expresamente: se dicta «a solicitud del Agente Fiscal» (coherente con el art. 146: las medidas se ordenan a pedido de parte).',
+            ),
+            op(
+              '¿Qué debe expresar el auto?',
               [
-                'La calificación legal del delito con cita de las normas aplicables',
-                'La opinión del periodista que cubrió el caso',
+                'Cuáles son los elementos de los que resultan acreditados el delito y su autor o partícipe',
                 'La pena definitiva que se impondrá',
+                'La opinión de la prensa sobre el caso',
                 'El monto de la indemnización',
               ],
-              'La calificación legal es un requisito formal; la pena se fija recién en la sentencia.',
+              'Es el inc. 1 del art. 158. La pena se fija recién en la sentencia.',
             ),
             vf(
-              'La falta de fundamentación del auto de prisión preventiva puede acarrear su nulidad.',
-              true,
-              'Verdadero: los requisitos del art. 158 se exigen bajo sanción de nulidad.',
-            ),
-            op(
-              '¿Qué fundamentación es INSUFICIENTE?',
-              [
-                '«Se dicta por la gravedad del hecho», sin mencionar peligros concretos',
-                'Indicar que el imputado amenazó a un testigo, según la declaración de fs. 20',
-                'Señalar que se fugó en una causa anterior, según el informe del registro',
-                'Mencionar que dio un domicilio falso, según el acta de constatación',
-              ],
-              'Las fórmulas genéricas no permiten controlar la decisión. Los otros ejemplos se apoyan en datos concretos.',
+              'Si el auto se apoya en declaraciones testimoniales, basta con citarlas sin decir qué surge de ellas.',
+              false,
+              'Falso. El art. 158 inc. 3 exige mencionar sintéticamente lo que resulta de las pruebas testimoniales o periciales.',
             ),
           ],
         }),

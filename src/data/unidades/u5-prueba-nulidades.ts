@@ -30,18 +30,18 @@ export const U5: Unidad = {
           intro: {
             titulo: 'Sólo es nulo lo que la ley dice',
             parrafos: [
-              'El art. 201 fija el principio de taxatividad: un acto procesal es nulo sólo cuando no se observaron disposiciones que la ley prevé expresamente «bajo pena de nulidad».',
+              'El art. 201 fija el principio de taxatividad: un acto procesal es nulo sólo cuando no se observaron disposiciones que la ley prevé expresamente «bajo sanción de nulidad», en especial cuando se viola la defensa en juicio.',
               'Ya viste varios ejemplos: la declaración del imputado sin defensor (art. 308) o el auto de prisión preventiva sin fundamentos (art. 158).',
             ],
             enLaPractica:
               'Antes de plantear una nulidad, buscá en el código la frase «bajo sanción (o pena) de nulidad» o una garantía constitucional afectada. Si no está, el planteo probablemente sea rechazado.',
           },
-          foco: 'sólo cuando no se hubieran observado las disposiciones expresamente prescriptas bajo pena de nulidad',
+          foco: 'sólo cuando no se hubieran observado las disposiciones expresamente prescriptas bajo sanción de nulidad',
           preguntas: [
             op(
               '¿Cuándo es nulo un acto procesal según el art. 201?',
               [
-                'Cuando no se observaron disposiciones prescriptas expresamente bajo pena de nulidad',
+                'Cuando no se observaron disposiciones prescriptas expresamente bajo sanción de nulidad',
                 'Cuando a una parte no le gusta el resultado',
                 'Siempre que tenga un error de tipeo',
                 'Cuando lo pide la víctima',
@@ -68,8 +68,8 @@ export const U5: Unidad = {
           intro: {
             titulo: 'Las que siempre importan',
             parrafos: [
-              'El art. 202 agrega nulidades de carácter general: las que afectan el nombramiento, capacidad y constitución del juez o fiscal; la intervención del juez, el Fiscal y la parte civil cuando es obligatoria; y la intervención, asistencia y representación del imputado.',
-              'Cuando esas nulidades implican violación de normas constitucionales, deben declararse de oficio en cualquier estado y grado del proceso (art. 203). Las demás requieren planteo de parte en tiempo oportuno.',
+              'El art. 202 agrega nulidades de orden general: las referidas al nombramiento, capacidad y constitución del juez o tribunal; a la intervención del Ministerio Público cuando es obligatoria; y a la intervención, asistencia y representación del imputado y de las partes civiles.',
+              'El órgano judicial que advierte un motivo de nulidad debe tratar de eliminarlo; si no lo hace, puede declararse a pedido de parte. Las nulidades de orden general que implican violación de normas constitucionales deben declararse de oficio, en cualquier estado y grado del proceso (art. 203).',
             ],
             enLaPractica:
               'Si se descubre en el juicio que el imputado nunca tuvo defensor en un acto central de la IPP, el Tribunal debe declarar la nulidad aunque nadie la haya pedido.',
@@ -94,7 +94,7 @@ export const U5: Unidad = {
               'Ordená de la regla a la excepción:',
               [
                 'Regla: sólo hay nulidad si la ley la prevé expresamente (art. 201)',
-                'Nulidades generales en todo caso (art. 202)',
+                'Nulidades de orden general (art. 202)',
                 'Declaración de oficio si afectan normas constitucionales (art. 203)',
               ],
               'Del principio de taxatividad a las nulidades absolutas, que operan aun sin pedido de parte.',
@@ -105,7 +105,6 @@ export const U5: Unidad = {
     },
     {
       articuloId: 'cppba-209',
-      relacionados: ['cppba-210'],
       lecciones: [
         leccion({
           id: 'u5-a209-l1',
@@ -114,8 +113,8 @@ export const U5: Unidad = {
           intro: {
             titulo: 'Se puede probar por cualquier medio… lícito',
             parrafos: [
-              'Todo hecho relacionado con el objeto del proceso puede probarse por cualquier medio de prueba: testigos, peritos, documentos, reconocimientos, registros de cámaras, informes de telefonía, etc.',
-              'Incluso se pueden usar medios no previstos en el código, con tres límites: que no afecten la moral, no estén prohibidos por la ley y no violen garantías constitucionales.',
+              'Todo hecho relacionado con el objeto del proceso puede probarse por cualquiera de los medios previstos en el código: testigos, peritos, documentos, reconocimientos, careos, etc.',
+              'Incluso se pueden usar otros medios (registros de cámaras, informes de telefonía…), siempre que no supriman garantías constitucionales ni afecten el sistema institucional. Y se puede limitar la prueba manifiestamente superabundante.',
             ],
             enLaPractica:
               'Las imágenes del Centro de Monitoreo municipal o de una cámara de un comercio son prueba válida en una IPP bonaerense, aunque el código no las mencione expresamente.',
@@ -130,54 +129,66 @@ export const U5: Unidad = {
             op(
               '¿Cuál es un límite a la libertad probatoria?',
               [
-                'Que el medio no viole garantías constitucionales',
+                'Que el medio no suprima garantías constitucionales',
                 'Que la prueba sea favorable al Fiscal',
                 'Que sea un medio escrito',
                 'Que lo autorice la víctima',
               ],
-              'El art. 209 excluye medios que afecten la moral, estén prohibidos o violen garantías.',
+              'El art. 209 admite otros medios siempre que no supriman garantías constitucionales de las personas ni afecten el sistema institucional.',
             ),
             comp(
               'Completá.',
-              'Se podrán utilizar otros medios siempre que no impliquen violación de ___.',
+              'Se podrán utilizar otros medios de prueba siempre que no supriman ___ de las personas o afecten el sistema institucional.',
               ['garantías constitucionales', 'costumbres locales', 'plazos administrativos', 'normas de tránsito'],
               'Las garantías constitucionales son el límite infranqueable.',
             ),
           ],
         }),
+      ],
+    },
+    {
+      articuloId: 'cppba-210',
+      lecciones: [
         leccion({
           id: 'u5-a210-l1',
-          titulo: 'Sana crítica',
+          titulo: 'Valoración: convicción sincera y razonada',
           minutos: 3,
           intro: {
             titulo: 'Libertad para valorar, obligación de explicar',
             parrafos: [
-              'Los jueces valoran la prueba según la sana crítica: no hay pruebas con valor fijado por ley (sistema de prueba tasada), pero tampoco pueden decidir por íntima convicción sin explicar.',
-              'Deben razonar de acuerdo con la lógica, la experiencia y los conocimientos científicos, y exponer por qué creen a un testigo y no a otro.',
+              'Según el art. 210, para valorar la prueba sólo se exige la expresión de la convicción sincera sobre la verdad de los hechos juzgados, con desarrollo escrito de las razones que llevan a esa convicción. Rige en todas las etapas.',
+              'No hay pruebas con valor fijado por ley (prueba tasada), pero el juez tampoco puede decidir sin explicar: la jurisprudencia lo asimila a la sana crítica racional, es decir, razonar con lógica, experiencia y conocimientos científicos.',
             ],
             enLaPractica:
               'En casación, una sentencia que no explica por qué descartó la versión del imputado puede anularse por arbitrariedad en la valoración de la prueba.',
           },
+          foco: 'convicción sincera sobre la verdad de los hechos juzgados',
           preguntas: [
             op(
-              '¿Qué exige la sana crítica?',
+              '¿Qué exige el art. 210 para valorar la prueba?',
               [
-                'Valorar libremente pero fundando el razonamiento en la lógica, la experiencia y la ciencia',
+                'La convicción sincera sobre los hechos, con desarrollo escrito de sus razones',
                 'Contar cuántos testigos declararon de cada lado',
                 'Aplicar un valor fijo a cada prueba',
                 'Decidir por intuición sin explicar',
               ],
-              'La sana crítica combina libertad de valoración con deber de motivación.',
+              'El art. 210 combina libertad de valoración con deber de motivación: convicción sincera más desarrollo escrito de las razones.',
+            ),
+            comp(
+              'Completá el art. 210.',
+              'Para la valoración de la prueba sólo se exige la expresión de la convicción ___ sobre la verdad de los hechos juzgados.',
+              ['sincera', 'unánime', 'presunta', 'policial'],
+              'Convicción sincera, con desarrollo escrito de las razones que la sostienen.',
             ),
             vf(
-              'En el sistema de sana crítica, una confesión vale automáticamente como prueba plena.',
+              'En el sistema del CPPBA, una confesión vale automáticamente como prueba plena.',
               false,
-              'Falso. Ninguna prueba tiene valor tasado: también la confesión se valora con las demás pruebas.',
+              'Falso. Ninguna prueba tiene valor tasado: también la confesión se valora junto con las demás, y el juez debe explicar sus razones.',
             ),
             ord(
               'Ordená los sistemas de valoración del más rígido al más libre:',
-              ['Prueba tasada (legal)', 'Sana crítica racional', 'Íntima convicción'],
-              'El CPPBA adopta la sana crítica, intermedia entre ambos extremos (la íntima convicción es propia del jurado popular).',
+              ['Prueba tasada (legal)', 'Convicción razonada / sana crítica', 'Íntima convicción sin fundamentos'],
+              'El CPPBA exige convicción sincera con fundamentos escritos (asimilable a la sana crítica); la íntima convicción sin fundamentos es propia del jurado popular.',
             ),
           ],
         }),
