@@ -1,21 +1,21 @@
 name: Publicar en GitHub Pages
 
+# Compila la app y la publica en la rama gh-pages (GitHub Pages la sirve en
+# https://<usuario>.github.io/<repo>/). Corre en cada push a la rama principal.
 on:
   push:
-    branches: [main]
+    branches: [main, claude/pwa-derecho-procesal-penal-454jcu]
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  build:
+  publicar:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,18 +24,15 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm test
       - run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
-      - uses: actions/upload-pages-artifact@v3
+      - run: touch dist/.nojekyll
+      - uses: peaceiris/actions-gh-pages@v4
         with:
-          path: dist
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          force_orphan: true
+          commit_message: 'Publicar Carpi Penal'
