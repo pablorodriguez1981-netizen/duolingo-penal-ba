@@ -1,0 +1,46 @@
+name: Descargar normativa y jurisprudencia
+
+# Descarga las fuentes oficiales listadas en fuentes/urls.tsv y las publica
+# (con una versión en texto) en la rama "fuentes-normativa", para revisar y
+# actualizar el contenido de la app.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - fuentes/urls.tsv
+      - .github/workflows/descargar-normativa.yml
+
+permissions:
+  contents: write
+
+jobs:
+  descargar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Herramientas de conversión
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils catdoc > /dev/null
+      - name: Descargar
+        run: |
+          mkdir -p salida/descargas salida/texto
+          printf 'nombre\turl\thttp\tbytes\ttipo\n' > salida/estado.tsv
+          grep -v '^#' fuentes/urls.tsv | while IFS=$'\t' read -r nombre url; do
+            [ -z "$nombre" ] && continue
+            res=$(curl -sSL --retry 3 --max-time 90 -A 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/126 Mobile Safari/537.36' \
+              -o "salida/descargas/$nombre" -w '%{http_code}\t%{size_download}\t%{content_type}' "$url" || echo "ERR\t0\t-")
+            printf '%s\t%s\t%s\n' "$nombre" "$url" "$res" >> salida/estado.tsv
+            case "$nombre" in
+              *.pdf) pdftotext -layout "salida/descargas/$nombre" "salida/texto/$nombre.txt" 2>/dev/null || true ;;
+              *.doc) catdoc -d utf-8 "salida/descargas/$nombre" > "salida/texto/$nombre.txt" 2>/dev/null || true ;;
+            esac
+          done
+          cat salida/estado.tsv
+      - name: Publicar en la rama fuentes-normativa
+        run: |
+          cd salida
+          git init -q -b fuentes-normativa
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -q -m "Fuentes descargadas el $(date -u +%Y-%m-%d)"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" fuentes-normativa
