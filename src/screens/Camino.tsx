@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Boton } from '../components/Boton';
 import { Hoja } from '../components/Hoja';
 import { AnilloProgreso } from '../components/Indicadores';
@@ -15,9 +15,18 @@ import { COLOR_UNIDAD } from '../lib/colores';
 import { diaLocal } from '../lib/fechas';
 import { usePWA, instalar } from '../lib/pwa';
 import { useProgreso } from '../store/progreso';
+import { ElegirTema } from './ElegirTema';
 
 const DESPLAZAMIENTOS = [0, 44, 72, 44, 0, -44, -72, -44];
-const PASO_Y = 96;
+const PASO_Y = 132;
+
+/** Nombre corto que se muestra debajo de cada nodo. */
+function etiquetaNodo(e: EstadoNodo): string {
+  const n = e.nodo;
+  if (n.tipo === 'repaso') return 'Repaso';
+  if (n.tipo === 'fallo') return n.titulo.replace(/^«([^,»]+).*$/, '«$1»');
+  return n.titulo.replace(/\s*\((?:art|arts)\.[^)]*\)\s*$/i, '').replace(/^Art\. /, 'Art. ');
+}
 
 function useProgresoCamino() {
   const leccionesCompletadas = useProgreso((s) => s.leccionesCompletadas);
@@ -62,11 +71,22 @@ function BotonNodo({ e, unidad, alTocar, chico }: { e: EstadoNodo; unidad: Unida
       )}
       <button
         onClick={alTocar}
-        className="btn-3d relative grid place-items-center rounded-full! text-white"
+        className="btn-3d relative mx-auto grid place-items-center rounded-full! text-white"
         style={{ width: tam, height: tam, background: fondo, ['--sombra' as string]: sombra, fontSize: chico ? 24 : 30 }}
         aria-label={`${e.nodo.titulo}${e.completo ? ' (completado)' : e.desbloqueado ? '' : ' (bloqueado)'}`}
       >
         <span className={e.desbloqueado || e.completo ? '' : 'opacity-60 grayscale'}>{icono}</span>
+      </button>
+      <button
+        onClick={alTocar}
+        tabIndex={-1}
+        aria-hidden
+        className={`absolute left-1/2 mt-2 line-clamp-2 -translate-x-1/2 rounded-md bg-fondo/90 px-1.5 text-center text-[11px] leading-tight font-extrabold ${
+          e.desbloqueado || e.completo ? 'text-texto' : 'text-suave'
+        }`}
+        style={{ width: chico ? 92 : 118 }}
+      >
+        {etiquetaNodo(e)}
       </button>
     </div>
   );
@@ -102,7 +122,8 @@ function SeccionUnidad({ unidad, estados, alTocarNodo, alVerGuia }: { unidad: Un
     const ocupados = estados.map((e) => {
       const p = pos.get(e.nodo.id)!;
       const r = e.nodo.tipo === 'fallo' ? 29 : 37;
-      return { x0: p.x - r, x1: p.x + r, y0: p.y, y1: p.y + 2 * r + 4 };
+      const ancho = e.nodo.tipo === 'fallo' ? 46 : 59; // la etiqueta es más ancha que el nodo
+      return { x0: p.x - ancho, x1: p.x + ancho, y0: p.y, y1: p.y + 2 * r + 38 };
     });
     return (
       candidatos.find(
@@ -110,7 +131,7 @@ function SeccionUnidad({ unidad, estados, alTocarNodo, alVerGuia }: { unidad: Un
       ) ?? null
     );
   })();
-  const alto = 40 + principales.length * PASO_Y;
+  const alto = 40 + principales.length * PASO_Y - 20;
   const centro = 160;
 
   return (
@@ -255,8 +276,22 @@ function DetalleNodo({ e, unidad, alCerrar }: { e: EstadoNodo; unidad: Unidad; a
         >
           {e.completo ? 'Repetir (+XP)' : n.tipo === 'caso' ? 'Entrar a la audiencia' : 'Empezar'}
         </Boton>
-      ) : (
+      ) : n.tipo === 'repaso' ? (
         <p className="rounded-2xl bg-superficie-2 p-3 text-center font-bold text-suave">🔒 Completá los pasos anteriores para desbloquear.</p>
+      ) : (
+        <div className="space-y-2">
+          <p className="text-sm font-semibold text-suave">El camino guiado sugiere hacer antes los pasos anteriores, pero podés estudiar este tema ahora.</p>
+          <Boton
+            ancho
+            variante="azul"
+            onClick={() => {
+              alCerrar();
+              navegar(destino);
+            }}
+          >
+            Estudiar este tema igual
+          </Boton>
+        </div>
       )}
     </div>
   );
@@ -297,7 +332,7 @@ function Bienvenida() {
             ))}
           </div>
         </div>
-        <p className="text-xs text-suave">Tu progreso se guarda sólo en este dispositivo y la app funciona sin conexión.</p>
+        <p className="text-xs text-suave">Tu progreso se guarda en este dispositivo (podés guardar una copia desde Perfil) y la app funciona sin conexión.</p>
         <Boton ancho onClick={marcar}>
           ¡Empezar!
         </Boton>
@@ -348,14 +383,54 @@ export function PantallaCamino() {
   const navegar = useNavigate();
   const todoCompleto = !hayMas && unidades.every((u) => p.repasosCompletados[u.id]);
   const generadosVisibles = unidades.filter((u) => u.generada).length;
+  const [params, setParams] = useSearchParams();
+  const vista = params.get('vista') === 'temas' ? 'temas' : 'camino';
 
   useEffect(() => {
+    if (vista !== 'camino') return;
     const t = window.setTimeout(() => document.getElementById('nodo-actual')?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 250);
     return () => window.clearTimeout(t);
-  }, []);
+  }, [vista]);
+
+  const selector = (
+    <div className="sticky top-0 z-20 bg-fondo/95 px-4 pt-3 pb-2 backdrop-blur">
+      <div className="grid grid-cols-2 gap-1 rounded-2xl bg-superficie-2 p-1" role="tablist" aria-label="Forma de estudiar">
+        {(
+          [
+            ['camino', '🧭 Camino guiado'],
+            ['temas', '📚 Elegir tema'],
+          ] as const
+        ).map(([v, etiqueta]) => (
+          <button
+            key={v}
+            role="tab"
+            aria-selected={vista === v}
+            onClick={() => {
+              setParams(v === 'temas' ? { vista: 'temas' } : {}, { replace: true });
+              window.scrollTo({ top: 0 });
+            }}
+            className={`rounded-xl py-2 text-sm font-black ${vista === v ? 'bg-superficie shadow' : 'text-suave'}`}
+          >
+            {etiqueta}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+
+  if (vista === 'temas') {
+    return (
+      <Marco lateral={<PanelLateral />}>
+        {selector}
+        <ElegirTema />
+        {!bienvenidaVista && <Bienvenida />}
+      </Marco>
+    );
+  }
 
   return (
     <Marco lateral={<PanelLateral />}>
+      {selector}
       {vueltas > 0 && <p className="px-4 pt-3 text-center text-sm font-black text-violeta-500">🔄 Vuelta {vueltas + 1} del camino</p>}
       {unidades.map((u) => (
         <SeccionUnidad key={u.id} unidad={u} estados={estados.get(u.id) ?? []} alTocarNodo={(e) => setNodo({ e, u })} alVerGuia={() => setGuia(u)} />

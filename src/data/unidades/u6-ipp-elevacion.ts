@@ -1,3 +1,4 @@
+import { ENLACES } from '../enlaces-fallos';
 import { comp, leccion, op, ord, vf } from '../helpers';
 import type { Unidad } from '../tipos';
 
@@ -21,7 +22,9 @@ export const U6: Unidad = {
           'En un proceso correccional, el mismo juez que había investigado era luego quien juzgaba. La Corte entendió que esa acumulación de funciones afectaba la garantía de imparcialidad.',
         regla:
           'Quien investiga no debe juzgar. Por eso el modelo bonaerense separa al Fiscal (que investiga) del Juez de Garantías (que controla) y del tribunal de juicio (que decide).',
-        nota: 'Síntesis didáctica (Fallos 328:1491). Verificá el fallo completo antes de citarlo.',
+        nota: 'Síntesis didáctica (Fallos 328:1491, 17/5/2005).',
+        enlaces: [ENLACES.llerena],
+        ambito: 'nacional',
       },
       lecciones: [
         leccion({
@@ -32,7 +35,7 @@ export const U6: Unidad = {
             titulo: 'Cinco objetivos de la investigación',
             parrafos: [
               'La Investigación Penal Preparatoria no busca condenar: busca reunir lo necesario para decidir si hay un caso para llevar a juicio.',
-              'Según el art. 266, debe: 1) comprobar si existe un hecho delictuoso; 2) establecer las circunstancias que lo califican, agravan, atenúan o justifican; 3) individualizar a autores y partícipes; 4) conocer las condiciones personales del imputado; y 5) comprobar la extensión del daño.',
+              'Según el art. 266, debe: 1) comprobar si existe un hecho delictuoso; 2) establecer las circunstancias que lo califican, agravan, atenúan, justifican o inciden en su punibilidad; 3) individualizar a autores y partícipes; 4) conocer las condiciones personales del imputado; y 5) comprobar la extensión del daño.',
               'Fijate que la IPP también busca lo que favorece al imputado (atenuantes, justificantes): es la objetividad del Fiscal en acción.',
             ],
             enLaPractica:
@@ -44,7 +47,7 @@ export const U6: Unidad = {
               'Ordená las finalidades de la IPP como aparecen en el art. 266:',
               [
                 'Comprobar si existe un hecho delictuoso',
-                'Establecer las circunstancias que lo califican, agravan, atenúan o justifican',
+                'Establecer las circunstancias que lo califiquen, agraven, atenúen, justifiquen o incidan en su punibilidad',
                 'Individualizar a autores y partícipes',
                 'Verificar las condiciones personales del imputado',
                 'Comprobar la extensión del daño',
@@ -58,8 +61,8 @@ export const U6: Unidad = {
             ),
             op(
               '¿Cuál de estas NO es una finalidad de la IPP?',
-              ['Dictar la sentencia condenatoria', 'Individualizar a los autores', 'Comprobar la extensión del daño', 'Comprobar si existió el hecho'],
-              'La IPP prepara el juicio; la sentencia la dicta el tribunal de juicio.',
+              ['Fijar la pena que corresponde al imputado', 'Individualizar a los autores y partícipes', 'Comprobar la extensión del daño', 'Verificar las condiciones personales del imputado'],
+              'La IPP prepara el juicio; la pena la fija el tribunal de juicio en la sentencia. Las condiciones personales del imputado sí se investigan (inc. 4).',
             ),
           ],
         }),
@@ -78,7 +81,7 @@ export const U6: Unidad = {
           preguntas: [
             op(
               'El Fiscal necesita allanar un domicilio. ¿Quién lo autoriza?',
-              ['El Juez de Garantías', 'El propio Fiscal', 'El comisario', 'La Cámara de Casación'],
+              ['El Juez de Garantías, a pedido del Fiscal', 'El propio Fiscal, como director de la IPP', 'El Fiscal General departamental', 'La Cámara de Apelación y Garantías'],
               'Los actos que afectan garantías (domicilio, comunicaciones, libertad) requieren orden judicial.',
             ),
             comp(
@@ -118,12 +121,17 @@ export const U6: Unidad = {
             comp(
               'Completá el art. 282.',
               'La Investigación Penal Preparatoria deberá practicarse en el plazo de ___ a contar de la detención o declaración del imputado.',
-              ['cuatro (4) meses', 'dos (2) años', 'diez (10) días', 'un (1) mes'],
+              ['cuatro (4) meses', 'seis (6) meses', 'dos (2) años', 'tres (3) meses'],
               'Cuatro meses es el plazo ordinario.',
             ),
             op(
               '¿Quién dispone la prórroga de la IPP?',
-              ['El propio Fiscal, en forma motivada y con conocimiento del Juez de Garantías', 'La víctima', 'El Tribunal de Casación', 'La Policía'],
+              [
+                'El propio Fiscal, en forma motivada y con conocimiento del Juez de Garantías',
+                'El Juez de Garantías, a pedido del Fiscal',
+                'El Fiscal General, a pedido del Agente Fiscal',
+                'La Cámara de Garantías, de oficio',
+              ],
               'Según el art. 282, el Fiscal «dispondrá motivada y fundadamente su prórroga, con conocimiento del Juez de Garantías».',
             ),
             comp(
@@ -148,7 +156,7 @@ export const U6: Unidad = {
     },
     {
       articuloId: 'cppba-334',
-      relacionados: ['cppba-335'],
+      relacionados: ['cppba-335', 'cppba-334-bis'],
       lecciones: [
         leccion({
           id: 'u6-a334-l1',
@@ -157,8 +165,9 @@ export const U6: Unidad = {
           intro: {
             titulo: 'La acusación que abre la puerta del juicio',
             parrafos: [
-              'Si el Fiscal estima contar con elementos suficientes para ejercer la acción, formula por escrito su requisitoria de citación a juicio ante el Juez de Garantías (art. 334).',
-              'Según el art. 335, debe contener, bajo sanción de nulidad: los datos del imputado, una relación clara, precisa, circunstanciada y específica del hecho, los fundamentos de la acusación y la calificación legal; y aclarar si debe juzgarlo un Tribunal o un Juez Correccional.',
+              'Si el Fiscal estima contar con elementos suficientes para ejercer la acción, y no corresponde aplicar un criterio de oportunidad o un mecanismo de abreviación del proceso, formula por escrito su requisitoria de citación a juicio (art. 334).',
+              'Antes, si durante la IPP denegó diligencias propuestas por las partes, debe disponer el cierre de la etapa y notificarlo: en cinco días las partes pueden pedir al Fiscal General que revise esa denegatoria, y éste resuelve en 48 horas.',
+              'Según el art. 335, debe contener, bajo sanción de nulidad: los datos del imputado, una relación clara, precisa, circunstanciada y específica del hecho, los fundamentos de la acusación y la calificación legal; y aclarar si debe juzgarlo un Tribunal Criminal (con o sin jurados) o un Juez Correccional. Puede indicar una calificación alternativa.',
               'La descripción del hecho es la base del principio de congruencia: no se podrá condenar por un hecho distinto.',
             ],
             enLaPractica:
@@ -170,9 +179,9 @@ export const U6: Unidad = {
               '¿Qué debe contener la requisitoria de elevación a juicio?',
               [
                 'Datos del imputado, relación circunstanciada del hecho, fundamentos y calificación legal',
-                'Sólo la calificación legal',
-                'La pena que el juez debe imponer, sin fundamentos',
-                'La declaración de la víctima transcripta',
+                'Datos del imputado, calificación legal y pena que se pedirá en el juicio',
+                'Relación del hecho y la lista de testigos, sin calificación legal',
+                'Datos del imputado y transcripción de la declaración de la víctima',
               ],
               'Son los requisitos del art. 335, exigidos bajo sanción de nulidad.',
             ),
@@ -181,10 +190,25 @@ export const U6: Unidad = {
               false,
               'Falso. El art. 334 condiciona la requisitoria a contar con elementos suficientes; si no los hay, por objetividad, debe pedir el sobreseimiento.',
             ),
+            op(
+              'Durante la IPP, el Fiscal rechazó una pericia que propuso la defensa. Ahora quiere requerir la elevación. ¿Qué debe hacer antes?',
+              [
+                'Cerrar la etapa y notificarlo, para que la defensa pueda pedir al Fiscal General que revise la denegatoria',
+                'Nada: la denegatoria sólo puede discutirse en el juicio',
+                'Pedir autorización al Juez de Garantías para no producirla',
+                'Producir la pericia de oficio aunque la considere inútil',
+              ],
+              'Art. 334, segundo párrafo: cierre de la etapa, cinco días para pedir la revisión al Fiscal General y 48 horas para que éste resuelva.',
+            ),
+            vf(
+              'Si el Fiscal pide el sobreseimiento y hay particular damnificado constituido, éste puede llegar a sostener la acusación a su costa.',
+              true,
+              'Verdadero (art. 334 bis): si el Fiscal de Cámara mantiene el sobreseimiento, el particular damnificado tiene 15 días para requerir la elevación a juicio.',
+            ),
             comp(
               'Completá el art. 335.',
               'La relación del hecho debe ser clara, precisa, ___ y específica.',
-              ['circunstanciada', 'breve', 'secreta', 'verbal'],
+              ['circunstanciada', 'fundada', 'sucinta', 'motivada'],
               'Circunstanciada: con tiempo, lugar, modo y participación.',
             ),
           ],
@@ -213,17 +237,22 @@ export const U6: Unidad = {
             comp(
               'Completá el art. 336.',
               'El defensor podrá, en el término de ___, oponerse instando al sobreseimiento o el cambio de calificación legal.',
-              ['quince (15) días', 'tres (3) días', 'seis (6) meses', 'veinticuatro (24) horas'],
+              ['quince (15) días', 'cinco (5) días', 'diez (10) días', 'tres (3) días'],
               'Quince días para preparar una oposición fundada.',
             ),
             op(
               '¿Qué puede pedir la defensa al oponerse?',
-              ['El sobreseimiento, el cambio de calificación u oponer excepciones', 'La condena de la víctima', 'La prisión del Fiscal', 'La suspensión de la feria judicial'],
+              [
+                'El sobreseimiento, el cambio de calificación u oponer excepciones',
+                'La nulidad de toda la IPP, sin otra alternativa',
+                'Que se reabra la IPP por seis meses más',
+                'La absolución, con valoración definitiva de la prueba',
+              ],
               'Son las pretensiones que prevé el art. 336.',
             ),
             op(
               '¿Quién resuelve la oposición y en qué plazo?',
-              ['El Juez de Garantías, en cinco días', 'El Fiscal que acusó, en un mes', 'El Tribunal de Casación, en veinte días', 'La Policía, en el acto'],
+              ['El Juez de Garantías, en cinco días', 'El Juez de Garantías, en quince días', 'El Tribunal en lo Criminal, en cinco días', 'La Cámara de Garantías, en diez días'],
               'Art. 337: el Juez de Garantías resuelve en cinco días; si rechaza la oposición, eleva la causa a juicio por auto.',
             ),
             vf(

@@ -17,6 +17,9 @@ s = re.sub(r'(?is)<(script|style|head)\b.*?</\1>', ' ', s)
 s = re.sub(r'\s+', ' ', s)  # en HTML los saltos de línea del código fuente no significan nada
 s = re.sub(r'(?i)<br\s*/?>', '\n', s)
 s = re.sub(r'(?i)</?(p|div|h[1-6]|li|tr|table|blockquote)\b[^>]*>', '\n\n', s)
+# Texto subrayado: en normas.gba.gob.ar marca lo observado (vetado) por el decreto de promulgación.
+s = re.sub(r'(?i)<u\b[^>]*>', '⟦', s)
+s = re.sub(r'(?i)</u\s*>', '⟧', s)
 s = re.sub(r'<[^>]+>', ' ', s)
 s = html.unescape(s).replace('\xa0', ' ').replace('\r', '')
 lineas = [re.sub(r'[ \t]+', ' ', l).strip() for l in s.split('\n')]

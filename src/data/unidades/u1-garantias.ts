@@ -1,4 +1,5 @@
-import { comp, leccion, op, ord, vf } from '../helpers';
+import { ENLACES } from '../enlaces-fallos';
+import { comp, leccion, op, vf } from '../helpers';
 import type { Unidad } from '../tipos';
 
 export const U1: Unidad = {
@@ -12,7 +13,7 @@ export const U1: Unidad = {
   temas: [
     {
       articuloId: 'cppba-1',
-      relacionados: ['cppba-3'],
+      relacionados: ['cppba-3', 'cppba-22-bis'],
       falloClave: {
         tribunal: 'Corte Suprema de Justicia de la Nación',
         caso: '«Polak, Federico Gabriel»',
@@ -21,19 +22,35 @@ export const U1: Unidad = {
           'Un imputado había sido juzgado válidamente y, por un error que no le era atribuible, se anuló el juicio para hacerlo de nuevo. La Corte entendió que retrotraer el proceso a etapas ya cumplidas, cuando el imputado no causó el vicio, lo expone otra vez al riesgo de condena.',
         regla:
           'El non bis in ídem prohíbe no sólo una segunda pena, sino también un nuevo juicio y la renovación del riesgo de condena por el mismo hecho.',
-        nota: 'Síntesis didáctica. Antes de citarlo en un escrito, consultá el fallo completo (Fallos 321:2826).',
+        nota: 'Síntesis didáctica (Fallos 321:2826, 15/10/1998).',
+        enlaces: [ENLACES.polak],
+        ambito: 'nacional',
       },
+      fallosRelacionados: [
+        {
+          tribunal: 'Suprema Corte de Justicia de la Provincia de Buenos Aires',
+          caso: '«Pitman y otros» (P. 137.668 y P. 137.671)',
+          anio: '2024',
+          resumen:
+            'Un jurado de Mar del Plata declaró no culpables a tres acusados. Los particulares damnificados pidieron la nulidad del juicio y la Casación, por vía de queja, anuló el debate y el veredicto y ordenó un nuevo juicio con otro jurado. La SCBA revocó esa decisión y restableció el veredicto de no culpabilidad.',
+          regla:
+            'Anular un veredicto de no culpabilidad del jurado para hacer un nuevo juicio expone a los acusados a un nuevo riesgo de condena por el mismo hecho: lo prohíbe el non bis in ídem. La absolución derivada del veredicto del jurado es irrecurrible (art. 371 quater, ap. 7).',
+          nota: 'Síntesis de la sentencia de marzo de 2024 (registrada el 21/3/2024).',
+          enlaces: [ENLACES.scbaPitman],
+          ambito: 'bonaerense',
+        },
+      ],
       lecciones: [
         leccion({
           id: 'u1-a1-l1',
           titulo: 'Juez natural y juicio previo',
-          minutos: 3,
+          minutos: 4,
           intro: {
             titulo: '¿Quién puede juzgarte?',
             parrafos: [
               'El artículo 1 del CPPBA es la puerta de entrada al código: reúne las garantías que la Constitución reconoce a cualquier persona acusada de un delito.',
               'La primera es el juez natural: sólo pueden juzgarte los jueces designados de acuerdo con la Constitución de la Provincia y competentes según sus leyes. El art. 18 de la Constitución Nacional agrega que deben estar designados por ley ANTES del hecho: nadie puede armar un tribunal especial para un caso.',
-              'La segunda es el juicio previo: para que haya pena tiene que haber antes un juicio con acusación, defensa, prueba y sentencia, fundado en una ley anterior al hecho y tramitado conforme al código.',
+              'La segunda es el juicio previo: para que haya pena tiene que haber antes un juicio, fundado en una ley anterior al hecho y tramitado conforme al código. Desde la Ley 14.543, el art. 1 también remite al juicio por jurados en causas criminales (art. 22 bis: delitos con pena máxima de más de 15 años).',
             ],
             enLaPractica:
               'Si una causa de Lomas de Zamora se asignara a un juzgado creado especialmente después del hecho para «ese» imputado, la defensa podría objetarlo por violar el juez natural.',
@@ -41,30 +58,40 @@ export const U1: Unidad = {
           foco: 'Nadie podrá ser juzgado por otros jueces que los designados de acuerdo con la Constitución de la Provincia y competentes según sus leyes reglamentarias',
           preguntas: [
             op(
-              '¿Qué exige la garantía del juez natural?',
+              '¿Qué exige la garantía del juez natural según el art. 1 CPPBA?',
               [
-                'Que el juez haya sido designado conforme a la Constitución y sea competente según la ley',
-                'Que el juez viva en el mismo barrio que el imputado',
-                'Que el imputado elija a su juez',
-                'Que el juez sea elegido por la víctima',
+                'Jueces designados conforme a la Constitución provincial y competentes según sus leyes',
+                'Que intervenga el juez del lugar donde vive el imputado',
+                'Que la causa la resuelva el juez que la Suprema Corte designe para ese caso',
+                'Que el imputado pueda elegir entre un juez técnico y un jurado en cualquier delito',
               ],
-              'El art. 1 CPPBA exige jueces designados de acuerdo con la Constitución de la Provincia y competentes según sus leyes; el art. 18 CN agrega que deben estar designados por ley antes del hecho de la causa. Lo que se prohíbe son los tribunales «a medida».',
+              'El art. 1 exige jueces designados de acuerdo con la Constitución de la Provincia y competentes según sus leyes; el art. 18 CN agrega que deben estar designados antes del hecho. La competencia territorial se fija por el lugar del hecho, no por el domicilio, y el jurado sólo rige en los delitos del art. 22 bis.',
             ),
-            vf(
-              'Se puede aplicar una pena sin juicio si el imputado confiesa en la comisaría.',
-              false,
-              'Falso. Sin juicio previo no hay pena. Además, una «confesión» policial no reemplaza al proceso ni a la declaración ante el Fiscal con defensor.',
+            op(
+              'Tras un homicidio muy mediático, se crea por ley un tribunal especial para juzgar sólo ese caso. ¿Qué garantía del art. 1 se afecta?',
+              ['El juez natural', 'El non bis in ídem', 'El favor rei', 'La inviolabilidad de la defensa'],
+              'Un tribunal armado después del hecho y «a medida» de una causa viola el juez natural. Las otras garantías existen, pero no son las que están en juego aquí.',
             ),
             comp(
               'Completá el artículo 1.',
               'Nadie podrá ser penado sin ___ fundado en ley anterior al hecho del proceso.',
-              ['juicio previo', 'denuncia policial', 'pericia médica', 'orden de captura'],
-              'Es la garantía de juicio previo: primero el juicio, después (si corresponde) la pena.',
+              ['juicio previo', 'acusación fiscal', 'sentencia firme', 'investigación preparatoria'],
+              'Es la garantía de juicio previo: primero el juicio, después (si corresponde) la pena. La «sentencia firme» aparece en otra parte del artículo, en el estado de inocencia.',
             ),
             op(
-              'Según el art. 1 CPPBA, ¿qué tiene que ser ANTERIOR al hecho del proceso?',
-              ['La ley en que se funda el juicio', 'La denuncia', 'La sentencia', 'La detención'],
-              'El art. 1 exige un juicio previo «fundado en ley anterior al hecho del proceso». Que también el juez exista antes del hecho surge del art. 18 de la Constitución Nacional.',
+              '¿En qué causas interviene el Tribunal de jurados (art. 22 bis CPPBA)?',
+              [
+                'En delitos cuya pena máxima en abstracto exceda de quince (15) años',
+                'En delitos cuya pena máxima supere los ocho (8) años',
+                'En todos los delitos de competencia del Tribunal en lo Criminal',
+                'Sólo en homicidios dolosos consumados',
+              ],
+              'El art. 22 bis atribuye al jurado los delitos con pena máxima en abstracto de más de 15 años (o un concurso en que alguno lo supere). Hasta 15 años, el Tribunal en lo Criminal es unipersonal salvo excepciones (art. 22).',
+            ),
+            vf(
+              'El imputado puede renunciar al juicio por jurados incluso después de que quedó firme la requisitoria de elevación a juicio.',
+              false,
+              'Falso. La renuncia debe hacerse en el plazo del art. 336 y ratificarse ante el juez; una vez firme la requisitoria «no podrá renunciarse al juicio por jurados, bajo pena de nulidad» (art. 22 bis).',
             ),
           ],
         }),
@@ -77,41 +104,52 @@ export const U1: Unidad = {
             parrafos: [
               'Mientras no haya una sentencia firme (es decir, que ya no puede recurrirse), el imputado es inocente. Por eso estar preso durante el proceso es la excepción y nunca puede funcionar como un castigo adelantado.',
               'El non bis in ídem impide perseguir a alguien dos veces por el mismo hecho. No importa si la primera vez terminó con condena, absolución o sobreseimiento firme: el Estado tuvo su oportunidad.',
+              'En el juicio por jurados la garantía se ve con claridad: la sentencia absolutoria derivada de un veredicto de no culpabilidad es irrecurrible (art. 371 quater, ap. 7).',
             ],
             enLaPractica:
-              'Si un joven fue sobreseído definitivamente por un hurto y meses después otra UFI lo cita por el mismo episodio, la defensa plantea la excepción por falta de acción invocando el non bis in ídem.',
+              'Si un joven fue sobreseído definitivamente por un hurto y meses después otra UFI lo cita por el mismo episodio, la defensa plantea la excepción de falta de acción (art. 328 inc. 2) invocando el non bis in ídem.',
           },
           foco: 'ni considerado culpable mientras una sentencia firme no lo declare tal; ni perseguido penalmente más de una vez por el mismo hecho',
           preguntas: [
             op(
-              '¿Hasta cuándo se presume la inocencia del imputado?',
+              '¿Hasta cuándo rige el estado de inocencia?',
               [
-                'Hasta que una sentencia firme lo declare culpable',
-                'Hasta que el Fiscal lo acusa',
-                'Hasta que es detenido',
-                'Hasta el veredicto del primer juicio, aunque se recurra',
+                'Hasta que una sentencia firme declare la culpabilidad',
+                'Hasta el veredicto de culpabilidad del jurado o del tribunal',
+                'Hasta que el Tribunal de Casación confirma la condena',
+                'Hasta que se dicta la prisión preventiva',
               ],
-              'La sentencia debe estar firme: mientras se pueda recurrir, sigue siendo inocente.',
+              'La sentencia debe estar firme. Un veredicto o una condena confirmada en Casación todavía pueden recurrirse (por ejemplo, ante la SCBA o la CSJN): mientras tanto, la persona sigue siendo inocente.',
             ),
             vf(
               'El non bis in ídem sólo impide una segunda condena; un segundo juicio por el mismo hecho estaría permitido.',
               false,
-              'Falso. La garantía prohíbe la doble PERSECUCIÓN: ya el riesgo de un nuevo proceso por el mismo hecho está vedado.',
+              'Falso. La garantía prohíbe la doble PERSECUCIÓN: ya el riesgo de un nuevo proceso por el mismo hecho está vedado (CSJN, «Polak»).',
             ),
             op(
-              'Martín fue sobreseído con resolución firme por un hurto. Otra fiscalía lo cita por el mismo hecho. ¿Qué corresponde?',
+              'Martín fue sobreseído con resolución firme por un hurto. Otra fiscalía lo cita por el mismo hecho. ¿Qué corresponde plantear?',
               [
-                'Plantear que la acción no puede ejercerse otra vez (non bis in ídem)',
-                'Que declare y explique lo mismo de nuevo',
-                'Esperar al juicio para ver si lo condenan',
-                'Pedir que se acumulen ambas causas',
+                'La excepción de falta de acción por cosa juzgada (non bis in ídem)',
+                'La nulidad de la citación porque no se notificó al defensor',
+                'La suspensión del juicio a prueba',
+                'La acumulación de ambas causas por conexión',
               ],
-              'El sobreseimiento firme cierra el caso con efecto de cosa juzgada. Volver a perseguirlo por el mismo hecho viola el art. 1.',
+              'El sobreseimiento firme cierra el caso. La vía es la excepción de falta de acción (art. 328 inc. 2: la acción «no pudiera ser proseguida»). Las otras opciones aceptan que la persecución siga.',
+            ),
+            op(
+              'Un jurado declaró «no culpable» a Lucas. El Fiscal quiere recurrir para que haya un nuevo juicio. ¿Qué establece el CPPBA?',
+              [
+                'La sentencia absolutoria derivada del veredicto de no culpabilidad es irrecurrible',
+                'Puede recurrir en casación si el veredicto se apartó de la prueba',
+                'Puede recurrir si el veredicto no fue unánime',
+                'Puede pedir un nuevo jurado si el particular damnificado lo solicita',
+              ],
+              'Art. 371 quater, ap. 7: «La sentencia absolutoria derivada del veredicto de no culpabilidad del jurado es irrecurrible». El apartamiento de la prueba (art. 448 bis, inc. d) es motivo de recurso sólo contra la condena. La SCBA lo aplicó en «Pitman» (2024).',
             ),
             comp(
               'Completá.',
               'Nadie podrá ser perseguido penalmente ___ por el mismo hecho.',
-              ['más de una vez', 'sin abogado', 'de noche', 'sin denuncia'],
+              ['más de una vez', 'sin acusación fiscal', 'sin sentencia firme', 'fuera de su departamento judicial'],
               'Es la fórmula clásica del non bis in ídem.',
             ),
           ],
@@ -124,47 +162,53 @@ export const U1: Unidad = {
             titulo: 'La duda siempre favorece al imputado',
             parrafos: [
               'La defensa en juicio es inviolable: el imputado tiene derecho a ser oído, a tener abogado, a conocer la acusación y a ofrecer prueba.',
-              'El favor rei manda que, ante la duda, se esté a lo más favorable al imputado. En la sentencia se traduce en el in dubio pro reo: si el tribunal no tiene certeza, absuelve.',
-              'Y una regla muy práctica: si se viola una garantía pensada para proteger al imputado, ese error no puede usarse en su contra.',
+              'El favor rei manda que, ante la duda, se esté a lo más favorable al imputado. En la sentencia se traduce en el in dubio pro reo: si el tribunal no tiene certeza, absuelve. Y el art. 3 completa la idea: las normas que restringen derechos se interpretan restrictivamente.',
+              'Dos reglas más del art. 1: si se viola una garantía pensada para proteger al imputado, ese error no puede usarse en su contra; y para imponer una medida de seguridad a un inimputable hay que respetar las reglas del juicio.',
             ],
             enLaPractica:
               'Si el único testigo del robo duda en el juicio («creo que era él, pero estaba oscuro»), el Tribunal en lo Criminal no puede condenar: la duda razonable obliga a absolver.',
           },
           foco: 'En caso de duda deberá estarse siempre a lo que sea más favorable al imputado.',
           preguntas: [
-            vf(
-              'Si al terminar el juicio los jueces dudan razonablemente sobre la autoría, deben absolver.',
-              true,
-              'Verdadero. Es el in dubio pro reo, derivado del favor rei del art. 1 CPPBA: la condena exige certeza.',
+            op(
+              'Al cerrar el debate, los jueces creen probable que Ana sea la autora, pero no están seguros. ¿Qué corresponde?',
+              [
+                'Absolver: la duda favorece a la imputada',
+                'Condenar al mínimo de la escala penal',
+                'Ordenar de oficio una instrucción suplementaria',
+                'Condenar si el particular damnificado mantiene la acusación',
+              ],
+              'La condena exige certeza: la probabilidad no alcanza. Es el in dubio pro reo, derivado del favor rei del art. 1.',
             ),
             op(
               '¿Qué significa «favor rei»?',
               [
                 'Ante la duda, estar a lo más favorable al imputado',
-                'Favorecer siempre a la víctima',
-                'Que el rey decide en última instancia',
-                'Que el fiscal tiene la última palabra',
+                'Ante la duda, el juez debe producir nuevas pruebas de oficio',
+                'Ante la duda sobre la ley aplicable, rige la vigente al dictar el fallo',
+                'Ante la duda, se sigue el dictamen del Fiscal por su criterio objetivo',
               ],
               'Es un principio de interpretación y de valoración: la duda juega a favor del imputado.',
             ),
             op(
-              'Se omitió notificar al imputado una audiencia, en violación de una garantía. ¿Puede el Fiscal invocar ese error para perjudicarlo?',
+              'Se omitió notificar al imputado una audiencia, en violación de una regla de garantía. ¿Puede el Fiscal invocar esa omisión para perjudicarlo?',
               [
-                'No: la inobservancia de una garantía no puede hacerse valer en perjuicio del imputado',
-                'Sí, si el error lo cometió el juez',
-                'Sí, siempre que lo pida la víctima',
-                'Depende de la gravedad del delito',
+                'No: una garantía establecida en su beneficio no puede hacerse valer en su perjuicio',
+                'Sí, si la defensa no planteó la nulidad a tiempo',
+                'Sí, porque la omisión no es imputable al Fiscal',
+                'Sólo si el acto puede renovarse sin afectar la defensa',
               ],
-              'El último párrafo del art. 1 lo dice expresamente: las reglas de garantía protegen al imputado y no pueden volverse en su contra.',
+              'El art. 1 lo dice expresamente: «La inobservancia de una regla de garantía establecida en beneficio del imputado no se podrá hacer valer en su perjuicio».',
             ),
-            ord(
-              'Ordená de la más general a la más específica estas manifestaciones del art. 1:',
-              [
-                'Defensa inviolable en todo el procedimiento',
-                'Favor rei: ante la duda, lo más favorable al imputado',
-                'In dubio pro reo: la duda sobre los hechos obliga a absolver',
-              ],
-              'La defensa inviolable es el marco general; el favor rei es una regla de interpretación; el in dubio pro reo es su aplicación concreta al momento de sentenciar.',
+            vf(
+              'Para imponer una medida de seguridad a una persona inimputable (art. 34 inc. 1 CP) no hace falta respetar las reglas del juicio.',
+              false,
+              'Falso. El último párrafo del art. 1 exige la previa observancia de las normas del juicio (Libro III) para imponer medidas de seguridad.',
+            ),
+            op(
+              'Una norma que limita la libertad durante el proceso admite dos lecturas. ¿Cómo debe interpretarse (art. 3)?',
+              ['Restrictivamente', 'Extensivamente, para proteger a la víctima', 'Por analogía con el código federal', 'Según el criterio del Fiscal'],
+              'El art. 3 manda interpretar restrictivamente toda disposición que coarte la libertad, restrinja derechos o establezca sanciones procesales o exclusiones probatorias.',
             ),
           ],
         }),
@@ -179,33 +223,36 @@ export const U1: Unidad = {
           'En «Mattei» la Corte afirmó que el imputado tiene derecho a obtener un pronunciamiento que, definiendo su situación, ponga fin del modo más rápido posible a la incertidumbre que implica el proceso. En «Mozzatti», frente a un proceso que llevaba alrededor de 25 años, declaró extinguida la acción porque la duración había desnaturalizado la garantía de defensa.',
         regla:
           'La duración irrazonable del proceso viola la defensa en juicio y puede llevar a ponerle fin. Se evalúa la complejidad del caso, la conducta del imputado y la de las autoridades.',
-        nota: 'Síntesis didáctica (Fallos 272:188 y 300:1102). Verificá el texto completo antes de citarlo.',
+        nota: 'Síntesis didáctica (Fallos 272:188 y 300:1102).',
+        enlaces: [ENLACES.mattei, ENLACES.mozzatti],
+        ambito: 'nacional',
       },
       lecciones: [
         leccion({
           id: 'u1-a2-l1',
           titulo: 'Plazo razonable',
-          minutos: 3,
+          minutos: 4,
           intro: {
             titulo: 'Un proceso no puede durar para siempre',
             parrafos: [
               'Estar imputado genera angustia, gastos y estigma. Por eso el art. 2 reconoce el derecho a ser juzgado en un tiempo razonable y sin dilaciones indebidas.',
               'Para el código, el retardo en dictar sentencia y las dilaciones indebidas, cuando son reiteradas, no son un detalle: constituyen falta grave.',
-              '¿Qué es «razonable»? No hay un número mágico: se mira la complejidad del caso, lo que hizo el imputado y lo que hicieron (o no) los fiscales y jueces.',
+              '¿Qué es «razonable»? No hay un número mágico: se mira la complejidad del caso, lo que hizo el imputado y lo que hicieron (o no) los fiscales y jueces. Ojo: el tope de 2 años del art. 141 es otra cosa y rige sólo con imputado detenido.',
             ],
             enLaPractica:
               'En una causa simple por lesiones leves que quedó paralizada años en un despacho sin que nadie la impulsara, la defensa puede invocar la violación del plazo razonable.',
           },
+          foco: 'Toda persona sometida a proceso tendrá derecho a ser juzgada en un tiempo razonable y sin dilaciones indebidas.',
           preguntas: [
             op(
               '¿Qué derecho reconoce el art. 2 del CPPBA?',
               [
                 'A ser juzgado en un tiempo razonable y sin dilaciones indebidas',
-                'A elegir la fecha del juicio',
-                'A que el juicio dure exactamente un año',
-                'A suspender el proceso cuando lo desee',
+                'A ser juzgado dentro de los dos años, aunque esté en libertad',
+                'A que la IPP no supere los cuatro meses en ningún caso',
+                'A que el juicio se fije dentro de los treinta días de la elevación',
               ],
-              'El art. 2 consagra el derecho a ser juzgado en un tiempo razonable (el «plazo razonable» del art. 8.1 de la Convención Americana).',
+              'El art. 2 consagra el plazo razonable (art. 8.1 CADH), un estándar flexible. Los 2 años son el tope del art. 141 con detenido, y los 4 meses, el plazo prorrogable de la IPP (art. 282).',
             ),
             vf(
               'El retardo en dictar sentencia y las dilaciones indebidas, cuando son reiteradas, constituyen falta grave.',
@@ -215,18 +262,22 @@ export const U1: Unidad = {
             op(
               '¿Qué pautas se usan para medir si un plazo es razonable?',
               [
-                'Complejidad del caso, conducta del imputado y conducta de las autoridades',
-                'Sólo la cantidad de fojas del expediente',
-                'La opinión de la víctima',
-                'El horario del juzgado',
+                'Complejidad del caso, actividad del imputado y conducta de las autoridades',
+                'Gravedad del delito, pena en expectativa y alarma social',
+                'Cantidad de imputados, de testigos y de fojas',
+                'Sólo el tiempo transcurrido desde el hecho',
               ],
-              'Son los criterios que emplean la Corte Interamericana y la CSJN para evaluar la duración del proceso.',
+              'Son los criterios de la Corte Interamericana y de la CSJN. La gravedad del delito no justifica por sí sola un proceso eterno.',
             ),
-            comp(
-              'Completá el art. 2.',
-              'Toda persona sometida a proceso tendrá derecho a ser juzgada en un ___ y sin dilaciones indebidas.',
-              ['tiempo razonable', 'plazo de diez días', 'tribunal federal', 'horario nocturno'],
-              'El art. 2 habla de «tiempo razonable»: un estándar flexible que se analiza caso por caso.',
+            op(
+              'Una causa por lesiones leves, con el imputado en libertad, lleva siete años sin actividad del Fiscal ni del juzgado. ¿Qué planteo es más sólido?',
+              [
+                'La violación del plazo razonable (art. 2 CPPBA y 8.1 CADH)',
+                'El vencimiento del plazo fatal de dos años del art. 141',
+                'La nulidad de la IPP por exceder los cuatro meses del art. 282',
+                'La caducidad de la instancia por inactividad de la víctima',
+              ],
+              'El art. 141 exige que el imputado esté privado de libertad, y el plazo del art. 282 no genera nulidad automática. Lo que corresponde es invocar el plazo razonable («Mattei», «Mozzatti»).',
             ),
           ],
         }),
@@ -234,7 +285,7 @@ export const U1: Unidad = {
     },
     {
       articuloId: 'cppba-141',
-      relacionados: ['cppba-2'],
+      relacionados: ['cppba-2', 'cppba-282'],
       lecciones: [
         leccion({
           id: 'u1-a2-l2',
@@ -243,45 +294,50 @@ export const U1: Unidad = {
           intro: {
             titulo: 'Cuando hay alguien preso, el reloj corre más fuerte',
             parrafos: [
-              'Si el imputado está privado de su libertad, el código endurece los tiempos: los términos de la IPP y la duración total del proceso pasan a ser plazos fatales.',
-              'Según el art. 141, en ese caso el proceso no puede durar más de 2 años, salvo casos de suma complejidad (muchos imputados, hechos muy complejos), donde se está al plazo razonable del art. 2, sujeto a la apreciación judicial.',
-              'La idea central —más urgencia cuando hay una persona presa— es la que tenés que dominar.',
+              'Si el imputado está privado de su libertad, el código endurece los tiempos: los términos para completar la IPP y la duración total del proceso pasan a ser plazos fatales.',
+              'Según el art. 141, en ese caso el proceso no puede durar más de dos años. En un caso de suma complejidad se está al plazo razonable del art. 2, sujeto a la apreciación judicial.',
+              'Dos detalles prácticos: si se acumulan causas por conexión, los términos corren por separado desde la acumulación; y no se computa el tiempo de prueba fuera de la circunscripción, de los incidentes ni de los recursos.',
             ],
             enLaPractica:
               'Ante una prisión preventiva que se estira sin juicio a la vista, la defensa controla los plazos del art. 141 y del art. 282 (duración de la IPP) para pedir el cese de la detención.',
           },
-          foco: 'el cual no podrá durar más de 2 años',
+          foco: 'el cual no podrá durar más de dos (2) años',
           preguntas: [
             op(
               'Según el art. 141, ¿cuándo se vuelven fatales los plazos de la IPP y del proceso?',
               [
                 'Cuando el imputado está privado de su libertad',
-                'Cuando la víctima lo solicita',
-                'Cuando el delito es de acción privada',
-                'Siempre, sin excepción',
+                'Cuando el delito tiene una pena máxima superior a ocho años',
+                'Cuando el Fiscal declara la causa compleja',
+                'En toda causa, esté o no detenido el imputado',
               ],
               'La fatalidad de los plazos se vincula con la detención: la libertad no puede quedar restringida indefinidamente.',
             ),
             comp(
               'Completá la regla general del art. 141.',
               'Con imputado privado de libertad, el proceso no podrá durar más de ___.',
-              ['dos (2) años', 'seis (6) meses', 'diez (10) años', 'cuatro (4) meses'],
-              'Dos años es el tope general; la excepción son los casos de extrema complejidad.',
+              ['dos (2) años', 'cuatro (4) meses', 'seis (6) meses', 'ocho (8) meses'],
+              'Dos años es el tope general. Cuatro meses es el plazo de la IPP (art. 282), prorrogable hasta seis en casos excepcionales; ocho meses es el plazo para pedir una nueva audiencia del art. 168 bis.',
             ),
             vf(
-              'En un caso de suma complejidad con muchos imputados puede aplicarse, en lugar del tope fijo, el plazo razonable del art. 2.',
+              'En un caso de suma complejidad puede aplicarse, en lugar del tope fijo, el plazo razonable del art. 2.',
               true,
-              'Verdadero: la suma complejidad (pluralidad de imputados, naturaleza o circunstancias de los hechos) habilita a estar al plazo razonable, sujeto a la apreciación judicial.',
+              'Verdadero: «En un caso de suma complejidad, deberá estarse al plazo razonable del artículo 2º», sujeto a la apreciación judicial.',
             ),
             op(
-              '¿Qué es un plazo fatal?',
+              '¿Qué tiempo NO se computa para los términos fatales?',
+              ['El de los recursos', 'El de la investigación penal preparatoria', 'El de la prisión preventiva', 'El del juicio oral'],
+              'El art. 141 excluye el tiempo de diligenciamiento de pruebas fuera de la circunscripción judicial, el de los incidentes y el de los recursos.',
+            ),
+            op(
+              'Se acumulan dos causas por conexión. ¿Cómo corren los términos fatales?',
               [
-                'Un plazo que vence sin prórroga y produce consecuencias automáticas',
-                'Un plazo que sólo rige para delitos con muerte',
-                'Un plazo que el juez puede ignorar',
-                'Un plazo fijado por la víctima',
+                'Separadamente para cada causa, desde la acumulación',
+                'Desde la primera detención, sumando ambas causas',
+                'Se reinician desde cero para las dos causas',
+                'Quedan suspendidos hasta que se unifique la pena',
               ],
-              'Fatal = improrrogable y con efecto automático al vencer.',
+              'Art. 141: «los términos fatales previstos correrán separadamente para cada causa a partir de la respectiva acumulación».',
             ),
           ],
         }),
@@ -309,8 +365,13 @@ export const U1: Unidad = {
           preguntas: [
             op(
               'El hecho se cometió con una ley; al momento del fallo rige otra más benigna. ¿Cuál se aplica?',
-              ['La más benigna', 'La vigente al momento del hecho', 'La más severa', 'La que elija la víctima'],
-              'El art. 2 CP manda aplicar siempre la más benigna, sea la del hecho, la intermedia o la del fallo.',
+              [
+                'La más benigna',
+                'La vigente al momento del hecho',
+                'La vigente al momento del fallo, aunque fuera más gravosa',
+                'La que resulte de promediar ambas escalas',
+              ],
+              'El art. 2 CP manda aplicar siempre la más benigna, sea la del hecho, la intermedia o la del fallo. No existe el «promedio» de escalas.',
             ),
             vf(
               'Si la ley más benigna se dicta durante el cumplimiento de la condena, ya no se puede aplicar.',
@@ -320,18 +381,18 @@ export const U1: Unidad = {
             comp(
               'Completá el art. 2 CP.',
               'En todos los casos del presente artículo, los efectos de la nueva ley se operarán ___.',
-              ['de pleno derecho', 'a pedido de la víctima', 'sólo en casación', 'a los diez años'],
+              ['de pleno derecho', 'a pedido de parte', 'por resolución de la Cámara', 'desde que la sentencia quede firme'],
               '«De pleno derecho»: la ley más benigna rige automáticamente.',
             ),
             op(
               '¿Qué regla trae el art. 3 CP para la prisión preventiva?',
               [
                 'Para su cómputo se aplica separadamente la ley más favorable al procesado',
-                'No se computa nunca en la pena',
-                'Se computa doble siempre',
-                'Sólo se computa si hubo condena condicional',
+                'Se computa según la ley vigente al momento del hecho',
+                'Se computa según la ley vigente al dictarse la sentencia',
+                'Se computa según la ley vigente al momento de la detención',
               ],
-              'El art. 3 CP aplica el principio de benignidad también al cómputo de la preventiva.',
+              'El art. 3 CP aplica el principio de benignidad también al cómputo de la preventiva, en forma separada.',
             ),
           ],
         }),
@@ -356,7 +417,7 @@ export const U1: Unidad = {
         pregunta: '¿Qué estrategia elegís?',
         opciones: [
           {
-            texto: 'Plantear la excepción por falta de acción invocando la cosa juzgada y el non bis in ídem (art. 1 CPPBA).',
+            texto: 'Oponer la excepción de falta de acción invocando la cosa juzgada y el non bis in ídem (arts. 1 y 328 inc. 2 CPPBA).',
             puntaje: 2,
             devolucion:
               '¡Exacto! Hay identidad de persona, de hecho y de causa de persecución. El sobreseimiento firme impide un nuevo proceso: la garantía protege contra el riesgo mismo de volver a ser juzgado.',
@@ -374,7 +435,7 @@ export const U1: Unidad = {
               'Llegarías tarde: el non bis in ídem prohíbe la doble persecución, no sólo la doble condena. Hay que plantearlo de inmediato para cortar el nuevo proceso.',
           },
         ],
-        normas: ['Art. 1 CPPBA', 'Arts. 328 y ss. CPPBA (excepciones)'],
+        normas: ['Art. 1 CPPBA', 'Arts. 328 y 329 CPPBA (excepciones)'],
       },
       {
         id: 'e2',

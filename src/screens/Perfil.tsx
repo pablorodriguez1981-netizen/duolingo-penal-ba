@@ -1,15 +1,16 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Boton } from '../components/Boton';
 import { Hoja } from '../components/Hoja';
 import { Llama } from '../components/Indicadores';
 import { Marco, TituloSeccion } from '../components/Marco';
 import { Mascota } from '../components/Mascota';
-import { infoCodigos } from '../data/codigos';
+import { fuenteDe, infoCodigos } from '../data/codigos';
 import { UNIDADES_NUCLEO } from '../data/curriculo';
 import { diaLocal, inicialDia, ultimosDias } from '../lib/fechas';
 import { instalar, pedirPermisoNotificaciones, usePWA } from '../lib/pwa';
+import { compartirRespaldo, descargarRespaldo, leerRespaldo, puedeCompartirArchivo } from '../lib/respaldo';
 import { hablar, useVoces, vozDisponible } from '../lib/voz';
-import { rachaVigente, useProgreso, type Tema } from '../store/progreso';
+import { rachaVigente, useProgreso, type DatosProgreso, type Tema } from '../store/progreso';
 
 function Estadistica({ icono, valor, etiqueta }: { icono: string; valor: string | number; etiqueta: string }) {
   return (
@@ -57,7 +58,13 @@ export function PantallaPerfil() {
   const pwa = usePWA();
   const [confirmar, setConfirmar] = useState<'reiniciar' | 'borrar' | null>(null);
   const [fuentes, setFuentes] = useState(false);
+  const [restaurar, setRestaurar] = useState<{ datos: Partial<DatosProgreso>; exportadoEl: string | null } | null>(null);
+  const [errorRespaldo, setErrorRespaldo] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
+  const entradaArchivo = useRef<HTMLInputElement>(null);
   const info = infoCodigos();
+  const fuenteCP = fuenteDe('CP');
+  const fuenteCPPBA = fuenteDe('CPPBA');
   const racha = rachaVigente(s.racha);
   const dias = ultimosDias(7);
   const maxXp = Math.max(10, ...dias.map((d) => s.historial[d] ?? 0));
@@ -218,8 +225,46 @@ export function PantallaPerfil() {
           </Boton>
         )}
         {pwa.instalada && <p className="text-center text-sm font-bold text-verde-600">✔ App instalada en este dispositivo</p>}
+        <div className="rounded-3xl border-2 border-borde bg-superficie p-4">
+          <p className="font-black">💾 Copia de tu progreso</p>
+          <p className="mt-1 text-sm font-semibold text-suave">
+            Tu avance se guarda sólo en este dispositivo. Guardá una copia para pasarla a otro teléfono o recuperarla si borrás los datos del navegador.
+          </p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <Boton ancho chico variante="verde" onClick={() => descargarRespaldo(s)}>
+              Guardar copia
+            </Boton>
+            {puedeCompartirArchivo() && (
+              <Boton ancho chico variante="azul" onClick={() => void compartirRespaldo(s)}>
+                Enviar copia…
+              </Boton>
+            )}
+            <Boton ancho chico variante="neutro" onClick={() => entradaArchivo.current?.click()}>
+              Restaurar desde archivo
+            </Boton>
+          </div>
+          <input
+            ref={entradaArchivo}
+            type="file"
+            accept="application/json,.json"
+            className="hidden"
+            onChange={async (e) => {
+              const f = e.target.files?.[0];
+              e.target.value = '';
+              if (!f) return;
+              try {
+                setRestaurar(leerRespaldo(await f.text()));
+                setErrorRespaldo(null);
+              } catch (err) {
+                setErrorRespaldo((err as Error).message);
+              }
+            }}
+          />
+          {errorRespaldo && <p className="mt-2 text-sm font-bold text-rojo-500">⚠️ {errorRespaldo}</p>}
+          {aviso && <p className="mt-2 text-sm font-bold text-verde-600">✔ {aviso}</p>}
+        </div>
         <Boton ancho variante="neutro" onClick={() => setFuentes(true)}>
-          📚 Fuentes y fidelidad de los textos
+          📚 Fuentes oficiales
         </Boton>
         <Boton ancho variante="neutro" onClick={() => setConfirmar('reiniciar')}>
           🔄 Reiniciar el camino
@@ -249,26 +294,50 @@ export function PantallaPerfil() {
         </Boton>
       </Hoja>
 
-      <Hoja abierta={fuentes} alCerrar={() => setFuentes(false)} titulo="Fuentes y fidelidad">
+      <Hoja abierta={!!restaurar} alCerrar={() => setRestaurar(null)} titulo="¿Restaurar esta copia?">
+        {restaurar && (
+          <div className="space-y-3">
+            <p className="text-suave">
+              Copia {restaurar.exportadoEl ? `del ${new Date(restaurar.exportadoEl).toLocaleDateString('es-AR')}` : 'sin fecha'}:{' '}
+              <b>{Object.keys(restaurar.datos.leccionesCompletadas ?? {}).length} lecciones</b>, <b>{restaurar.datos.xp ?? 0} XP</b>
+              {restaurar.datos.racha ? `, racha de ${restaurar.datos.racha.actual} días` : ''}. Reemplaza el progreso actual de este dispositivo.
+            </p>
+            <Boton
+              ancho
+              variante="azul"
+              onClick={() => {
+                s.restaurar(restaurar.datos);
+                setRestaurar(null);
+                setAviso('Progreso restaurado.');
+              }}
+            >
+              Sí, restaurar
+            </Boton>
+          </div>
+        )}
+      </Hoja>
+
+      <Hoja abierta={fuentes} alCerrar={() => setFuentes(false)} titulo="Fuentes oficiales">
         <div className="space-y-3 text-[15px] leading-relaxed">
           <p>
-            <b>Código Penal:</b> texto literal importado del PDF provisto ({info.cp?.ley ?? 'Ley 11.179'}).{' '}
-            {info.cp?.ultimaReformaDetectada && `Última reforma incluida en ese texto: ${info.cp.ultimaReformaDetectada}. `}
-            Las reformas posteriores no están reflejadas: los artículos afectados que se usan en las lecciones llevan un aviso.
+            <b>CPPBA (Ley 11.922):</b> texto actualizado publicado por la Provincia de Buenos Aires
+            {info.cppbaOficial?.ultimaReformaDetectada ? `, con las reformas hasta la ${info.cppbaOficial.ultimaReformaDetectada}` : ''}. Revisado el {fuenteCPPBA?.revisado}.{' '}
+            {fuenteCPPBA?.enlace && (
+              <a className="font-bold text-azul-500 underline" href={fuenteCPPBA.enlace} target="_blank" rel="noopener noreferrer">
+                normas.gba.gob.ar ↗
+              </a>
+            )}
           </p>
           <p>
-            <b>CPPBA (Ley 11.922):</b>{' '}
-            {info.cppbaOficial
-              ? `texto literal del documento que cargaste (${info.cppbaOficial.version ?? info.cppbaOficial.fuente}). Esa versión es de 2003 aprox.: los artículos que se reformaron después y se usan en las lecciones (144, 148, 157, 169, 171 y 395) muestran una versión actualizada de estudio, con una pestaña para ver el texto de tu documento.`
-              : 'los artículos centrales se muestran en una versión de estudio (marcada 🧭) que debe cotejarse con el texto oficial vigente.'}
+            <b>Código Penal:</b> texto actualizado de InfoLEG{info.cp?.ultimaReformaDetectada ? ` (última reforma: ${info.cp.ultimaReformaDetectada})` : ''}. Revisado el {fuenteCP?.revisado}.{' '}
+            {fuenteCP?.enlace && (
+              <a className="font-bold text-azul-500 underline" href={fuenteCP.enlace} target="_blank" rel="noopener noreferrer">
+                argentina.gob.ar ↗
+              </a>
+            )}
           </p>
           <p>
-            Para cargar una versión más nueva del CPPBA (PDF o Word), ejecutá en el proyecto:
-            <code className="mt-1 block rounded-lg bg-superficie-2 p-2 text-xs">npm run importar:codigo -- --codigo CPPBA --docx ruta/al/CPPBA.docx</code>
-            Las lecciones y los módulos dinámicos se regeneran con ese texto.
-          </p>
-          <p>
-            <b>Jurisprudencia:</b> síntesis didácticas de fallos conocidos (CSJN, Corte IDH, CIDH) y de líneas jurisprudenciales; verificá siempre el fallo completo antes de citarlo.
+            <b>Jurisprudencia:</b> síntesis didácticas; cada ficha tiene el enlace al fallo completo para leerlo antes de citarlo.
           </p>
           <p>
             <b>Casos prácticos:</b> ficticios, con fines didácticos.

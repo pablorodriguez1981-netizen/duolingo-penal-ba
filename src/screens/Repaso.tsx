@@ -5,7 +5,7 @@ import { Mascota } from '../components/Mascota';
 import { PantallaResultado } from '../components/Resultado';
 import { SesionPreguntas, type ResultadoSesion } from '../components/Sesion';
 import { articulo, etiquetaArticulo } from '../data/codigos';
-import { preguntasDeUnidad, preguntasVistas, unidadesVisibles, unidadPorId } from '../data/curriculo';
+import { preguntasDeUnidad, preguntasParaPracticar, preguntasVistas, sinPenalidad, UNIDADES_NUCLEO, unidadesVisibles, unidadPorId } from '../data/curriculo';
 import type { PreguntaEnContexto } from '../data/tipos';
 import { armarRepasoDinamico, errorFrecuente, seleccionarParaRepaso } from '../lib/repaso';
 import { volverAtras } from '../lib/navegacion';
@@ -88,6 +88,7 @@ export function PantallaRepaso() {
   return (
     <SesionPreguntas
       preguntas={preguntas}
+      usaVidas={!sinPenalidad(unidad.id)}
       etiqueta={etiquetaDe}
       alSalir={() => navegar('/')}
       alTerminar={(r) => setFin({ r, a: estado.completarRepaso(unidad.id, r.aciertos, r.total) })}
@@ -109,7 +110,14 @@ export function PantallaPractica() {
 
   const pool = useMemo(() => {
     const { unidades } = unidadesVisibles(estado);
-    return preguntasVistas(unidades, estado);
+    const practicadas = preguntasParaPracticar(unidades, estado);
+    // Quien recién empieza (o se quedó sin corazones en su primera lección)
+    // recupera repasando la Unidad 1.
+    if (practicadas.length < 5 && modo === 'corazones') {
+      const ids = new Set(practicadas.map((q) => q.pregunta.id));
+      return [...practicadas, ...preguntasDeUnidad(UNIDADES_NUCLEO[0]).filter((q) => !ids.has(q.pregunta.id))];
+    }
+    return practicadas;
   }, []);
 
   const preguntas = useMemo(() => {
@@ -128,7 +136,15 @@ export function PantallaPractica() {
   const t = titulos[modo] ?? titulos.rapida;
 
   if (pool.length === 0) {
-    return <Portada icono="🔒" titulo={t.titulo} texto="Completá al menos una lección del camino para desbloquear la práctica." alVolver={() => navegar('/')} animo="triste" />;
+    return (
+      <Portada
+        icono="🌱"
+        titulo={t.titulo}
+        texto="Todavía no respondiste preguntas. Empezá la primera lección del camino (o elegí un tema) y acá vas a poder repasar todo lo que hayas intentado."
+        alVolver={() => navegar('/')}
+        animo="pensando"
+      />
+    );
   }
 
   if (fin) {

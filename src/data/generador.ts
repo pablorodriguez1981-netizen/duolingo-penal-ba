@@ -330,10 +330,8 @@ function articuloDeBloque(b: BloqueCPPBA): Articulo {
     numero: `${b.desde} a ${b.hasta}`,
     epigrafe: nombreBloque(b),
     texto: [b.libro, b.titulo, b.capitulo, b.descripcion].filter(Boolean).join('\n\n'),
-    fidelidad: 'referencia',
     ubicacion: `${b.libro} · ${b.titulo}`,
-    avisoVigencia:
-      'Bloque generado desde la estructura del código. Para estudiar el texto literal de estos artículos, importá el PDF oficial del CPPBA (ver Perfil › Fuentes).',
+    sintetico: true,
   };
   registrarArticulo(a);
   return a;
@@ -418,6 +416,8 @@ interface Plantilla {
   etapa: string;
   icono: string;
   aviso?: string;
+  /** Ids de los artículos que trata el módulo (para elegir un tema sin materializarlo). */
+  articulos: string[];
   temas: () => Tema[];
 }
 
@@ -442,7 +442,7 @@ function plantillasCP(excluir: Set<string>): Plantilla[] {
         subtitulo: `Código Penal · ${rango(parte[0].numero, parte[parte.length - 1].numero)}`,
         etapa: lista[0].libro?.startsWith('Libro Segundo') ? 'Código Penal · Parte especial' : 'Código Penal · Parte general',
         icono: '📕',
-        aviso: 'Módulo generado a partir del texto literal del Código Penal (PDF provisto, actualizado a 2009).',
+        articulos: parte.map((p) => idDe('cp', p.numero)),
         temas: () => {
           const arts = parte.map((p) => articulo(idDe('cp', p.numero))).filter((x): x is Articulo => !!x);
           const vecinos = lista
@@ -486,7 +486,7 @@ function plantillasCPPBA(excluir: Set<string>): Plantilla[] {
           subtitulo: `CPPBA · ${rango(parte[0].numero, parte[parte.length - 1].numero)}`,
           etapa: b.libro,
           icono: '📘',
-          aviso: 'Módulo generado a partir del texto literal del CPPBA que cargaste (versión 2003): puede no reflejar reformas posteriores.',
+          articulos: parte.map((p) => idDe('cppba', p.numero)),
           temas: () => {
             const vecinos = delBloque.map((p) => articulo(idDe('cppba', p.numero))).filter((x): x is Articulo => !!x);
             return parte
@@ -515,7 +515,8 @@ function plantillasCPPBA(excluir: Set<string>): Plantilla[] {
         subtitulo: `${libro} · arts. ${grupo[0].desde} a ${grupo[grupo.length - 1].hasta}`,
         etapa: libro,
         icono: '🗺️',
-        aviso: 'Módulo generado desde la estructura del CPPBA. Con el PDF oficial importado se generan lecciones con el texto literal de cada artículo.',
+        aviso: 'Módulo generado desde la estructura del CPPBA.',
+        articulos: grupo.map((b) => `cppba-bloque-${b.id}`),
         temas: () =>
           grupo.map((b) => {
             const a = articuloDeBloque(b);
@@ -553,6 +554,11 @@ export function plantillasGeneradas(excluir: Set<string>, numeroInicial: number)
   return {
     total: plantillas.length,
     ids: plantillas.map((p) => p.id),
+    /** Lección generada para un artículo (id de lección), sin materializar el módulo. */
+    leccionDe(articuloId: string): string | undefined {
+      const p = plantillas.find((x) => x.articulos.includes(articuloId));
+      return p ? `${p.id}-${articuloId}` : undefined;
+    },
     /** Materializa (y memoriza) el módulo i-ésimo. */
     unidad(i: number): Unidad | undefined {
       const p = plantillas[i];

@@ -160,7 +160,41 @@ export function preguntasVistas(unidades: Unidad[], p: ProgresoCamino): Pregunta
   return unidades.flatMap(preguntasDeUnidad).filter((q) => p.leccionesCompletadas[q.leccionId]);
 }
 
+/** Lecciones donde se estudia un artículo: las del núcleo o, si no, la del módulo generado. */
+export function leccionesDeArticulo(articuloId: string): string[] {
+  const nucleo = UNIDADES_NUCLEO.flatMap((u) => u.temas.filter((t) => t.articuloId === articuloId).flatMap((t) => t.lecciones.map((l) => l.id)));
+  if (nucleo.length) return nucleo;
+  const generada = generados().leccionDe(articuloId);
+  return generada ? [generada] : [];
+}
+
+/** La primera unidad es de práctica libre: los errores no quitan corazones. */
+export const sinPenalidad = (unidadId: string) => unidadId === UNIDADES_NUCLEO[0].id;
+
+/** Busca una pregunta por su id ("u3-a148-l1-p2", "g-cppba-…-l1-p3"). */
+export function buscarPregunta(preguntaId: string): PreguntaEnContexto | undefined {
+  const leccionId = preguntaId.replace(/-p\d+$/, '');
+  const u = buscarLeccion(leccionId);
+  const pregunta = u?.leccion.preguntas.find((q) => q.id === preguntaId);
+  return u && pregunta ? { pregunta, unidadId: u.unidad.id, leccionId, articuloId: u.tema.articuloId } : undefined;
+}
+
+/**
+ * Banco para practicar: preguntas de lecciones completadas y también las ya
+ * intentadas en lecciones a medio hacer (así quien recién empieza puede
+ * recuperar corazones repasando lo que ya vio).
+ */
+export function preguntasParaPracticar(unidades: Unidad[], p: ProgresoCamino & { preguntas: Record<string, unknown> }): PreguntaEnContexto[] {
+  const vistas = preguntasVistas(unidades, p);
+  const ids = new Set(vistas.map((q) => q.pregunta.id));
+  const intentadas = Object.keys(p.preguntas)
+    .filter((id) => !ids.has(id))
+    .map(buscarPregunta)
+    .filter((q): q is PreguntaEnContexto => !!q);
+  return [...vistas, ...intentadas];
+}
+
 /** Temas con «Fallo clave» de las unidades visibles. */
 export function temasConFallo(unidades: Unidad[]) {
-  return unidades.flatMap((u) => u.temas.filter((t) => t.falloClave).map((t) => ({ unidad: u, tema: t })));
+  return unidades.flatMap((u) => u.temas.filter((t) => t.falloClave || t.fallosRelacionados?.length).map((t) => ({ unidad: u, tema: t })));
 }

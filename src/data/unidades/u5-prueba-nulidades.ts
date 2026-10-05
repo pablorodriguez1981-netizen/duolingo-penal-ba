@@ -1,3 +1,4 @@
+import { ENLACES } from '../enlaces-fallos';
 import { comp, leccion, op, ord, vf } from '../helpers';
 import type { Unidad } from '../tipos';
 
@@ -20,44 +21,56 @@ export const U5: Unidad = {
           'La jurisprudencia exige, para declarar una nulidad, que quien la plantea indique qué perjuicio concreto le causó el vicio y qué defensas se vio privado de oponer. La nulidad no se declara en el solo interés de la ley.',
         regla:
           'La nulidad es la última ratio: procede cuando el vicio produce un perjuicio real a una parte o afecta garantías constitucionales; si el acto puede subsanarse o cumplió su finalidad, se mantiene.',
-        nota: 'Síntesis de una línea jurisprudencial consolidada; para un escrito, buscá precedentes concretos en JUBA (SCBA) y en la base de la CSJN.',
+        nota: 'Síntesis de una línea jurisprudencial consolidada, hoy recogida en el segundo párrafo del art. 201. Para un escrito, buscá precedentes concretos en JUBA (SCBA) y en la base de la CSJN.',
+        enlaces: [],
+        ambito: 'nacional',
       },
       lecciones: [
         leccion({
           id: 'u5-a201-l1',
-          titulo: 'Taxatividad de las nulidades',
-          minutos: 3,
+          titulo: 'Taxatividad y perjuicio',
+          minutos: 4,
           intro: {
-            titulo: 'Sólo es nulo lo que la ley dice',
+            titulo: 'Sólo es nulo lo que la ley dice… y si causa perjuicio',
             parrafos: [
-              'El art. 201 fija el principio de taxatividad: un acto procesal es nulo sólo cuando no se observaron disposiciones que la ley prevé expresamente «bajo sanción de nulidad», en especial cuando se viola la defensa en juicio.',
-              'Ya viste varios ejemplos: la declaración del imputado sin defensor (art. 308) o el auto de prisión preventiva sin fundamentos (art. 158).',
+              'El art. 201 fija el principio de taxatividad: la inobservancia de las formas sólo hace nulos los actos en los supuestos expresamente determinados por el código (por ejemplo, la declaración del imputado sin notificar al defensor, art. 308).',
+              'Y agrega el principio de trascendencia: no se declara la nulidad si el vicio no produjo ni pudo producir perjuicio para quien la alega o para aquel en cuyo favor se estableció. Por eso el art. 205 exige expresar el motivo y el perjuicio, bajo sanción de inadmisibilidad.',
             ],
             enLaPractica:
               'Antes de plantear una nulidad, buscá en el código la frase «bajo sanción (o pena) de nulidad» o una garantía constitucional afectada. Si no está, el planteo probablemente sea rechazado.',
           },
-          foco: 'sólo cuando no se hubieran observado las disposiciones expresamente prescriptas bajo sanción de nulidad',
+          foco: 'sólo los hará nulos en los supuestos expresamente determinados por este Código',
           preguntas: [
             op(
-              '¿Cuándo es nulo un acto procesal según el art. 201?',
+              '¿Cuándo la inobservancia de las formas hace nulo un acto (art. 201)?',
               [
-                'Cuando no se observaron disposiciones prescriptas expresamente bajo sanción de nulidad',
-                'Cuando a una parte no le gusta el resultado',
-                'Siempre que tenga un error de tipeo',
-                'Cuando lo pide la víctima',
+                'Sólo en los supuestos expresamente determinados por el Código',
+                'Siempre que se viole cualquier norma procesal',
+                'Cuando el juez lo considere conveniente para el proceso',
+                'Cuando ambas partes lo consientan',
               ],
               'Es el principio de taxatividad (o especificidad).',
             ),
             vf(
-              'Cualquier error formal, por mínimo que sea, provoca la nulidad del acto.',
-              false,
-              'Falso. Rige la taxatividad y, además, se exige un perjuicio concreto.',
+              'Aunque haya un vicio previsto bajo sanción de nulidad, no se declara si no produjo ni pudo producir perjuicio.',
+              true,
+              'Verdadero: es el segundo párrafo del art. 201 (principio de trascendencia, «no hay nulidad sin perjuicio»).',
             ),
             comp(
               'Completá.',
               'Las nulidades se rigen por el principio de ___: sólo las que la ley prevé expresamente.',
-              ['taxatividad', 'oportunidad', 'publicidad', 'inmediación'],
-              'Taxatividad o especificidad: la ley enumera las causales.',
+              ['taxatividad', 'trascendencia', 'conservación', 'convalidación'],
+              'Taxatividad o especificidad: la ley enumera las causales. La trascendencia es el otro requisito: que haya perjuicio.',
+            ),
+            op(
+              'El acta de una testimonial tiene mal escrita la fecha, pero el testigo, las partes y el contenido están claros. La defensa pide la nulidad sin indicar perjuicio. ¿Qué corresponde?',
+              [
+                'Rechazarla: no se alega ni existe perjuicio (arts. 201 y 205)',
+                'Declararla: toda acta con errores es nula',
+                'Declararla de oficio por violar normas constitucionales',
+                'Diferirla hasta la sentencia',
+              ],
+              'El art. 205 exige expresar los motivos y el perjuicio bajo sanción de inadmisibilidad, y el art. 201 impide declarar nulidades sin perjuicio.',
             ),
           ],
         }),
@@ -69,7 +82,8 @@ export const U5: Unidad = {
             titulo: 'Las que siempre importan',
             parrafos: [
               'El art. 202 agrega nulidades de orden general: las referidas al nombramiento, capacidad y constitución del juez o tribunal; a la intervención del Ministerio Público cuando es obligatoria; y a la intervención, asistencia y representación del imputado y de las partes civiles.',
-              'El órgano judicial que advierte un motivo de nulidad debe tratar de eliminarlo; si no lo hace, puede declararse a pedido de parte. Las nulidades de orden general que implican violación de normas constitucionales deben declararse de oficio, en cualquier estado y grado del proceso (art. 203).',
+              'Las nulidades que implican violación de normas constitucionales deben declararse de oficio, en cualquier estado y grado del proceso, fundando el perjuicio (art. 203). Las demás deben plantearse a tiempo (art. 205): las de la IPP, durante la IPP.',
+              'El órgano que comprueba un vicio procura sanearlo sin retroceder a etapas cumplidas (art. 206); y el acto queda subsanado si no se pidió su saneamiento en término, si se aceptaron sus efectos o si cumplió su fin.',
             ],
             enLaPractica:
               'Si se descubre en el juicio que el imputado nunca tuvo defensor en un acto central de la IPP, el Tribunal debe declarar la nulidad aunque nadie la haya pedido.',
@@ -79,16 +93,21 @@ export const U5: Unidad = {
               '¿Cuál de estos vicios es una nulidad de carácter general?',
               [
                 'Falta de asistencia del imputado por su defensor en un acto en que es obligatoria',
-                'Un error en la numeración de las fojas',
-                'Una audiencia que empezó 10 minutos tarde',
-                'Una notificación con una coma mal puesta',
+                'Que el Fiscal no firmó una providencia de mero trámite',
+                'Que la víctima no estuvo presente en una testimonial',
+                'Que un auto se notificó un día después de dictado',
               ],
               'La asistencia y representación del imputado está expresamente protegida por el art. 202.',
             ),
             vf(
-              'Las nulidades que implican violación de normas constitucionales pueden declararse de oficio en cualquier estado del proceso.',
+              'Las nulidades que implican violación de normas constitucionales deben declararse de oficio en cualquier estado y grado del proceso.',
               true,
-              'Verdadero, según el art. 203.',
+              'Verdadero, según el art. 203, «con obligación de fundar el motivo del perjuicio».',
+            ),
+            op(
+              'Una nulidad se produjo durante la IPP y no afecta normas constitucionales. ¿Hasta cuándo puede articularse?',
+              ['Durante la IPP', 'Hasta la sentencia definitiva', 'Hasta la audiencia preliminar del juicio', 'Sólo dentro de las 24 horas del acto'],
+              'Art. 205 inc. 1, bajo sanción de caducidad. Las 24 horas son el plazo para pedir el saneamiento del acto (art. 206).',
             ),
             ord(
               'Ordená de la regla a la excepción:',
@@ -130,17 +149,22 @@ export const U5: Unidad = {
               '¿Cuál es un límite a la libertad probatoria?',
               [
                 'Que el medio no suprima garantías constitucionales',
-                'Que la prueba sea favorable al Fiscal',
-                'Que sea un medio escrito',
-                'Que lo autorice la víctima',
+                'Que el medio esté expresamente enumerado en el Código',
+                'Que lo ofrezca el Fiscal durante la IPP',
+                'Que se produzca ante el Juez de Garantías',
               ],
               'El art. 209 admite otros medios siempre que no supriman garantías constitucionales de las personas ni afecten el sistema institucional.',
             ),
             comp(
               'Completá.',
               'Se podrán utilizar otros medios de prueba siempre que no supriman ___ de las personas o afecten el sistema institucional.',
-              ['garantías constitucionales', 'costumbres locales', 'plazos administrativos', 'normas de tránsito'],
+              ['garantías constitucionales', 'formas procesales', 'derechos de la víctima', 'facultades del Fiscal'],
               'Las garantías constitucionales son el límite infranqueable.',
+            ),
+            vf(
+              'Si todos los intervinientes están de acuerdo, puede prescindirse de probar un hecho notorio y declararlo comprobado.',
+              true,
+              'Verdadero: último párrafo del art. 209, que también permite limitar la prueba manifiestamente superabundante.',
             ),
           ],
         }),
@@ -156,7 +180,7 @@ export const U5: Unidad = {
           intro: {
             titulo: 'Libertad para valorar, obligación de explicar',
             parrafos: [
-              'Según el art. 210, para valorar la prueba sólo se exige la expresión de la convicción sincera sobre la verdad de los hechos juzgados, con desarrollo escrito de las razones que llevan a esa convicción. Rige en todas las etapas.',
+              'Según el art. 210, para valorar la prueba sólo se exige la expresión de la convicción sincera sobre la verdad de los hechos juzgados, con desarrollo escrito de las razones que llevan a esa convicción. Rige en todas las etapas, salvo en el juicio por jurados, donde rige la íntima convicción.',
               'No hay pruebas con valor fijado por ley (prueba tasada), pero el juez tampoco puede decidir sin explicar: la jurisprudencia lo asimila a la sana crítica racional, es decir, razonar con lógica, experiencia y conocimientos científicos.',
             ],
             enLaPractica:
@@ -168,16 +192,16 @@ export const U5: Unidad = {
               '¿Qué exige el art. 210 para valorar la prueba?',
               [
                 'La convicción sincera sobre los hechos, con desarrollo escrito de sus razones',
-                'Contar cuántos testigos declararon de cada lado',
-                'Aplicar un valor fijo a cada prueba',
-                'Decidir por intuición sin explicar',
+                'La íntima convicción, sin necesidad de fundar',
+                'Un valor fijo asignado por la ley a cada prueba',
+                'La coincidencia de la mayoría de los testigos',
               ],
               'El art. 210 combina libertad de valoración con deber de motivación: convicción sincera más desarrollo escrito de las razones.',
             ),
             comp(
               'Completá el art. 210.',
               'Para la valoración de la prueba sólo se exige la expresión de la convicción ___ sobre la verdad de los hechos juzgados.',
-              ['sincera', 'unánime', 'presunta', 'policial'],
+              ['sincera', 'íntima', 'razonable', 'plena'],
               'Convicción sincera, con desarrollo escrito de las razones que la sostienen.',
             ),
             vf(
@@ -188,7 +212,12 @@ export const U5: Unidad = {
             ord(
               'Ordená los sistemas de valoración del más rígido al más libre:',
               ['Prueba tasada (legal)', 'Convicción razonada / sana crítica', 'Íntima convicción sin fundamentos'],
-              'El CPPBA exige convicción sincera con fundamentos escritos (asimilable a la sana crítica); la íntima convicción sin fundamentos es propia del jurado popular.',
+              'El CPPBA exige convicción sincera con fundamentos escritos (asimilable a la sana crítica); la íntima convicción es la del jurado popular.',
+            ),
+            op(
+              'En un juicio por jurados, ¿qué regla de valoración rige para el veredicto?',
+              ['La íntima convicción', 'La convicción sincera con fundamentos escritos', 'La prueba tasada', 'La sana crítica, con voto fundado de cada jurado'],
+              'El art. 210 (Ley 14.543) exceptúa al juicio por jurados: allí rige la íntima convicción. El control se hace por las instrucciones del juez y por los motivos del art. 448 bis.',
             ),
           ],
         }),
@@ -203,7 +232,9 @@ export const U5: Unidad = {
           'En «Rayford» la CSJN excluyó no sólo la prueba obtenida ilegalmente sino también la que derivaba de ella, salvo que existiera un cauce de investigación independiente. En «Fernández Prieto y Tumbeiro», la Corte IDH condenó a la Argentina por detenciones y requisas basadas en la «actitud sospechosa» de las personas, sin elementos objetivos.',
         regla:
           'La prueba obtenida con afectación de garantías y la que deriva directamente de ella carecen de eficacia (doctrina del «fruto del árbol venenoso»), salvo fuente independiente. Una requisa sin motivos objetivos previos es arbitraria.',
-        nota: 'Síntesis didáctica (Fallos 308:733; Corte IDH, sentencia del 1/9/2020). Consultá los textos completos antes de citarlos.',
+        nota: 'Síntesis didáctica (Fallos 308:733; Corte IDH, sentencia del 1/9/2020, Serie C 411).',
+        enlaces: [ENLACES.rayford, ENLACES.fernandezPrieto],
+        ambito: 'nacional',
       },
       lecciones: [
         leccion({
@@ -226,8 +257,8 @@ export const U5: Unidad = {
               'La policía entró a una casa sin orden ni urgencia y encontró un celular robado. ¿Qué pasa con esa prueba?',
               [
                 'Carece de eficacia por violar la inviolabilidad del domicilio',
-                'Es válida porque el celular era robado',
-                'Es válida si el imputado no protesta en el momento',
+                'Es válida si después el juez convalida el ingreso',
+                'Es válida si el imputado no protestó en el momento',
                 'Es válida si la víctima reconoce el celular',
               ],
               'El hallazgo no convalida el ingreso ilegal. Rige el art. 211 y el art. 18 CN.',
@@ -241,16 +272,16 @@ export const U5: Unidad = {
               '¿Qué es la «fuente independiente»?',
               [
                 'Un cauce lícito de investigación que habría llevado a la misma prueba sin depender de la ilegalidad',
-                'Un testigo que trabaja de forma independiente',
-                'Una prueba aportada por la defensa',
-                'Un perito de parte',
+                'La prueba obtenida por un particular y no por la policía',
+                'La prueba que el imputado no objetó en término',
+                'La que se obtiene con una orden judicial dictada después del hallazgo',
               ],
               'Si la prueba se obtiene por un camino autónomo y lícito, la exclusión no la alcanza.',
             ),
             comp(
               'Completá el art. 211.',
               'Carecerá de toda eficacia la prueba obtenida con afectación de ___.',
-              ['garantías constitucionales', 'formalidades menores', 'horarios judiciales', 'reglamentos internos'],
+              ['garantías constitucionales', 'formas procesales', 'reglas de cadena de custodia', 'derechos de la víctima'],
               'La regla de exclusión protege las garantías constitucionales.',
             ),
           ],

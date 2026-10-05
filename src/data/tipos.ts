@@ -1,32 +1,15 @@
 export type CodigoId = 'CPPBA' | 'CP';
 
-/**
- * Fidelidad del texto mostrado en la tarjeta de lectura:
- * - `oficial`: transcripción literal del código importado (PDF provisto).
- * - `referencia`: versión de estudio redactada a partir del código; debe
- *   cotejarse con el texto oficial vigente. Se reemplaza automáticamente
- *   cuando se importa el PDF oficial (ver scripts/importar-codigo.mjs).
- */
-export type Fidelidad = 'oficial' | 'referencia';
-
 export interface Articulo {
   id: string; // 'cppba-148', 'cp-76-bis'
   codigo: CodigoId;
   numero: string; // '148', '76 bis'
   epigrafe: string;
   texto: string; // párrafos separados por \n\n
-  fidelidad: Fidelidad;
   ubicacion?: string; // 'Libro I · Título VI · Medidas de coerción'
-  notas?: string[]; // notas de reforma
-  avisoVigencia?: string; // reformas posteriores conocidas que el texto no refleja
-  /**
-   * Texto literal del documento importado cuando el artículo fue reformado
-   * después de esa versión: `texto` lleva la versión actualizada de estudio
-   * (la que usan las lecciones) y acá queda el texto del documento.
-   */
-  textoDocumento?: string;
-  /** Rótulo de la fuente del texto literal (p. ej., "Documento provisto, versión 2003"). */
-  fuente?: string;
+  notas?: string[]; // notas de reforma ("Texto según Ley 15004")
+  /** Resumen armado desde la estructura del código (no es texto legal). */
+  sintetico?: boolean;
 }
 
 interface PreguntaBase {
@@ -80,6 +63,14 @@ export interface Leccion {
   preguntas: Pregunta[];
 }
 
+export interface EnlaceFallo {
+  /** P. ej. "Fallo completo (CSJN)". */
+  etiqueta: string;
+  url: string;
+}
+
+export type AmbitoFallo = 'bonaerense' | 'nacional' | 'interamericano';
+
 export interface FalloClave {
   tribunal: string;
   caso: string;
@@ -88,6 +79,9 @@ export interface FalloClave {
   regla: string;
   /** Aclaración sobre el alcance de la síntesis. */
   nota?: string;
+  /** Texto íntegro en el sitio oficial del tribunal. */
+  enlaces: EnlaceFallo[];
+  ambito: AmbitoFallo;
 }
 
 export interface Tema {
@@ -96,6 +90,8 @@ export interface Tema {
   relacionados?: string[];
   lecciones: Leccion[]; // 1 a 5
   falloClave?: FalloClave;
+  /** Otros fallos (en especial de la SCBA y del Tribunal de Casación bonaerense). */
+  fallosRelacionados?: FalloClave[];
 }
 
 export interface OpcionCaso {

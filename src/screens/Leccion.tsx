@@ -11,7 +11,7 @@ import { CabeceraSesion, ConfirmarSalida, Cronometro, SesionPreguntas, SinVidas,
 import { BotonEscuchar, TarjetaArticulo } from '../components/TarjetaArticulo';
 import { TarjetaFallo } from '../components/TarjetaFallo';
 import { articulo, etiquetaArticulo } from '../data/codigos';
-import { buscarLeccion } from '../data/curriculo';
+import { buscarLeccion, sinPenalidad } from '../data/curriculo';
 import type { Articulo } from '../data/tipos';
 import { detener } from '../lib/voz';
 import { useProgreso, type ResultadoActividad } from '../store/progreso';
@@ -43,6 +43,7 @@ export function PantallaLeccion() {
   if (!ubicacion) return <Navigate to="/" replace />;
   const { unidad, tema, leccion, indiceEnTema } = ubicacion;
   const art = articulo(tema.articuloId);
+  const libre = sinPenalidad(unidad.id);
   const volver = () => {
     detener();
     navegar('/');
@@ -66,6 +67,7 @@ export function PantallaLeccion() {
       <SesionPreguntas
         preguntas={leccion.preguntas.map((pregunta) => ({ pregunta, unidadId: unidad.id, leccionId: leccion.id, articuloId: tema.articuloId }))}
         objetivoMin={leccion.minutos}
+        usaVidas={!libre}
         progresoInicial={0.25}
         segundosIniciales={segundosAlEmpezar.current}
         alSalir={volver}
@@ -81,7 +83,7 @@ export function PantallaLeccion() {
   const cabecera = (
     <CabeceraSesion
       progreso={paso === 'intro' ? 0.08 : 0.18}
-      vidas={cantidad}
+      vidas={libre ? undefined : cantidad}
       derecha={<Cronometro segundos={segundos} objetivoMin={leccion.minutos} />}
       alSalir={() => setSalir(true)}
     />
@@ -105,6 +107,11 @@ export function PantallaLeccion() {
                 <span className="absolute bottom-3 -left-2 h-4 w-4 rotate-45 border-b-2 border-l-2 border-borde bg-superficie" aria-hidden />
               </div>
             </div>
+            {libre && indiceEnTema === 0 && (
+              <p className="rounded-2xl bg-verde-100 px-4 py-2 text-sm font-bold text-verde-700 dark:bg-verde-700/30 dark:text-verde-500">
+                🎈 Unidad de práctica libre: acá los errores no te quitan corazones.
+              </p>
+            )}
             <div className="space-y-3 text-[17px] leading-relaxed">
               <ParrafosGlosario parrafos={leccion.intro.parrafos} />
             </div>
@@ -144,6 +151,9 @@ export function PantallaLeccion() {
               </div>
             )}
             {tema.falloClave && <TarjetaFallo fallo={tema.falloClave} idArticulo={tema.articuloId} plegable alAbrir={() => marcarFallo(tema.articuloId)} />}
+            {tema.fallosRelacionados?.map((f) => (
+              <TarjetaFallo key={f.caso} fallo={f} idArticulo={tema.articuloId} plegable />
+            ))}
           </motion.div>
         )}
       </div>
@@ -179,7 +189,7 @@ export function PantallaLeccion() {
         {relacionado && <TarjetaArticulo articulo={relacionado} compacta />}
       </Hoja>
       <ConfirmarSalida abierta={salir} alCerrar={() => setSalir(false)} alSalir={volver} />
-      <SinVidas abierta={cantidad <= 0} alSalir={volver} alSeguir={() => undefined} />
+      <SinVidas abierta={!libre && cantidad <= 0} alSalir={volver} alSeguir={() => undefined} />
     </div>
   );
 }

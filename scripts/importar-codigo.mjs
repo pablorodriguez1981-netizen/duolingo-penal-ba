@@ -6,6 +6,7 @@
  * Uso:
  *   node scripts/importar-codigo.mjs --codigo CP    --pdf Codigo_Penal.pdf
  *   node scripts/importar-codigo.mjs --codigo CPPBA --docx Ley_11922.docx
+ *   node scripts/importar-codigo.mjs --codigo CPPBA --html V9OGJUPx.html   (normas.gba.gob.ar)
  *   node scripts/importar-codigo.mjs --codigo CPPBA --txt cppba.txt
  *
  * Requiere `pdftotext` (poppler-utils) para PDF y `python3` para .docx.
@@ -28,8 +29,8 @@ const args = Object.fromEntries(
 );
 
 const codigo = (args.codigo || '').toUpperCase();
-if (!['CP', 'CPPBA'].includes(codigo) || (!args.pdf && !args.txt && !args.docx)) {
-  console.error('Uso: node scripts/importar-codigo.mjs --codigo CP|CPPBA --pdf archivo.pdf | --docx archivo.docx | --txt archivo.txt');
+if (!['CP', 'CPPBA'].includes(codigo) || (!args.pdf && !args.txt && !args.docx && !args.html)) {
+  console.error('Uso: node scripts/importar-codigo.mjs --codigo CP|CPPBA --pdf archivo.pdf | --docx archivo.docx | --html archivo.html | --txt archivo.txt');
   process.exit(1);
 }
 
@@ -53,7 +54,7 @@ const TITULOS_CP = [
   ['Libro Primero · Disposiciones generales', 'Título II · De las penas', '5', '25'],
   ['Libro Primero · Disposiciones generales', 'Título III · Condenación condicional', '26', '29'],
   ['Libro Primero · Disposiciones generales', 'Título IV · Reparación de perjuicios', '30', '33'],
-  ['Libro Primero · Disposiciones generales', 'Título V · Imputabilidad', '34', '41 quater'],
+  ['Libro Primero · Disposiciones generales', 'Título V · Imputabilidad', '34', '41 quinquies'],
   ['Libro Primero · Disposiciones generales', 'Título VI · Tentativa', '42', '44'],
   ['Libro Primero · Disposiciones generales', 'Título VII · Participación criminal', '45', '49'],
   ['Libro Primero · Disposiciones generales', 'Título VIII · Reincidencia', '50', '53'],
@@ -74,8 +75,27 @@ const TITULOS_CP = [
   ['Libro Segundo · De los delitos', 'Título X · Delitos contra los poderes públicos y el orden constitucional', '226', '236'],
   ['Libro Segundo · De los delitos', 'Título XI · Delitos contra la administración pública', '237', '281 bis'],
   ['Libro Segundo · De los delitos', 'Título XII · Delitos contra la fe pública', '282', '302'],
-  ['Disposiciones complementarias', 'Disposiciones complementarias', '303', '305'],
+  ['Libro Segundo · De los delitos', 'Título XIII · Delitos contra el orden económico y financiero', '303', '313'],
+  ['Disposiciones complementarias', 'Disposiciones complementarias', '314', '316'],
 ];
+
+/** Epígrafes de varias oraciones que la heurística no puede separar del texto. */
+const EPIGRAFES_CPPBA = {
+  1: 'Juez natural y juicio por jurados. Juicio previo. Principio de inocencia. Non bis in idem. Inviolabilidad de la defensa. Favor rei.',
+  '334 bis': 'Pedido de sobreseimiento del Fiscal. Acusación Particular.',
+};
+
+/** Rúbricas que continúan después del primer punto ("Calidad. Instancias. Se considerará…"). */
+const CONTINUACION_EPIGRAFE_CPPBA = {
+  60: 'Instancias.',
+  92: 'Sustitución.',
+  142: 'Efectos. Obligación Fiscal.',
+  338: 'Citación a Juicio.',
+  '338 bis': 'Condiciones. Impedimentos. Remuneración.',
+  339: 'Luego de la instrucción suplementaria. Indemnización y anticipo de gastos.',
+  370: 'Grabación y versión taquigráfica.',
+  483: 'Plazo.',
+};
 
 const SUFIJOS = ['bis', 'ter', 'quater', 'quinquies', 'sexies', 'septies', 'octies', 'nonies', 'decies'];
 
@@ -88,6 +108,12 @@ export function ordenDe(numero) {
 
 function extraerTexto() {
   if (args.txt) return readFileSync(args.txt, 'utf8');
+  if (args.html) {
+    return execFileSync('python3', [resolve(raiz, 'scripts/html-a-texto.py'), args.html], {
+      encoding: 'utf8',
+      maxBuffer: 64 * 1024 * 1024,
+    });
+  }
   if (args.docx) {
     return execFileSync('python3', [resolve(raiz, 'scripts/docx-a-texto.py'), args.docx], {
       encoding: 'utf8',
@@ -101,9 +127,9 @@ function extraerTexto() {
 }
 
 const RE_ARTICULO =
-  /^ART[IÍ]CULO\s+(\d+)\s*(?:[º°o](?=[\s.\-–—:]))?\s*(bis|ter|quater|quinquies|sexies|septies|octies|nonies|decies)?\b\s*[º°]?\s*[.\-–—:]*\s*(.*)$/i;
+  /^ART[IÍ]CULO\s+(\d+)\s*(?:[º°o](?=[\s.\-–—:]))?\s*(bis|ter|qu[aá]ter|cuater|quinquies|sexies|septies|octies|nonies|decies)?(?![a-záéíóúñ])\s*[º°]?\s*[.\-–—:]*\s*(.*)$/i;
 const RE_NOTA =
-  /\s*\((?=[^()]*(?:sustituid[oa]s?|incorporad[oa]s?|derogad[oa]s?|modificad[oa]s?|vetad[oa]s?|actualizad[oa]s?|Nota Infoleg|observad[oa]))[^()]*\)\s*/g;
+  /\s*\((?=[^()]*(?:sustituid[oa]s?|incorporad[oa]s?|derogad[oa]s?|modificad[oa]s?|vetad[oa]s?|actualizad[oa]s?|renumerad[oa]s?|Nota Infoleg|observad[oa]))[^()]*\)\s*/g;
 const RE_CAPITULO = /^\s{8,}Cap[ií]tulo\s+([IVXLC]+(?:\s+bis)?)\b\.?\s*(.*)$/i;
 const RE_TITULO = /^\s{8,}T[IÍ]TULO\s+([IVXLC]+)\s*$/i;
 
@@ -190,7 +216,7 @@ function parsear(texto) {
     if (m) {
       cerrarParrafo();
       esperandoNombreCapitulo = false;
-      const numero = m[2] ? `${m[1]} ${m[2].toLowerCase()}` : m[1];
+      const numero = m[2] ? `${m[1]} ${m[2].toLowerCase().replace(/^(qu[aá]|cua)ter$/, 'quater')}` : m[1];
       actual = {
         numero,
         capitulo: capitulo ? `Capítulo ${capitulo.numero}${capitulo.nombre ? ` · ${capitulo.nombre}` : ''}` : null,
@@ -236,28 +262,57 @@ function normalizar(articulos) {
           return ' ';
         }),
       )
-      .map((p) => p.replace(/\s+/g, ' ').replace(/^[-–—.\s]+/, '').replace(/\.-$/, '.').trim())
+      .map((p) =>
+        p
+          .replace(/\s+/g, ' ')
+          .replace(/\s+([.,;:])/g, '$1')
+          .replace(/\.\s*\.(?!\.)/g, '.')
+          .replace(/^[-–—.\s]+/, '')
+          .replace(/\.-$/, '.')
+          .trim(),
+      )
       .filter((p) => p && !/^Ver Antecedentes Normativos$/i.test(p));
     // CPPBA: "(Texto según Ley 12.059) Acción pública.- La acción penal..." → nota + epígrafe + texto.
     let epigrafe = null;
     if (parrafos.length) {
       let primero = parrafos[0];
-      const segun = primero.match(/^\(\s*(Texto(?:\s+seg[uú]n)?\s+Ley[^)]*|Texto seg[uú]n[^)]*|Incorporado[^)]*|Sustituido[^)]*)\)\s*[-–.]*\s*/i);
-      if (segun) {
-        notas.unshift(segun[1].replace(/\s+/g, ' ').trim());
+      // Notas de reforma al comienzo: "(Texto según Ley 15004)", "(Ver Ley 13811)", "(Texto según Ley 13252 Requisitos..." (sin cerrar).
+      const previas = [];
+      for (;;) {
+        const segun =
+          primero.match(/^\(\s*(Texto(?:\s+seg[uú]n)?\s+Ley[^)]*|Texto seg[uú]n[^)]*|Texto sustituido[^)]*|Art[ií]culo\s+\w+[^)]*|Incorporado[^)]*|Sustituido[^)]*|Ver\s+Ley[^)]*)\)\s*[-–.]*\s*/i) ??
+          primero.match(/^\(\s*(Texto seg[uú]n Ley \d+)\s+(?=[A-ZÁÉÍÓÚÑ])/);
+        if (!segun) break;
+        previas.push(segun[1].replace(/\s+/g, ' ').trim());
         primero = primero.slice(segun[0].length);
       }
+      notas.unshift(...previas);
+      if (codigo === 'CPPBA' && EPIGRAFES_CPPBA[a.numero] && primero.startsWith(EPIGRAFES_CPPBA[a.numero])) {
+        epigrafe = EPIGRAFES_CPPBA[a.numero].replace(/\.$/, '');
+        primero = primero.slice(EPIGRAFES_CPPBA[a.numero].length);
+      }
+      // Epígrafe en un párrafo propio: "Debate ante el Tribunal de jurados ."
+      const propio = parrafos.length > 1 && primero.match(/^([A-ZÁÉÍÓÚÑ][^.:;]{2,90}?)\s*\.?\s*$/);
+      const dosPuntos = primero.match(/^([A-ZÁÉÍÓÚÑ][^.:;]{2,80}?)\s*:\s*(?=[A-ZÁÉÍÓÚÑ(])/);
       const conGuion = primero.match(/^([^.]{0,40}?[A-ZÁÉÍÓÚÑ][^]{2,170}?)\s*\.\s*-\s*(?=\S)/);
       const corto = primero.match(/^([A-ZÁÉÍÓÚÑ][^.:;]{2,90}?)\.\s+(?=[A-ZÁÉÍÓÚÑ(])/);
       const mayusculas = primero.match(/^([A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ ]{2,40}?)\s*:\s*/);
       const soloGuion = primero.match(/^([A-ZÁÉÍÓÚÑ][^.:;]{2,90}?)-\s+(?=[A-ZÁÉÍÓÚÑ])/);
-      if (codigo === 'CPPBA' && mayusculas) {
+      if (epigrafe) {
+        // definido por EPIGRAFES_CPPBA
+      } else if (codigo === 'CPPBA' && propio && propio[1].split(/\s+/).length <= 10 && !/[a-záéíóúñ]+r(á|án)(?![a-záéíóúñ])|\b(es|son)\b/i.test(propio[1])) {
+        epigrafe = propio[1].trim();
+        primero = '';
+      } else if (codigo === 'CPPBA' && mayusculas) {
         const e = mayusculas[1].trim().toLowerCase();
         epigrafe = e.charAt(0).toUpperCase() + e.slice(1);
         primero = primero.slice(mayusculas[0].length);
       } else if (codigo === 'CPPBA' && conGuion && !/\b(será|podrá|deberá|se\s+\w+rá)\b/i.test(conGuion[1])) {
         epigrafe = conGuion[1].trim();
         primero = primero.slice(conGuion[0].length);
+      } else if (codigo === 'CPPBA' && dosPuntos && dosPuntos[1].split(/\s+/).length <= 8 && !/\b\w+(r[aá]n?|ndo|an|en)\b\s*$/.test(dosPuntos[1])) {
+        epigrafe = dosPuntos[1].trim();
+        primero = primero.slice(dosPuntos[0].length);
       } else if (codigo === 'CPPBA' && corto && corto[1].split(/\s+/).length <= 10) {
         epigrafe = corto[1].trim();
         primero = primero.slice(corto[0].length);
@@ -265,9 +320,37 @@ function normalizar(articulos) {
         epigrafe = soloGuion[1].trim();
         primero = primero.slice(soloGuion[0].length);
       }
+      const sigue = codigo === 'CPPBA' && epigrafe && CONTINUACION_EPIGRAFE_CPPBA[a.numero];
+      if (sigue && primero.replace(/^[-–—.\s]+/, '').startsWith(sigue)) {
+        epigrafe = `${epigrafe.replace(/\.$/, '')}. ${sigue.replace(/\.$/, '')}`;
+        primero = primero.replace(/^[-–—.\s]+/, '').slice(sigue.length);
+      }
       parrafos[0] = primero.replace(/^[-–—.\s]+/, '');
       if (!parrafos[0]) parrafos.shift();
     }
+    // Texto observado por el decreto de promulgación (subrayado en la fuente): no es ley vigente.
+    const esNotaVeto = (p) => /^[·*•]?\s*Los? subrayado/i.test(p.replace(/[⟦⟧]/g, ''));
+    const hayVeto = parrafos.some(esNotaVeto) || notas.some((n) => /subrayad/i.test(n));
+    for (let i = parrafos.length - 1; i >= 0; i--) {
+      if (esNotaVeto(parrafos[i])) notas.push(parrafos.splice(i, 1)[0].replace(/[⟦⟧]/g, '').replace(/^[·*•]\s*/, ''));
+    }
+    for (let i = 0; i < parrafos.length; i++) {
+      let quitado = false;
+      parrafos[i] = parrafos[i]
+        .replace(/⟦([^⟧]*)⟧/g, (_, observado) => {
+          if (!hayVeto || !observado.trim()) return observado;
+          notas.push(`Texto observado (no vigente): «${observado.trim()}»`);
+          quitado = true;
+          return '';
+        })
+        .replace(/[⟦⟧]/g, '')
+        .replace(/\s+([.,;:])/g, '$1')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+      if (quitado && /[\p{L})]$/u.test(parrafos[i])) parrafos[i] += '.';
+    }
+    if (epigrafe) epigrafe = epigrafe.replace(/[⟦⟧]/g, '').trim();
+    for (let i = parrafos.length - 1; i >= 0; i--) if (!parrafos[i]) parrafos.splice(i, 1);
     const texto = parrafos.join('\n\n').replace(/\s*\.-$/, '.');
     const derogado = !texto || /^\(?\s*derogado\b/i.test(texto) || /^\(?\s*art[ií]culo derogado/i.test(texto) || (notas.some((n) => /derogad/i.test(n)) && texto.length < 5);
     const ubicacion = codigo === 'CP' ? ubicarCP(a.numero) : { libro: null, titulo: null };
@@ -298,14 +381,23 @@ const ultimaReforma = [...texto.matchAll(/Ley N?°?\s*(\d{2}\.\d{3})[^)]{0,40}?B
   .sort((a, b) => b.n - a.n)[0];
 
 // "(Texto actualizado con las modificaciones introducidas por las Leyes ...)" al inicio del documento.
-const version = texto.slice(0, 3000).match(/\(\s*(Texto\s+actualizado[^)]+)\)/i)?.[1].replace(/\s+/g, ' ').replace(/\s+,/g, ',').trim() ?? null;
+const version =
+  (texto.slice(0, 3000).match(/\(\s*(Texto\s+actualizado[^)]+)\)/i) ?? texto.slice(0, 3000).match(/^\s*(Texto\s+actualizado[^\n]+?)\.?\s*$/im))?.[1]
+    .replace(/\s+/g, ' ')
+    .replace(/\s+,/g, ',')
+    .trim() ?? null;
 
 const salida = {
   codigo,
   ...META[codigo],
   version,
-  fuente: `Documento importado: ${(args.pdf ?? args.docx ?? args.txt).split('/').pop()}`,
-  ultimaReformaDetectada: ultimaReforma ? `Ley ${ultimaReforma.ley} (B.O. ${ultimaReforma.fecha})` : null,
+  fuente: args.fuente ?? `Documento importado: ${(args.pdf ?? args.docx ?? args.html ?? args.txt).split('/').pop()}`,
+  ultimaReformaDetectada: ultimaReforma
+    ? `Ley ${ultimaReforma.ley} (B.O. ${ultimaReforma.fecha})`
+    : version?.match(/(\d{2})\.?(\d{3})\s*$/)
+      ? `Ley ${version.match(/(\d{2})\.?(\d{3})\s*$/).slice(1).join('.')}`
+      : null,
+  ...(args.enlace ? { enlace: args.enlace } : {}),
   importadoEl: new Date().toISOString().slice(0, 10),
   articulos,
 };

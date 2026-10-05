@@ -1,3 +1,4 @@
+import { ENLACES } from '../enlaces-fallos';
 import { comp, leccion, op, ord, vf } from '../helpers';
 import type { Unidad } from '../tipos';
 
@@ -28,12 +29,12 @@ export const U2: Unidad = {
             enLaPractica:
               'Cuando la policía de una comisaría de Quilmes detiene a alguien, inmediatamente da aviso a la UFI de turno: desde ese momento el Fiscal dirige la investigación.',
           },
-          foco: 'promoverá y ejercerá la acción penal',
+          foco: 'promoverá y ejercerá la acción penal de carácter público',
           preguntas: [
             op(
               '¿Quién practica la Investigación Penal Preparatoria en el CPPBA?',
-              ['El Ministerio Público Fiscal', 'El Juez de Garantías', 'El Tribunal en lo Criminal', 'La víctima'],
-              'El Fiscal investiga; el Juez de Garantías controla. Es la base del modelo acusatorio bonaerense.',
+              ['El Ministerio Público Fiscal', 'El Juez de Garantías', 'La Policía en función judicial, con control del juez', 'El Tribunal en lo Criminal'],
+              'El Fiscal investiga; el Juez de Garantías controla y la Policía actúa bajo la dirección del Fiscal. Es la base del modelo acusatorio bonaerense.',
             ),
             ord(
               'Ordená las funciones del Fiscal según aparecen en el art. 56:',
@@ -51,21 +52,21 @@ export const U2: Unidad = {
             ),
             op(
               '¿Qué dirige el Fiscal además de la IPP?',
-              ['A la Policía en función judicial', 'Al Servicio Penitenciario', 'A la Defensoría oficial', 'A la Suprema Corte'],
-              'La Policía, cuando actúa en una investigación penal, lo hace bajo la dirección del Fiscal.',
+              ['A la Policía en función judicial', 'A la Policía de seguridad en tareas de prevención', 'Al Juez de Garantías durante la IPP', 'Al Defensor Oficial en la etapa preparatoria'],
+              'El art. 56 le asigna la dirección de la Policía «en función judicial», es decir, cuando investiga delitos; no la prevención general ni, menos aún, a jueces o defensores.',
             ),
           ],
         }),
         leccion({
           id: 'u2-a56-l2',
           titulo: 'Objetividad del Fiscal',
-          minutos: 3,
+          minutos: 4,
           intro: {
             titulo: 'Acusar no es perseguir a cualquier costo',
             parrafos: [
               'El Fiscal debe actuar con criterio objetivo: buscar la verdad, también lo que favorece al imputado.',
               'Por eso el art. 56 le exige formular sus requerimientos conforme a ese criterio «aún a favor del imputado» (por ejemplo, pidiendo el sobreseimiento o la absolución), y fundarlos de manera que se basten a sí mismos.',
-              'Reformas posteriores a tu documento agregaron además criterios de oportunidad para archivar ciertos casos (art. 56 bis).',
+              'Además puede aplicar criterios de oportunidad en cualquier etapa, en especial los que favorecen la reparación de la víctima. El art. 56 bis regula el archivo en tres supuestos: insignificancia (con pena máxima de hasta 6 años), daño sufrido por el propio imputado («pena natural») y pena irrelevante frente a otros delitos.',
             ],
             enLaPractica:
               'Si en el debate la prueba demuestra que el imputado actuó en legítima defensa, el Fiscal objetivo debe pedir la absolución aunque él mismo haya acusado.',
@@ -80,13 +81,28 @@ export const U2: Unidad = {
             comp(
               'Completá el art. 56.',
               'Adecuará sus actos a un criterio ___.',
-              ['objetivo', 'punitivo', 'político', 'reservado'],
+              ['objetivo', 'de oportunidad', 'acusatorio', 'de legalidad'],
               'Objetividad: el Fiscal representa el interés de la sociedad en que se aplique correctamente la ley, no en condenar.',
             ),
             op(
               '¿Cómo deben ser los requerimientos del Fiscal?',
-              ['Motivados, de manera que se basten a sí mismos', 'Verbales e informales', 'Secretos para la defensa', 'Idénticos en todas las causas'],
-              'El art. 56 le exige formular motivadamente sus requerimientos y conclusiones, «de manera que se basten a sí mismos»: así la defensa puede contradecirlos y el juez controlarlos.',
+              [
+                'Motivados, de manera que se basten a sí mismos',
+                'Escritos en todos los casos, incluso durante el debate',
+                'Breves, con remisión a las constancias de la causa',
+                'Fundados sólo cuando la defensa lo pida',
+              ],
+              'El art. 56 le exige formular motivadamente sus requerimientos y conclusiones, «de manera que se basten a sí mismos»; en los debates procede oralmente.',
+            ),
+            op(
+              'Un imputado sin antecedentes sustrajo mercadería de valor ínfimo de un supermercado (hurto, pena máxima de 2 años) y ofrece reparar. ¿Qué herramienta tiene el Fiscal?',
+              [
+                'Archivar por insignificancia (art. 56 bis inc. 1)',
+                'Sobreseer por prescripción de la acción',
+                'Desistir porque el hurto es de acción privada',
+                'Ofrecer un juicio abreviado sin pena',
+              ],
+              'El art. 56 bis inc. 1 permite archivar cuando la afectación del bien jurídico es insignificante y la pena máxima no supera 6 años; se considera especialmente la reparación. El archivo debe notificarse a la víctima, que puede pedir su revisión al Fiscal General.',
             ),
           ],
         }),
@@ -94,7 +110,7 @@ export const U2: Unidad = {
     },
     {
       articuloId: 'cp-71',
-      relacionados: ['cp-72'],
+      relacionados: ['cp-72', 'cp-59'],
       lecciones: [
         leccion({
           id: 'u2-cp71-l1',
@@ -103,9 +119,9 @@ export const U2: Unidad = {
           intro: {
             titulo: '¿Quién puede poner en marcha el proceso?',
             parrafos: [
-              'El Código Penal (arts. 71 a 73) clasifica las acciones. La regla es la acción pública: el Fiscal actúa de oficio.',
-              'Algunas son dependientes de instancia privada (art. 72): hace falta la denuncia de la víctima para empezar, pero luego sigue de oficio. Ejemplo: lesiones leves.',
-              'Otras son privadas: sólo la víctima las impulsa por querella (por ejemplo, calumnias e injurias).',
+              'El Código Penal (arts. 71 a 73) clasifica las acciones. La regla es la acción pública: el Fiscal actúa de oficio, «sin perjuicio de las reglas de disponibilidad de la acción penal previstas en la legislación procesal» (Ley 27.147).',
+              'Algunas son dependientes de instancia privada (art. 72): abusos sexuales de los arts. 119, 120 y 130 sin muerte ni lesiones gravísimas, lesiones leves e impedimento de contacto. Hace falta la denuncia de la víctima para empezar; luego sigue de oficio.',
+              'Hay excepciones: se procede de oficio si la víctima del abuso es menor de 18 años o incapaz, y en las lesiones leves cuando median razones de seguridad o interés público. Las acciones privadas (por ejemplo, calumnias e injurias) se impulsan por querella.',
             ],
             enLaPractica:
               'En una pelea con lesiones leves (art. 89 CP), la UFI no puede avanzar si la víctima no insta la acción, salvo razones de seguridad o interés público.',
@@ -114,16 +130,16 @@ export const U2: Unidad = {
             op(
               'Según el art. 71 CP, ¿cuál es la regla?',
               [
-                'Las acciones penales se inician de oficio',
-                'Todas las acciones requieren denuncia de la víctima',
-                'Sólo se persiguen delitos con querella',
-                'La policía decide qué delitos se persiguen',
+                'Se inician de oficio, salvo las de instancia privada y las privadas',
+                'Todas requieren la denuncia de la víctima',
+                'El Fiscal elige libremente cuáles inicia',
+                'Sólo se inician de oficio los delitos con pena mayor a 3 años',
               ],
-              'La regla es la acción de oficio; las excepciones son las de instancia privada y las privadas.',
+              'La regla es la acción de oficio; las excepciones son las de instancia privada y las privadas. Las «reglas de disponibilidad» que menciona el art. 71 (criterios de oportunidad) las fija la ley procesal, no el Fiscal a su arbitrio.',
             ),
             op(
               '¿Qué tipo de acción nace de unas lesiones leves dolosas?',
-              ['Dependiente de instancia privada', 'Privada', 'Pública de oficio sin excepción', 'Civil'],
+              ['Dependiente de instancia privada', 'Privada', 'Pública de oficio', 'Pública, salvo que la víctima se oponga'],
               'El art. 72 inc. 2 CP incluye las lesiones leves, dolosas o culposas.',
             ),
             vf(
@@ -131,10 +147,25 @@ export const U2: Unidad = {
               true,
               'Verdadero: el propio art. 72 CP prevé esa excepción para el inciso de lesiones leves.',
             ),
+            vf(
+              'En un abuso sexual del art. 119 CP sin muerte ni lesiones gravísimas, si la víctima tiene 15 años se procede de oficio.',
+              true,
+              'Verdadero. El art. 72 (Ley 27.455) dispone que en los casos del inciso 1 se procede de oficio cuando la víctima es menor de 18 años o fue declarada incapaz.',
+            ),
+            op(
+              'Desde la Ley 27.147, ¿cuál de estas es una causal de extinción de la acción penal (art. 59 CP)?',
+              [
+                'La conciliación o reparación integral, según las leyes procesales',
+                'El desistimiento de la denuncia en un delito de acción pública',
+                'El perdón del Fiscal en delitos con pena menor a 3 años',
+                'El pago voluntario de una multa en cualquier delito',
+              ],
+              'El art. 59 incorporó el criterio de oportunidad, la conciliación o reparación integral y el cumplimiento de la suspensión del juicio a prueba, siempre conforme a las leyes procesales.',
+            ),
             comp(
               'Completá.',
               'En los delitos de acción privada, el proceso se impulsa mediante ___.',
-              ['querella', 'requisitoria fiscal', 'denuncia anónima', 'orden policial'],
+              ['querella', 'instancia privada', 'requisitoria fiscal', 'denuncia ante la UFI'],
               'Las acciones privadas se ejercen por querella del agraviado (art. 8 y arts. 381 y ss. CPPBA).',
             ),
           ],
@@ -151,7 +182,9 @@ export const U2: Unidad = {
           'Walter Bulacio, de 17 años, murió tras ser detenido en una razzia policial en 1991 sin que se avisara al juez ni a su familia. La Corte IDH condenó a la Argentina y remarcó los deberes del Estado frente a toda persona detenida.',
         regla:
           'Toda persona detenida tiene derecho a ser informada de las razones de su detención, a que se notifique sin demora a un juez y a sus familiares, y a contar con asistencia letrada desde el primer momento.',
-        nota: 'Síntesis didáctica. Consultá la sentencia completa en el sitio de la Corte IDH.',
+        nota: 'Síntesis didáctica (sentencia del 18/9/2003, Serie C 100).',
+        enlaces: [ENLACES.bulacio],
+        ambito: 'interamericano',
       },
       lecciones: [
         leccion({
@@ -178,16 +211,16 @@ export const U2: Unidad = {
               '¿Desde cuándo puede el imputado ejercer sus derechos?',
               [
                 'Desde el primer momento de la persecución penal en su contra',
-                'Desde la elevación a juicio',
-                'Desde que se dicta la prisión preventiva',
-                'Desde la sentencia',
+                'Desde que se le recibe declaración (art. 308)',
+                'Desde que el juez convierte la aprehensión en detención',
+                'Desde la requisitoria de citación a juicio',
               ],
               'Es una regla amplia de protección: la defensa no espera a los actos formales.',
             ),
             comp(
               'Completá.',
               'Se considerará imputado a toda persona que en cualquier acto o procedimiento se lo indique o ___ como autor o partícipe de la comisión de un delito.',
-              ['detenga', 'absuelva', 'indemnice', 'cite como testigo'],
+              ['detenga', 'cite como testigo', 'notifique', 'identifique'],
               'Indicado o detenido: cualquiera de las dos situaciones activa sus derechos.',
             ),
           ],
@@ -199,7 +232,7 @@ export const U2: Unidad = {
           intro: {
             titulo: 'El kit básico de derechos',
             parrafos: [
-              'Desde la detención (o desde la primera diligencia, si el delito no admite detención), la autoridad debe informarle sus garantías mínimas: 1) saber sin demora, en un idioma que comprenda y en detalle, de qué se lo acusa; 2) comunicarse libremente con un abogado de su elección o con el Defensor Oficial; 3) que no está obligado a declarar contra sí mismo ni a confesarse culpable; 4) sus derechos frente al responsable civil y la aseguradora, si los hubiera.',
+              'Desde la detención (o desde la primera diligencia, si el delito no admite detención), la autoridad debe informarle sus garantías mínimas: saber sin demora, en un idioma que comprenda y en detalle, de qué se lo acusa; comunicarse libremente con un abogado de su elección o con el Defensor Oficial (y, si es extranjero, con el Cónsul de su país); que no está obligado a declarar contra sí mismo ni a confesarse culpable; y sus derechos frente al responsable civil y la aseguradora, si los hubiera.',
               'Si está detenido, puede presentar sus pedidos ante quien lo custodia, que debe comunicarlos de inmediato al órgano que interviene.',
             ],
             enLaPractica:
@@ -209,9 +242,9 @@ export const U2: Unidad = {
             op(
               '¿Cuál de estos NO es un derecho del imputado?',
               [
-                'Ser obligado a declarar bajo juramento de decir verdad',
+                'Declarar bajo juramento para que su versión tenga más valor',
                 'Ser informado de la imputación en un idioma que comprenda',
-                'Comunicarse libremente con un abogado de su elección',
+                'Comunicarse con el Cónsul de su país, si es extranjero',
                 'Abstenerse de declarar',
               ],
               'El imputado nunca declara bajo juramento: hacerlo violaría la garantía contra la autoincriminación (art. 18 CN).',
@@ -224,18 +257,28 @@ export const U2: Unidad = {
             op(
               'Una persona no puede pagar un abogado. ¿Qué pasa?',
               [
-                'Se le asigna un defensor oficial',
-                'Declara sola',
-                'Se suspende el proceso hasta que consiga dinero',
-                'La víctima le paga el abogado',
+                'Lo asiste el Defensor Oficial',
+                'Puede declarar sin abogado si lo consiente por escrito',
+                'Se suspende la investigación hasta que consiga abogado',
+                'Lo asiste un abogado elegido por el Fiscal',
               ],
-              'El art. 60 inc. 2 le asegura el derecho a ser asistido y comunicarse con el Defensor Oficial si no tiene un abogado de confianza.',
+              'El art. 60 le asegura el derecho a ser asistido y comunicarse con el Defensor Oficial si no tiene un abogado de confianza. Nunca declara sin asistencia letrada.',
             ),
             comp(
               'Completá.',
               'El imputado será informado ___, en un idioma que comprenda y en forma detallada, de la imputación.',
-              ['sin demora', 'al final del juicio', 'por edictos', 'sólo si lo pide por escrito'],
+              ['sin demora', 'antes de la declaración', 'al elevarse la causa a juicio', 'dentro de las 48 horas'],
               'La información debe ser inmediata, comprensible y detallada.',
+            ),
+            op(
+              'Detienen en Avellaneda a un ciudadano uruguayo. Además de las garantías comunes, ¿qué debe informársele?',
+              [
+                'Su derecho a comunicarse con el Cónsul de su país',
+                'Que deberá declarar en castellano, sin intérprete',
+                'Que no puede designar un abogado particular',
+                'Que será expulsado si se lo condena',
+              ],
+              'El art. 60 incluye el derecho a comunicarse con el Cónsul; el art. 308 exige notificarle sin dilación su derecho a la asistencia consular, bajo sanción de nulidad (Convención de Viena sobre Relaciones Consulares).',
             ),
           ],
         }),
@@ -251,7 +294,9 @@ export const U2: Unidad = {
           'La condena se basaba en una confesión obtenida mediante apremios ilegales por la policía, que llevó a encontrar los objetos robados. La Corte dejó sin efecto la sentencia.',
         regla:
           'Una confesión obtenida bajo tormentos o apremios es inválida y no puede usarse como prueba: sería convertir al Estado en beneficiario de un hecho ilícito.',
-        nota: 'Síntesis didáctica (Fallos 303:1938). Verificá el fallo completo antes de citarlo.',
+        nota: 'Síntesis didáctica (Fallos 303:1938).',
+        enlaces: [ENLACES.montenegro],
+        ambito: 'nacional',
       },
       lecciones: [
         leccion({
@@ -272,19 +317,34 @@ export const U2: Unidad = {
           preguntas: [
             op(
               '¿Quién recibe la declaración del imputado en el CPPBA?',
-              ['El Agente Fiscal', 'El Juez de Garantías', 'El comisario', 'El Tribunal en lo Criminal'],
+              ['El Agente Fiscal', 'El Juez de Garantías', 'El oficial que lo aprehendió', 'El Defensor Oficial'],
               'El art. 308 pone ese acto en cabeza del Fiscal, coherente con su rol de director de la IPP (salvo que el imputado pida motivadamente declarar ante el Juez de Garantías).',
             ),
             comp(
               'Completá el plazo para el detenido.',
               'Cuando el imputado se encuentre aprehendido o detenido, el acto deberá cumplirse inmediatamente o a más tardar dentro de las ___ desde el momento en que se produjo la restricción de la libertad.',
-              ['veinticuatro (24) horas', 'setenta y dos (72) horas', 'diez (10) días', 'dos (2) horas'],
+              ['veinticuatro (24) horas', 'cuarenta y ocho (48) horas', 'setenta y dos (72) horas', 'doce (12) horas'],
               'La regla es 24 horas desde la restricción de la libertad, prorrogables por otro tanto en los supuestos del art. 308.',
             ),
             vf(
               'Para citar a declarar al imputado basta una mera intuición del Fiscal.',
               false,
               'Falso. Se requieren elementos suficientes o indicios vehementes de la perpetración de un delito y motivo bastante para sospechar de su participación.',
+            ),
+            op(
+              'El Fiscal no pudo recibir la declaración del detenido dentro de las 24 horas. ¿Qué prevé el art. 308?',
+              [
+                'Una prórroga por otro plazo igual',
+                'Una prórroga de hasta diez días, por decisión fiscal',
+                'Que la reciba la policía para no exceder el plazo',
+                'Que el plazo se suspenda hasta el día hábil siguiente',
+              ],
+              'El plazo de 24 horas puede prorrogarse «por otro igual» cuando el Fiscal no pudo recibirla o cuando el imputado lo pide para proponer defensor.',
+            ),
+            vf(
+              'Aun sin estado de sospecha, el Fiscal puede citar a una persona a prestar declaración informativa, con las garantías del imputado.',
+              true,
+              'Verdadero. El art. 308 prevé la declaración informativa: la persona y su letrado tienen todas las garantías, derechos y deberes del imputado y del defensor.',
             ),
           ],
         }),
@@ -306,7 +366,7 @@ export const U2: Unidad = {
           preguntas: [
             op(
               '¿Qué pasa si se le recibe declaración sin notificar previamente al defensor?',
-              ['Es nula', 'Es válida si el imputado firmó', 'Es válida si el delito es grave', 'Sólo genera una multa al Fiscal'],
+              ['Es nula', 'Es válida si el imputado la firmó', 'Es válida si luego la ratifica en el juicio', 'Es nula sólo si se prueba un perjuicio concreto'],
               'El art. 308 exige la notificación previa al defensor bajo sanción de nulidad, y no vale ningún interrogatorio si el abogado no pudo asesorarlo.',
             ),
             vf(
@@ -328,11 +388,11 @@ export const U2: Unidad = {
               'Un comisario le promete a un detenido que «si confiesa se va a su casa». ¿Qué problema hay?',
               [
                 'Es un medio prohibido para inducirlo a declarar contra su voluntad',
-                'Ninguno, si el detenido acepta',
-                'Sólo es problema si lo graba',
-                'Ninguno, porque la policía puede negociar',
+                'Ninguno, si el detenido acepta libremente',
+                'Ninguno, si después confirma la confesión ante el Fiscal',
+                'Sólo afecta la credibilidad de la confesión, no su validez',
               ],
-              'Promesas, amenazas o engaños para obtener declaraciones están prohibidos y vician el acto.',
+              'El art. 310 prohíbe cualquier medio para obligarlo, inducirlo o determinarlo a declarar contra su voluntad, y sanciona su inobservancia con nulidad.',
             ),
           ],
         }),

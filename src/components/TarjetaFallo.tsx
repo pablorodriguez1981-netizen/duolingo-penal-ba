@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { FalloClave } from '../data/tipos';
+import type { AmbitoFallo, FalloClave } from '../data/tipos';
 import { BotonEscuchar } from './TarjetaArticulo';
 import { TextoGlosario } from './Glosario';
 
@@ -11,6 +11,12 @@ interface Props {
   alAbrir?: () => void;
 }
 
+export const AMBITOS: Record<AmbitoFallo, { etiqueta: string; corta: string }> = {
+  bonaerense: { etiqueta: 'Jurisprudencia bonaerense', corta: 'Bonaerenses' },
+  nacional: { etiqueta: 'Corte Suprema de la Nación', corta: 'Corte Suprema' },
+  interamericano: { etiqueta: 'Sistema interamericano', corta: 'Interamericanos' },
+};
+
 /** "El Fallo Clave": síntesis amigable de una línea jurisprudencial. */
 export function TarjetaFallo({ fallo, idArticulo, plegable, alAbrir }: Props) {
   const [abierta, setAbierta] = useState(!plegable);
@@ -20,7 +26,9 @@ export function TarjetaFallo({ fallo, idArticulo, plegable, alAbrir }: Props) {
         ⚖️
       </span>
       <div className="min-w-0 text-left">
-        <p className="text-xs font-black tracking-widest text-violeta-500 uppercase">El Fallo Clave</p>
+        <p className="text-xs font-black tracking-widest text-violeta-500 uppercase">
+          {fallo.ambito === 'bonaerense' ? '🏛️ Fallo bonaerense' : 'El Fallo Clave'}
+        </p>
         <p className="leading-tight font-extrabold">{fallo.caso}</p>
         <p className="text-xs font-semibold text-suave">
           {fallo.tribunal}
@@ -58,7 +66,21 @@ export function TarjetaFallo({ fallo, idArticulo, plegable, alAbrir }: Props) {
             </p>
           </div>
           {fallo.nota && <p className="text-xs text-suave">ℹ️ {fallo.nota}</p>}
-          <BotonEscuchar id={`fallo-${idArticulo}`} texto={`${fallo.caso}. ${fallo.resumen}. La regla: ${fallo.regla}`} />
+          <div className="flex flex-wrap items-center gap-2">
+            <BotonEscuchar id={`fallo-${idArticulo}-${fallo.caso}`} texto={`${fallo.caso}. ${fallo.resumen}. La regla: ${fallo.regla}`} />
+            {fallo.enlaces.map((e) => (
+              <a
+                key={e.url}
+                href={e.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full bg-violeta-500/10 px-3 py-1.5 text-sm font-extrabold text-violeta-500 hover:bg-violeta-500/20"
+              >
+                📄 Ver fallo ↗<span className="sr-only"> ({e.etiqueta})</span>
+              </a>
+            ))}
+          </div>
+          {fallo.enlaces.length > 0 && <p className="text-[11px] font-semibold text-suave">{fallo.enlaces.map((e) => e.etiqueta).join(' · ')}</p>}
         </div>
       )}
     </section>

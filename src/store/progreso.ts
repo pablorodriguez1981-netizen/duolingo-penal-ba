@@ -109,6 +109,8 @@ interface Acciones {
   marcarBienvenida(): void;
   reiniciarCamino(): void;
   borrarTodo(): void;
+  /** Reemplaza el progreso por el de una copia de seguridad. */
+  restaurar(datos: Partial<DatosProgreso>): void;
 }
 
 export type EstadoProgreso = DatosProgreso & Acciones;
@@ -276,6 +278,11 @@ export const useProgreso = create<EstadoProgreso>()(
 
         borrarTodo() {
           setState({ ...inicial(), bienvenidaVista: true });
+        },
+
+        restaurar(datos) {
+          const base = inicial();
+          setState({ ...base, ...datos, ajustes: { ...base.ajustes, ...(datos.ajustes ?? {}) }, bienvenidaVista: true });
         },
       };
     },

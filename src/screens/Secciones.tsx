@@ -5,12 +5,12 @@ import { Hoja } from '../components/Hoja';
 import { Marco, TituloSeccion } from '../components/Marco';
 import { Mascota } from '../components/Mascota';
 import { BotonEscuchar, InsigniaCodigo, TarjetaArticulo } from '../components/TarjetaArticulo';
-import { TarjetaFallo } from '../components/TarjetaFallo';
-import { articulo, articulosCP, etiquetaArticulo, idDe, infoCodigos, todosLosArticulos } from '../data/codigos';
+import { AMBITOS, TarjetaFallo } from '../components/TarjetaFallo';
+import { articulo, articulosCP, etiquetaArticulo, fuenteDe, idDe, todosLosArticulos } from '../data/codigos';
 import { preguntasVistas, temasConFallo, UNIDADES_NUCLEO, unidadesVisibles } from '../data/curriculo';
 import { ESTRUCTURA_CPPBA } from '../data/estructura-cppba';
 import { GLOSARIO } from '../data/glosario';
-import type { Articulo } from '../data/tipos';
+import type { AmbitoFallo, Articulo, FalloClave } from '../data/tipos';
 import { COLOR_UNIDAD } from '../lib/colores';
 import { errorFrecuente } from '../lib/repaso';
 import { useProgreso } from '../store/progreso';
@@ -105,27 +105,45 @@ export function PantallaEntrenar() {
 export function PantallaFallos() {
   const leidos = useProgreso((s) => s.fallosLeidos);
   const marcar = useProgreso((s) => s.marcarFalloLeido);
-  const temas = useMemo(() => temasConFallo(UNIDADES_NUCLEO), []);
+  const [ambito, setAmbito] = useState<AmbitoFallo | 'todos'>('todos');
+  const fallos = useMemo(
+    () =>
+      temasConFallo(UNIDADES_NUCLEO).flatMap(({ unidad, tema }) =>
+        [tema.falloClave, ...(tema.fallosRelacionados ?? [])].filter((f): f is FalloClave => !!f).map((fallo) => ({ unidad, tema, fallo })),
+      ),
+    [],
+  );
+  const visibles = fallos.filter((f) => ambito === 'todos' || f.fallo.ambito === ambito);
   return (
     <Marco>
-      <TituloSeccion icono="⚖️" titulo="Banco de jurisprudencia" bajada="El Fallo Clave de los artículos más densos, en lenguaje claro." />
-      <div className="mx-4 mb-4 rounded-2xl bg-violeta-500/10 p-3 text-sm font-semibold">
-        ℹ️ Son síntesis didácticas de líneas jurisprudenciales conocidas. Antes de citarlas en un escrito, consultá el fallo completo (JUBA para la SCBA, la base de la CSJN o la Corte IDH).
+      <TituloSeccion icono="⚖️" titulo="Banco de jurisprudencia" bajada="Fallos clave en lenguaje claro, con enlace al texto completo." />
+      <div className="mb-3 flex gap-2 overflow-x-auto px-4 pb-1">
+        {(['todos', 'bonaerense', 'nacional', 'interamericano'] as const).map((a) => (
+          <button
+            key={a}
+            onClick={() => setAmbito(a)}
+            data-sel={ambito === a}
+            className="shrink-0 rounded-full border-2 border-borde bg-superficie px-3 py-1 text-sm font-extrabold data-[sel=true]:border-violeta-500 data-[sel=true]:bg-violeta-500/10"
+          >
+            {a === 'todos' ? `Todos (${fallos.length})` : `${AMBITOS[a].corta} (${fallos.filter((f) => f.fallo.ambito === a).length})`}
+          </button>
+        ))}
       </div>
       <div className="space-y-3 px-4">
-        {temas.map(({ unidad, tema }) => {
+        {visibles.map(({ unidad, tema, fallo }) => {
           const a = articulo(tema.articuloId);
           return (
-            <div key={tema.articuloId}>
+            <div key={`${tema.articuloId}-${fallo.caso}`}>
               <p className="mb-1 flex items-center gap-2 px-1 text-xs font-black tracking-wider text-suave uppercase">
                 {a && etiquetaArticulo(a)} · Unidad {unidad.numero}
-                {leidos[tema.articuloId] && <span className="text-verde-500">✔ leído</span>}
+                {fallo === tema.falloClave && leidos[tema.articuloId] && <span className="text-verde-500">✔ leído</span>}
               </p>
-              <TarjetaFallo fallo={tema.falloClave!} idArticulo={tema.articuloId} plegable alAbrir={() => marcar(tema.articuloId)} />
+              <TarjetaFallo fallo={fallo} idArticulo={tema.articuloId} plegable alAbrir={() => marcar(tema.articuloId)} />
             </div>
           );
         })}
       </div>
+      <p className="px-6 py-4 text-center text-xs font-semibold text-suave">Síntesis didácticas: leé el fallo completo antes de citarlo.</p>
     </Marco>
   );
 }
@@ -186,7 +204,7 @@ export function PantallaCodigos() {
   const [abierto, setAbierto] = useState<string | null>(null);
   const [art, setArt] = useState<Articulo | null>(null);
   const [q, setQ] = useState('');
-  const info = infoCodigos();
+  const fuenteCodigo = fuenteDe(pestana);
 
   const cppbaDisponibles = useMemo(() => todosLosArticulos().filter((a) => a.codigo === 'CPPBA' && !a.id.startsWith('cppba-bloque')), []);
   const gruposCP = useMemo(() => {
@@ -243,13 +261,19 @@ export function PantallaCodigos() {
           aria-label="Buscar en el código"
           className="mb-3 w-full rounded-2xl border-2 border-borde bg-superficie px-4 py-3 font-semibold outline-none focus:border-azul-400"
         />
-        <p className="mb-3 text-xs font-semibold text-suave">
-          {pestana === 'CP'
-            ? `📄 ${info.avisoCP}`
-            : info.cppbaOficial
-              ? `📄 Texto literal del documento que cargaste (versión 2003 aprox.: ${info.cppbaOficial.version ?? info.cppbaOficial.fuente}). Puede no reflejar reformas posteriores.`
-              : '🧭 Del CPPBA se incluyen versiones de estudio de los artículos centrales y la estructura completa. Importá el PDF oficial para ver el texto literal de todo el código.'}
-        </p>
+        {fuenteCodigo && (
+          <p className="mb-3 text-xs font-semibold text-suave">
+            Texto vigente{fuenteCodigo.ultimaReforma ? ` (última reforma: ${fuenteCodigo.ultimaReforma})` : ''} · revisado el {fuenteCodigo.revisado}
+            {fuenteCodigo.enlace && (
+              <>
+                {' · '}
+                <a href={fuenteCodigo.enlace} target="_blank" rel="noopener noreferrer" className="font-bold text-azul-500 underline">
+                  fuente oficial ↗
+                </a>
+              </>
+            )}
+          </p>
+        )}
       </div>
 
       {resultados ? (
@@ -279,7 +303,7 @@ export function PantallaCodigos() {
                 {abierto === b.id && (
                   <div className="border-t-2 border-borde p-3 pt-2">
                     <p className="mb-2 text-sm text-suave">{b.descripcion}</p>
-                    {arts.length > 0 ? <ul>{arts.map(filaArticulo)}</ul> : <p className="text-sm font-semibold text-suave">Texto disponible al importar el PDF oficial.</p>}
+                    {arts.length > 0 ? <ul>{arts.map(filaArticulo)}</ul> : <p className="text-sm font-semibold text-suave">Sin artículos vigentes en este bloque.</p>}
                   </div>
                 )}
               </div>

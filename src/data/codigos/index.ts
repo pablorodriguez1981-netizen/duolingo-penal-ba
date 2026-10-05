@@ -1,6 +1,5 @@
-import { ARTICULOS_CPPBA } from '../articulos-cppba';
 import { bloqueDeArticulo } from '../estructura-cppba';
-import { AVISO_CP_GENERAL, META_CP } from '../meta-cp';
+import { META_CP } from '../meta-cp';
 import type { Articulo } from '../tipos';
 
 export interface ArticuloImportado {
@@ -23,7 +22,10 @@ export interface CodigoImportado {
   /** "Texto actualizado con las modificaciones introducidas por las Leyes …" */
   version?: string | null;
   fuente: string;
+  /** Página oficial del texto actualizado. */
+  enlace?: string;
   ultimaReformaDetectada: string | null;
+  /** Fecha en que se descargó y revisó el texto (AAAA-MM-DD). */
   importadoEl: string;
   articulos: ArticuloImportado[];
 }
@@ -66,42 +68,32 @@ function epigrafeCP(a: ArticuloImportado) {
   return a.titulo?.split(' · ')[1] ?? 'Código Penal';
 }
 
-/** Rótulo de la versión del CPPBA importado (p. ej., "…Leyes 11.982 a 13.078"). */
-export function fuenteCPPBA(c: CodigoImportado): string {
-  const leyes = c.version?.match(/\d{2}\.?\d{3}/g)?.map((l) => (l.includes('.') ? l : `${l.slice(0, 2)}.${l.slice(2)}`));
-  const rango = leyes && leyes.length ? ` (texto actualizado con las Leyes ${leyes[0]} a ${leyes[leyes.length - 1]}, año 2003 aprox.)` : '';
-  return `Texto literal del documento provisto${rango}. No incluye reformas posteriores.`;
-}
+/** Rúbricas para artículos del CPPBA que no traen epígrafe propio. */
+const EPIGRAFES_CPPBA: Record<string, string> = {
+  '22 bis': 'Tribunal de jurados',
+  '23 bis': 'Juez de Garantías de turno',
+};
+
+/** "2026-10-05" → "05/10/2026" */
+export const fechaCorta = (iso: string) => iso.split('-').reverse().join('/');
 
 /** Construye el registro de artículos a partir de los códigos cargados. */
 export function construirRegistro(cp: CodigoImportado | null, cppbaOficial: CodigoImportado | null) {
   const registro = new Map<string, Articulo>();
 
-  for (const a of ARTICULOS_CPPBA) registro.set(a.id, a);
-
   if (cppbaOficial) {
-    const fuente = fuenteCPPBA(cppbaOficial);
     for (const o of cppbaOficial.articulos) {
       if (o.derogado || !o.texto) continue;
       const id = idDe('cppba', o.numero);
-      const actualizado = registro.get(id);
       const bloque = bloqueDeArticulo(o.numero);
-      if (actualizado) {
-        // Reformado después del documento: la lección usa la versión actualizada
-        // y la tarjeta permite ver el texto literal del documento.
-        registro.set(id, { ...actualizado, textoDocumento: o.texto, notas: o.notas, fuente });
-        continue;
-      }
       registro.set(id, {
         id,
         codigo: 'CPPBA',
         numero: o.numero,
-        epigrafe: o.epigrafe ?? bloque?.capitulo?.split(' · ')[1] ?? bloque?.titulo.split(' · ')[1] ?? 'CPPBA',
+        epigrafe: o.epigrafe ?? EPIGRAFES_CPPBA[o.numero] ?? bloque?.capitulo?.split(' · ')[1] ?? bloque?.titulo.split(' · ')[1] ?? 'CPPBA',
         texto: o.texto,
-        fidelidad: 'oficial',
         ubicacion: bloque ? [bloque.libro.split(' · ')[0], bloque.titulo, bloque.capitulo].filter(Boolean).join(' · ') : undefined,
         notas: o.notas,
-        fuente,
       });
     }
   }
@@ -116,11 +108,8 @@ export function construirRegistro(cp: CodigoImportado | null, cppbaOficial: Codi
         numero: a.numero,
         epigrafe: epigrafeCP(a),
         texto: a.texto,
-        fidelidad: 'oficial',
         ubicacion: ubicacionCP(a),
         notas: a.notas,
-        avisoVigencia: META_CP[a.numero]?.avisoVigencia,
-        fuente: AVISO_CP_GENERAL,
       });
     }
   }
@@ -168,8 +157,19 @@ export function articuloOFalla(id: string): Articulo {
 export const infoCodigos = () => ({
   cp: estado.cp,
   cppbaOficial: estado.cppbaOficial,
-  avisoCP: AVISO_CP_GENERAL,
 });
+
+/** Fuente oficial y fecha de revisión del código de un artículo. */
+export function fuenteDe(codigo: Articulo['codigo']) {
+  const c = codigo === 'CP' ? estado.cp : estado.cppbaOficial;
+  if (!c) return null;
+  return {
+    enlace: c.enlace,
+    revisado: fechaCorta(c.importadoEl),
+    ultimaReforma: c.ultimaReformaDetectada,
+    sitio: codigo === 'CP' ? 'InfoLEG (argentina.gob.ar)' : 'normas.gba.gob.ar',
+  };
+}
 
 export const articulosCP = () => estado.cpArticulos;
 export const articulosCPPBAOficial = () => estado.cppbaArticulos;

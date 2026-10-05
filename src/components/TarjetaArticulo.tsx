@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { etiquetaArticulo } from '../data/codigos';
+import { etiquetaArticulo, fuenteDe } from '../data/codigos';
 import type { Articulo } from '../data/tipos';
 import { detener, hablar, useHablando, vozDisponible } from '../lib/voz';
 import { useProgreso } from '../store/progreso';
@@ -52,10 +52,9 @@ export function InsigniaCodigo({ codigo }: { codigo: Articulo['codigo'] }) {
 /** Tarjeta "pergamino moderno" con el texto de la norma, audio y glosario. */
 export function TarjetaArticulo({ articulo: a, foco, compacta }: Props) {
   const [verNotas, setVerNotas] = useState(false);
-  const [verDocumento, setVerDocumento] = useState(false);
-  const mostrarDocumento = verDocumento && !!a.textoDocumento;
-  const textoVisible = mostrarDocumento ? a.textoDocumento! : a.texto;
+  const textoVisible = a.texto;
   const parrafos = textoVisible.split('\n\n');
+  const fuente = a.sintetico ? null : fuenteDe(a.codigo);
   return (
     <article className="relative overflow-hidden rounded-3xl border-2 border-pergamino-borde bg-pergamino shadow-[0_6px_0_0_var(--pergamino-borde)]">
       <div className="absolute inset-x-0 top-0 h-2 bg-gradient-to-r from-oro-400 via-naranja-400 to-oro-400" aria-hidden />
@@ -72,42 +71,25 @@ export function TarjetaArticulo({ articulo: a, foco, compacta }: Props) {
           <BotonEscuchar id={`art-${a.id}`} texto={`${etiquetaArticulo(a)}. ${a.epigrafe}. ${textoVisible}`} />
         </header>
 
-        {a.textoDocumento && (
-          <div className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-black/5 p-1 text-xs font-black dark:bg-white/10" role="tablist" aria-label="Versión del texto">
-            {[
-              { doc: false, etiqueta: '🆕 Versión actualizada' },
-              { doc: true, etiqueta: '📄 Tu documento (2003)' },
-            ].map((t) => (
-              <button
-                key={t.etiqueta}
-                role="tab"
-                aria-selected={mostrarDocumento === t.doc}
-                onClick={() => setVerDocumento(t.doc)}
-                className={`rounded-lg px-2 py-1.5 ${mostrarDocumento === t.doc ? 'bg-superficie text-texto shadow' : 'text-suave'}`}
-              >
-                {t.etiqueta}
-              </button>
-            ))}
-          </div>
-        )}
-
         <div className="space-y-3 font-serif text-[17px] leading-relaxed text-texto">
-          <ParrafosGlosario parrafos={parrafos} foco={mostrarDocumento ? undefined : foco} />
+          <ParrafosGlosario parrafos={parrafos} foco={foco} />
         </div>
 
         <footer className="mt-4 space-y-2 text-xs">
-          {mostrarDocumento ? (
-            <p className="font-bold text-verde-700 dark:text-verde-500">📄 {a.fuente ?? 'Texto literal del documento importado.'}</p>
-          ) : a.fidelidad === 'oficial' ? (
-            <p className="font-bold text-verde-700 dark:text-verde-500">📄 {a.fuente ?? 'Texto literal del código importado.'}</p>
-          ) : (
-            <p className="rounded-xl bg-naranja-100 px-3 py-2 font-bold text-naranja-600 dark:bg-naranja-600/20 dark:text-naranja-400">
-              🧭 Versión actualizada de estudio (reformas posteriores a tu documento): cotejala con el texto oficial vigente antes de citarla.
+          {fuente && (
+            <p className="font-semibold text-suave">
+              Texto vigente · revisado el {fuente.revisado}
+              {fuente.enlace && (
+                <>
+                  {' · '}
+                  <a href={fuente.enlace} target="_blank" rel="noopener noreferrer" className="font-bold text-azul-500 underline">
+                    Ver en {fuente.sitio} ↗
+                  </a>
+                </>
+              )}
             </p>
           )}
-          {a.avisoVigencia && (
-            <p className="rounded-xl bg-oro-300/40 px-3 py-2 font-semibold text-texto">⚠️ {a.avisoVigencia}</p>
-          )}
+          {a.sintetico && <p className="font-semibold text-suave">Resumen de la estructura del código (no es texto legal).</p>}
           {a.notas && a.notas.length > 0 && (
             <div>
               <button className="font-bold text-azul-500" onClick={() => setVerNotas((v) => !v)} aria-expanded={verNotas}>

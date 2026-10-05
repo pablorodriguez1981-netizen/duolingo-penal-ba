@@ -1,3 +1,4 @@
+import { ENLACES } from '../enlaces-fallos';
 import { comp, leccion, op, ord, vf } from '../helpers';
 import type { Unidad } from '../tipos';
 
@@ -21,8 +22,24 @@ export const U4: Unidad = {
           'Una ley había excluido de la excarcelación a los imputados de ciertos delitos, sólo por el tipo de delito. La Corte la declaró inconstitucional.',
         regla:
           'El legislador no puede convertir determinados delitos en «inexcarcelables» en abstracto: la restricción de la libertad durante el proceso debe apoyarse en la verificación de peligros procesales en el caso concreto.',
-        nota: 'Síntesis didáctica (Fallos 321:3630). En la misma línea, el plenario «Díaz Bessone» (Cámara Federal de Casación, 2008) sostuvo que la pena en expectativa no basta por sí sola para denegar la libertad.',
+        nota: 'Síntesis didáctica (Fallos 321:3630, 22/12/1998). En la misma línea, el plenario «Díaz Bessone» (Cámara Federal de Casación, 2008) sostuvo que la pena en expectativa no basta por sí sola para denegar la libertad.',
+        enlaces: [ENLACES.napoli],
+        ambito: 'nacional',
       },
+      fallosRelacionados: [
+        {
+          tribunal: 'Suprema Corte de Justicia de la Provincia de Buenos Aires',
+          caso: '«Carrascosa» (P. 125.776)',
+          anio: '2016',
+          resumen:
+            'Un imputado condenado a prisión perpetua por sentencia no firme llevaba más de cinco años en prisión preventiva (morigerada) y reclamaba su cese por exceso del plazo razonable. La SCBA rechazó el recurso por insuficiente: la defensa no rebatió todos los fundamentos de la Casación, que había valorado el avance de la causa (condenas en dos instancias), su complejidad, la gravedad del hecho y la pena en expectativa junto con las pautas del art. 148.',
+          regla:
+            'La razonabilidad de la prisión preventiva se mide en el caso concreto: grado de avance del proceso (incluida una condena no firme), complejidad, naturaleza del hecho y pena en expectativa, como indicadores del peligro de fuga del art. 148. Si cambia la situación (por ejemplo, se revoca la condena), puede volver a pedirse.',
+          nota: 'Síntesis de la sentencia del 1/6/2016 (rechazo por mayoría de fundamentos). Contrastala con «Nápoli»: la pena en expectativa sirve como indicio en el caso, nunca como regla abstracta.',
+          enlaces: [ENLACES.scbaCarrascosa],
+          ambito: 'bonaerense',
+        },
+      ],
       lecciones: [
         leccion({
           id: 'u4-a169-l1',
@@ -41,8 +58,8 @@ export const U4: Unidad = {
           preguntas: [
             op(
               '¿Quién puede pedir la excarcelación?',
-              ['El imputado que ya se encuentra detenido', 'Quien todavía no fue detenido', 'Sólo el condenado con sentencia firme', 'La víctima'],
-              'La excarcelación presupone una detención. Quien aún no está detenido pide la eximición de prisión.',
+              ['El imputado que se encuentra detenido', 'Quien teme ser detenido en una causa determinada', 'El condenado con sentencia firme', 'El imputado citado a declarar en libertad'],
+              'La excarcelación presupone una detención. Quien todavía no está detenido pide la eximición de prisión (art. 185); el condenado con sentencia firme, en cambio, discute su libertad en la ejecución (libertad condicional).',
             ),
             vf(
               'Si el imputado es excarcelado, la causa penal queda terminada.',
@@ -52,13 +69,13 @@ export const U4: Unidad = {
             comp(
               'Completá.',
               'El excarcelado debe prestar una ___ que asegure que se presentará al proceso.',
-              ['caución', 'confesión', 'indemnización', 'declaración jurada patrimonial'],
-              'La caución puede ser juratoria, personal o real.',
+              ['caución', 'contracautela', 'reparación del daño', 'declaración indagatoria'],
+              'La caución puede ser juratoria, personal o real. La contracautela es otra cosa: la presta el particular damnificado o el actor civil que pide una medida (art. 146 inc. 4).',
             ),
             op(
               'Una persona se entera de que la investigan por una causa determinada y teme ser detenida. ¿Qué puede pedir?',
-              ['La eximición de prisión', 'La excarcelación', 'La casación', 'El juicio abreviado'],
-              'El art. 185 permite pedir la eximición de prisión a toda persona que se considere imputada en una causa penal determinada; se resuelve en tres días.',
+              ['La eximición de prisión', 'La excarcelación', 'Un hábeas corpus preventivo', 'La suspensión del juicio a prueba'],
+              'El art. 185 permite pedir la eximición de prisión a toda persona que se considere imputada en una causa penal determinada; se resuelve en tres días. El hábeas corpus procede contra restricciones o amenazas ilegales o arbitrarias, no contra una investigación regular.',
             ),
           ],
         }),
@@ -70,8 +87,8 @@ export const U4: Unidad = {
             titulo: 'Inciso 1: el máximo de la escala',
             parrafos: [
               'El primer supuesto mira la escala penal en abstracto: procede la excarcelación si el delito imputado tiene una pena cuyo máximo no supere los ocho años de prisión o reclusión.',
-              'En el concurso real (varios hechos), se mira la pena aplicable al concurso, que tampoco debe superar los ocho años.',
-              'Por eso la calificación legal que elige el Fiscal es tan importante: cambia la escala y, con ella, la libertad.',
+              'En el concurso real (varios hechos), se mira la pena aplicable al concurso, que tampoco debe superar los ocho años (inc. 2).',
+              'Por eso la calificación legal que elige el Fiscal es tan importante: cambia la escala y, con ella, la libertad. Ojo: en delitos con violencia mediante armas de fuego o con intervención de menores de 18 años, se toma la escala que resulta de los arts. 41 bis y 41 quater CP.',
             ],
             enLaPractica:
               'Un robo simple (art. 164 CP: 1 mes a 6 años) entra en el inciso 1; un robo con arma (art. 166 inc. 2: 5 a 15 años) no.',
@@ -80,19 +97,39 @@ export const U4: Unidad = {
           preguntas: [
             op(
               'Imputación por robo simple (art. 164 CP: un mes a seis años). ¿Entra en el inc. 1 del art. 169?',
-              ['Sí, porque el máximo (6 años) no supera los 8', 'No, porque el mínimo es muy bajo', 'No, el robo nunca es excarcelable', 'Sólo si la víctima consiente'],
-              'Se compara el MÁXIMO de la escala con el tope de 8 años.',
+              ['Sí: el máximo (6 años) no supera los 8', 'No: hubo violencia en las personas', 'Sólo si es probable una condena condicional', 'Sólo si el Fiscal presta conformidad'],
+              'Se compara el MÁXIMO de la escala con el tope de 8 años. La condena condicional probable es otro supuesto (inc. 3), para cuando el máximo supera los 8.',
             ),
             op(
               'Imputación por robo con arma (art. 166 inc. 2 CP: cinco a quince años). ¿Entra en el inc. 1?',
-              ['No, porque el máximo (15) supera los 8 años', 'Sí, porque el mínimo es menor a 8', 'Sí, siempre', 'Depende del valor de lo robado'],
+              ['No: el máximo (15) supera los 8 años', 'Sí: el mínimo (5) es menor a 8', 'Sí, si el imputado no tiene antecedentes', 'Depende de que el arma sea de fuego'],
               'El máximo de 15 años supera el tope del inc. 1. Habrá que analizar otros incisos (por ejemplo, el de la condena condicional probable).',
             ),
             comp(
               'Completá el inciso 1.',
               'Procede cuando el delito tenga prevista una pena cuyo máximo no supere los ___ de prisión o reclusión.',
-              ['ocho (8) años', 'tres (3) años', 'quince (15) años', 'veinticinco (25) años'],
-              'El tope es de ocho años en el máximo de la escala.',
+              ['ocho (8) años', 'seis (6) años', 'tres (3) años', 'quince (15) años'],
+              'El tope vigente es de ocho años en el máximo de la escala (Ley 14.128; antes eran seis).',
+            ),
+            op(
+              'Dos hurtos en concurso real (art. 162 CP: máximo 2 años cada uno). ¿Procede la excarcelación por la escala?',
+              [
+                'Sí: la pena aplicable al concurso (máximo 4 años) no supera los 8 (inc. 2)',
+                'No: el concurso real no es excarcelable',
+                'Sólo si cada hecho, por separado, no supera 3 años',
+                'Se toma sólo el delito más grave y se ignora el otro',
+              ],
+              'En el concurso real el máximo se forma sumando los máximos (art. 55 CP): 2 + 2 = 4 años, por debajo del tope de 8 del inc. 2.',
+            ),
+            op(
+              'En delitos cometidos con violencia mediante armas de fuego, ¿qué escala se usa para resolver la excarcelación?',
+              [
+                'La que resulta de aplicar los arts. 41 bis y 41 quater del CP',
+                'La del delito sin agravantes',
+                'La de la tentativa del delito',
+                'La mitad del máximo previsto',
+              ],
+              'Es el párrafo final del art. 169 (también para delitos con intervención de menores de 18 años).',
             ),
             vf(
               'Para el inciso 1 se mira el mínimo de la escala penal.',
@@ -119,22 +156,22 @@ export const U4: Unidad = {
           preguntas: [
             op(
               '¿Qué artículo del Código Penal define cuándo cabe la condena de ejecución condicional?',
-              ['El art. 26 CP', 'El art. 79 CP', 'El art. 2 CP', 'El art. 166 CP'],
-              'El art. 26 CP: primera condena a prisión que no exceda de tres años.',
+              ['El art. 26 CP', 'El art. 27 bis CP', 'El art. 76 bis CP', 'El art. 13 CP'],
+              'El art. 26 CP: primera condena a prisión que no exceda de tres años. El 27 bis regula las reglas de conducta, el 76 bis la probation y el 13 la libertad condicional.',
             ),
             comp(
               'Completá el art. 26 CP.',
               'En los casos de primera condena a pena de prisión que no exceda de ___, el tribunal podrá dejar en suspenso su cumplimiento.',
-              ['tres años', 'seis años', 'ocho años', 'un año'],
+              ['tres años', 'dos años', 'cuatro años', 'seis años'],
               'Tres años es el límite de la condenación condicional.',
             ),
             op(
               'Robo con arma de fuego apta (escala de 6 años y 8 meses a 20 años). ¿Puede invocarse el inc. 3?',
               [
                 'No: el mínimo supera 3 años, así que la condena condicional es imposible',
-                'Sí: el máximo es alto, pero eso no importa',
+                'Sí: para el inc. 3 sólo importa el máximo',
                 'Sí, si el imputado no tiene antecedentes',
-                'Sí, siempre que pague una caución alta',
+                'Sí, si ofrece una caución real',
               ],
               'Si el mínimo de la escala supera 3 años, ninguna condena podrá ser en suspenso: el inc. 3 queda descartado.',
             ),
@@ -147,15 +184,17 @@ export const U4: Unidad = {
         }),
         leccion({
           id: 'u4-a169-l4',
-          titulo: 'Sobreseimiento y agotamiento',
-          minutos: 3,
+          titulo: 'Sobreseimiento, agotamiento y plazo razonable',
+          minutos: 4,
           intro: {
             titulo: 'Cuando el tiempo o la causa ya no justifican el encierro',
             parrafos: [
-              'Otros supuestos del art. 169 atienden a situaciones en que la detención perdió sentido: si el imputado fue sobreseído aunque la resolución no esté firme; si ya cumplió en detención el máximo de la pena prevista; o si estuvo preso un tiempo que, de haber sido condenado, le habría permitido la libertad condicional (respetando los reglamentos carcelarios).',
+              'Otros incisos del art. 169 atienden a situaciones en que la detención perdió sentido: sobreseimiento no firme (inc. 4); haber agotado en detención el máximo de la pena según la calificación del requerimiento de citación a juicio (inc. 5); estar en condiciones de obtener la libertad condicional o asistida (inc. 6); o una sentencia no firme absolutoria, en suspenso, ya agotada o que permite la libertad condicional (incs. 8 a 10).',
+              'Y el inc. 11 recoge el plazo razonable: procede si la prisión preventiva excede el plazo del art. 7.5 de la Convención Americana, teniendo en cuenta la gravedad del delito, la pena probable y la complejidad del proceso.',
               'Son reglas de proporcionalidad: la prisión preventiva nunca puede durar más que la pena posible.',
             ],
           },
+          foco: 'excede el plazo razonable a que se refiere el artículo 7º inciso 5) de la Convención Americana de Derechos Humanos',
           preguntas: [
             vf(
               'Si el imputado ya estuvo detenido el máximo de la pena prevista para el delito, debe recuperar su libertad.',
@@ -164,7 +203,7 @@ export const U4: Unidad = {
             ),
             op(
               'El imputado fue sobreseído pero el Fiscal apeló. ¿Puede ser excarcelado?',
-              ['Sí: el sobreseimiento no firme habilita la excarcelación', 'No, hasta que la Cámara resuelva', 'No, nunca', 'Sólo si la víctima lo acepta'],
+              ['Sí: el sobreseimiento no firme habilita la excarcelación (inc. 4)', 'No, hasta que la Cámara resuelva la apelación', 'Sólo si el delito tiene pena máxima de hasta 8 años', 'Sólo si el Fiscal desiste de la apelación'],
               'El sobreseimiento, aun no firme, debilita al extremo el fundamento de la detención.',
             ),
             ord(
@@ -173,7 +212,17 @@ export const U4: Unidad = {
                 'Tiempo de detención que habría permitido la libertad condicional',
                 'Tiempo de detención igual al máximo de la pena prevista',
               ],
-              'La libertad condicional se obtiene antes del agotamiento total de la pena (por ejemplo, a los 2/3 en penas de más de 3 años, art. 13 CP).',
+              'La libertad condicional se obtiene antes del agotamiento total de la pena (por ejemplo, a los 2/3 en penas temporales de más de 3 años, art. 13 CP).',
+            ),
+            op(
+              'Un hombre lleva cuatro años en prisión preventiva por un hecho simple, sin fecha de juicio a la vista. ¿Qué inciso del art. 169 invocás?',
+              [
+                'El inc. 11: la preventiva excede el plazo razonable (art. 7.5 CADH)',
+                'El inc. 1, porque pasó mucho tiempo desde el hecho',
+                'El inc. 4, por equiparación al sobreseimiento',
+                'Ninguno: el plazo razonable sólo se discute en casación',
+              ],
+              'El inc. 11 permite excarcelar cuando la prisión preventiva excede el plazo razonable, valorando gravedad, pena probable y complejidad. También corresponde revisar los plazos fatales del art. 141.',
             ),
           ],
         }),
@@ -191,7 +240,7 @@ export const U4: Unidad = {
             titulo: 'El límite de la excarcelación',
             parrafos: [
               'Aunque se cumpla algún inciso del art. 169, la excarcelación se deniega si hay indicios vehementes de que el imputado tratará de eludir la acción de la justicia o entorpecer la investigación (art. 171).',
-              'Esos peligros pueden inferirse de las circunstancias del art. 148 (arraigo, pena esperada, comportamiento procesal, etc.).',
+              'Esos peligros pueden inferirse de las circunstancias del art. 148 (arraigo, pena esperada, comportamiento procesal, etc.). Además, en casos de tenencia o portación ilegítima de arma de fuego, el juez puede considerar que concurren si el imputado intentó eludir a la policía, evadir un control o resistirse al procedimiento.',
               'Al revés también vale: si el delito tiene una pena alta, la defensa puede igualmente discutir la libertad demostrando que no hay peligros concretos.',
             ],
             enLaPractica:
@@ -203,11 +252,11 @@ export const U4: Unidad = {
               '¿Qué exige el art. 171 para denegar la excarcelación?',
               [
                 'Indicios vehementes de fuga o de entorpecimiento de la investigación',
-                'Que el delito sea de acción pública',
-                'Que la víctima se oponga',
-                'Que el imputado no tenga dinero para la caución',
+                'Que la pena máxima supere los ocho años',
+                'Que el imputado registre antecedentes penales',
+                'Que la víctima se oponga en la audiencia',
               ],
-              'El art. 171 se basa en los peligros procesales, no en la opinión de la víctima ni en la capacidad económica.',
+              'El art. 171 se basa en los peligros procesales. La pena, los antecedentes o la oposición de la víctima pueden ser datos a valorar, pero no bastan por sí solos.',
             ),
             vf(
               'Un delito con pena máxima de 2 años es siempre excarcelable, aunque el imputado tenga varias fugas previas.',
@@ -217,7 +266,7 @@ export const U4: Unidad = {
             comp(
               'Completá.',
               'La existencia de los peligros procesales podrá inferirse de las circunstancias previstas en el artículo ___.',
-              ['148', '308', '26 del CP', '395'],
+              ['148', '146', '157', '163'],
               'El art. 171 remite a las pautas del art. 148.',
             ),
             op(
@@ -226,9 +275,19 @@ export const U4: Unidad = {
                 'Es inconstitucional: hay que verificar peligros procesales concretos («Nápoli»)',
                 'Es válida, porque el legislador decide',
                 'Es válida si la pena supera 8 años',
-                'Es válida sólo para mayores de 21 años',
+                'Es válida si la ley prevé otra caución',
               ],
               'En «Nápoli» (1998) la Corte invalidó la exclusión de la excarcelación por la sola naturaleza del delito.',
+            ),
+            op(
+              'Detienen a un hombre que portaba sin autorización un arma de fuego y que intentó escapar de un control policial. ¿Qué permite el art. 171?',
+              [
+                'Que el juez considere que hay peligro procesal y deniegue la excarcelación',
+                'Nada: la portación tiene pena baja, así que la excarcelación es obligatoria',
+                'Dictar la prisión preventiva sin audiencia ni pedido fiscal',
+                'Denegarla sólo si el arma estaba cargada',
+              ],
+              'El segundo párrafo del art. 171 (Ley 14.517) autoriza a considerar que concurren los peligros procesales cuando, en esos supuestos, el imputado intentó eludir el accionar policial, evadir un control o resistirse al procedimiento.',
             ),
           ],
         }),
@@ -258,8 +317,8 @@ export const U4: Unidad = {
               [
                 'La fuerza en las cosas o la violencia física en las personas',
                 'El valor de lo sustraído',
-                'Que ocurra de noche',
-                'Que haya más de un autor',
+                'Que la víctima esté presente',
+                'Que intervenga más de un autor',
               ],
               'El art. 164 CP agrega la fuerza o violencia al apoderamiento ilegítimo del art. 162.',
             ),

@@ -1,8 +1,20 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { articulo, inicializarCodigos, type CodigoImportado } from './codigos';
-import { estadoCamino, generados, nodosDeUnidad, preguntasDeUnidad, UNIDADES_NUCLEO, unidadesVisibles } from './curriculo';
+import { articulo, fuenteDe, inicializarCodigos, type CodigoImportado } from './codigos';
+import {
+  buscarLeccion,
+  buscarPregunta,
+  estadoCamino,
+  generados,
+  leccionesDeArticulo,
+  nodosDeUnidad,
+  preguntasDeUnidad,
+  preguntasParaPracticar,
+  sinPenalidad,
+  UNIDADES_NUCLEO,
+  unidadesVisibles,
+} from './curriculo';
 import { extraerPena } from './generador';
 import { GLOSARIO } from './glosario';
 import type { Pregunta, Unidad } from './tipos';
@@ -64,27 +76,32 @@ describe('unidades centrales', () => {
     }
   });
 
-  it('el texto del CP es literal del PDF importado', () => {
+  it('el CP es el texto actualizado oficial (InfoLEG)', () => {
     expect(articulo('cp-164')?.texto).toMatch(/^Será reprimido con prisión de un mes a seis años/);
-    expect(articulo('cp-76-bis')?.fidelidad).toBe('oficial');
+    // Ley 27.147 (2015): nuevas causales de extinción de la acción
+    expect(articulo('cp-59')?.texto).toMatch(/conciliación o reparación integral/);
+    // Ley 26.791 (2012): femicidio
+    expect(articulo('cp-80')?.texto).toMatch(/mediare violencia de género/);
+    expect(fuenteDe('CP')?.enlace).toMatch(/^https:\/\/www\.argentina\.gob\.ar\//);
   });
 
-  it('el CPPBA usa el texto literal del documento y conserva las versiones actualizadas de los reformados', () => {
-    expect(articulo('cppba-1')).toMatchObject({ fidelidad: 'oficial', epigrafe: expect.stringMatching(/^Juez natural/) });
-    expect(articulo('cppba-308')?.texto).toMatch(/previa notificación al Defensor bajo sanción de nulidad/);
-    for (const n of ['144', '148', '157', '169', '171', '395']) {
-      const a = articulo(`cppba-${n}`)!;
-      expect(a.fidelidad, n).toBe('referencia');
-      expect(a.textoDocumento, n).toBeTruthy();
-      expect(a.avisoVigencia, n).toBeTruthy();
-    }
-    expect(articulo('cppba-169')?.textoDocumento).toMatch(/seis \(6\) años/);
+  it('el CPPBA es el texto actualizado oficial (normas.gba.gob.ar)', () => {
+    expect(articulo('cppba-1')?.epigrafe).toMatch(/^Juez natural y juicio por jurados/);
+    // Ley 15.004: interrogatorio del imputado por su defensor
+    expect(articulo('cppba-358')?.texto).toContain('el imputado queda sometido al interrogatorio de su abogado defensor y de las partes contrarias');
+    expect(articulo('cppba-358')?.notas).toContain('Texto según Ley 15004');
+    expect(articulo('cppba-395')?.texto).toMatch(/quince \(15\) años/);
+    expect(articulo('cppba-169')?.texto).toMatch(/ocho \(8\) años/);
+    expect(articulo('cppba-342-bis')?.epigrafe).toBe('Debate ante el Tribunal de jurados');
+    expect(fuenteDe('CPPBA')).toMatchObject({ enlace: expect.stringMatching(/^https:\/\/normas\.gba\.gob\.ar\//), revisado: expect.stringMatching(/^\d{2}\/\d{2}\/\d{4}$/) });
   });
 
   it('cada fragmento resaltado aparece literalmente en el artículo que se lee', () => {
+    const faltantes: string[] = [];
     for (const u of UNIDADES_NUCLEO)
       for (const t of u.temas)
-        for (const l of t.lecciones) if (l.foco) expect(articulo(t.articuloId)?.texto, `${l.id}: «${l.foco}»`).toContain(l.foco);
+        for (const l of t.lecciones) if (l.foco && !articulo(t.articuloId)?.texto.includes(l.foco)) faltantes.push(`${l.id} (${t.articuloId}): «${l.foco}»`);
+    expect(faltantes).toEqual([]);
   });
 });
 
@@ -147,5 +164,46 @@ describe('extracción de penas', () => {
 describe('glosario', () => {
   it('tiene ids únicos', () => {
     expect(new Set(GLOSARIO.map((t) => t.id)).size).toBe(GLOSARIO.length);
+  });
+});
+
+describe('vidas, temas y práctica', () => {
+  it('la primera unidad es de práctica libre', () => {
+    expect(sinPenalidad('u1')).toBe(true);
+    expect(sinPenalidad('u2')).toBe(false);
+  });
+
+  it('se puede practicar con preguntas intentadas aunque no haya lecciones completas', () => {
+    const vacio = { leccionesCompletadas: {}, repasosCompletados: {}, casosCompletados: {}, fallosLeidos: {} };
+    const { unidades } = unidadesVisibles(vacio);
+    expect(preguntasParaPracticar(unidades, { ...vacio, preguntas: {} })).toHaveLength(0);
+    const intento = { 'u1-a1-l1-p1': {}, 'u4-a169-l2-p2': {} };
+    const banco = preguntasParaPracticar(unidades, { ...vacio, preguntas: intento });
+    expect(banco.map((q) => q.pregunta.id).sort()).toEqual(['u1-a1-l1-p1', 'u4-a169-l2-p2']);
+    expect(buscarPregunta('u7-a358-l1-p1')?.articuloId).toBe('cppba-358');
+  });
+
+  it('cada artículo tiene una lección para estudiarlo directamente', () => {
+    expect(leccionesDeArticulo('cppba-169')).toContain('u4-a169-l2');
+    expect(leccionesDeArticulo('cppba-358')).toEqual(['u7-a358-l1']);
+    const generada = leccionesDeArticulo('cppba-448-bis')[0];
+    expect(generada).toMatch(/^g-cppba-/);
+    expect(buscarLeccion(generada)?.tema.articuloId).toBe('cppba-448-bis');
+  });
+
+  it('todos los fallos tienen ámbito y los enlaces son https', () => {
+    for (const u of UNIDADES_NUCLEO)
+      for (const t of u.temas)
+        for (const f of [t.falloClave, ...(t.fallosRelacionados ?? [])].filter((x) => !!x)) {
+          expect(['bonaerense', 'nacional', 'interamericano'], f!.caso).toContain(f!.ambito);
+          for (const e of f!.enlaces) expect(e.url, f!.caso).toMatch(/^https:\/\//);
+        }
+    const bonaerenses = UNIDADES_NUCLEO.flatMap((u) => u.temas.flatMap((t) => [t.falloClave, ...(t.fallosRelacionados ?? [])])).filter((f) => f?.ambito === 'bonaerense');
+    expect(bonaerenses.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it('los textos vetados no forman parte del artículo', () => {
+    expect(articulo('cppba-334')?.texto).not.toContain('órganos ordinarios de juzgamiento');
+    expect(articulo('cppba-334')?.notas?.join(' ')).toMatch(/observado/);
   });
 });
