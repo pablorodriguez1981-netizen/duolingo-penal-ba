@@ -304,7 +304,7 @@ export const U3: Unidad = {
             comp(
               'Completá la definición del art. 154.',
               'También hay flagrancia mientras es ___ por la fuerza pública, el ofendido o el público.',
-              ['perseguido', 'investigado', 'citado', 'buscado por edictos'],
+              ['perseguido', 'identificado', 'señalado', 'buscado'],
               'La persecución ininterrumpida mantiene la flagrancia.',
             ),
             vf(

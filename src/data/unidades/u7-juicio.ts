@@ -323,14 +323,14 @@ export const U7: Unidad = {
           foco: 'especialmente la miseria o la dificultad de ganarse el sustento propio necesario y el de los suyos',
           preguntas: [
             op(
-              '¿Cuál de estos es un atenuante que el art. 41 CP menciona expresamente?',
+              '¿Qué circunstancia menciona expresamente el art. 41 CP al valorar los motivos del delito?',
               [
                 'La miseria o la dificultad de ganarse el sustento propio y de los suyos',
-                'Que el imputado sea famoso',
-                'Que la víctima tenga antecedentes',
-                'Que el juicio haya sido rápido',
+                'El arrepentimiento expresado en la última palabra',
+                'La reparación del daño antes del juicio',
+                'La duración del proceso hasta la sentencia',
               ],
-              'El inc. 2 del art. 41 destaca la miseria y la dificultad de ganarse el sustento.',
+              'El inc. 2 del art. 41 destaca «especialmente la miseria o la dificultad de ganarse el sustento». Las otras pueden alegarse dentro de las pautas generales, pero no están nombradas así en la norma.',
             ),
             vf(
               'Que el imputado haya ejercido su derecho a no declarar puede valorarse como agravante.',
@@ -340,7 +340,7 @@ export const U7: Unidad = {
             comp(
               'Completá el art. 41 CP.',
               'El juez deberá tomar conocimiento directo y ___ del sujeto, de la víctima y de las circunstancias del hecho.',
-              ['de visu', 'por escrito', 'por teléfono', 'mediante peritos únicamente'],
+              ['de visu', 'por informes', 'mediante peritos', 'por las constancias de la causa'],
               'El conocimiento «de visu» exige contacto directo del juez con las personas.',
             ),
           ],
