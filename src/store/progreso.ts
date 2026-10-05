@@ -59,6 +59,8 @@ export interface Ajustes {
   sonido: boolean;
   vozVelocidad: number;
   vozURI: string | null;
+  /** Usar las voces naturales pregrabadas (ElevenLabs) cuando existan. */
+  vozNatural: boolean;
   metaDiaria: 3 | 4;
   recordatorios: boolean;
   horaRecordatorio: number;
@@ -132,6 +134,7 @@ const inicial = (): DatosProgreso => ({
     sonido: true,
     vozVelocidad: 1,
     vozURI: null,
+    vozNatural: true,
     metaDiaria: 3,
     recordatorios: false,
     horaRecordatorio: 20,

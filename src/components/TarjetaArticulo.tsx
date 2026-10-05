@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { etiquetaArticulo, fuenteDe } from '../data/codigos';
 import type { Articulo } from '../data/tipos';
-import { detener, hablar, useHablando, vozDisponible } from '../lib/voz';
+import { locuciones } from '../lib/locucion';
+import { detener, hablar, puedeHablar, useHablando } from '../lib/voz';
 import { useProgreso } from '../store/progreso';
 import { ParrafosGlosario } from './Glosario';
 
@@ -14,12 +15,12 @@ interface Props {
 export function BotonEscuchar({ id, texto, etiqueta = 'Escuchar' }: { id: string; texto: string; etiqueta?: string }) {
   const hablando = useHablando();
   const ajustes = useProgreso((s) => s.ajustes);
-  if (!vozDisponible()) return null;
+  if (!puedeHablar(texto, ajustes.vozNatural)) return null;
   const activo = hablando === id;
   return (
     <button
       type="button"
-      onClick={() => (activo ? detener() : hablar(texto, { velocidad: ajustes.vozVelocidad, vozURI: ajustes.vozURI, id }))}
+      onClick={() => (activo ? detener() : hablar(texto, { velocidad: ajustes.vozVelocidad, vozURI: ajustes.vozURI, id, natural: ajustes.vozNatural }))}
       className={`flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-extrabold transition ${
         activo ? 'bg-azul-500 text-white' : 'bg-azul-100 text-azul-600 hover:brightness-95 dark:bg-azul-700 dark:text-azul-100'
       }`}
@@ -68,7 +69,7 @@ export function TarjetaArticulo({ articulo: a, foco, compacta }: Props) {
             <h3 className="text-lg leading-snug font-extrabold">{a.epigrafe}</h3>
             {a.ubicacion && <p className="mt-0.5 text-xs font-semibold text-suave">{a.ubicacion}</p>}
           </div>
-          <BotonEscuchar id={`art-${a.id}`} texto={`${etiquetaArticulo(a)}. ${a.epigrafe}. ${textoVisible}`} />
+          <BotonEscuchar id={`art-${a.id}`} texto={locuciones.articulo(a).texto} />
         </header>
 
         <div className="space-y-3 font-serif text-[17px] leading-relaxed text-texto">

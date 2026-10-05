@@ -1,8 +1,31 @@
 /**
- * Lectura en voz alta con la Web Speech API (SpeechSynthesis).
- * Funciona offline con las voces del sistema (en Android, las de Google TTS).
+ * Lectura en voz alta.
+ *
+ * 1. Voz natural: audios pregrabados con Eleven v4 (public/audio, listados en
+ *    src/data/audios.json). No consumen créditos al reproducirse y quedan
+ *    guardados en el teléfono para usarlos sin conexión.
+ * 2. Respaldo: la voz del dispositivo (Web Speech API), para los textos que no
+ *    tienen audio grabado o si no se pudo descargar.
  */
 import { useEffect, useState, useSyncExternalStore } from 'react';
+import manifiesto from '../data/audios.json';
+import { claveLocucion, textoParaVoz } from './locucion';
+
+export { textoParaVoz } from './locucion';
+
+interface ManifiestoAudios {
+  modelo: string | null;
+  voz: { id: string; nombre: string } | null;
+  formato: string | null;
+  generadoEl: string | null;
+  /** clave → bytes y segundos aproximados */
+  archivos: Record<string, { b: number; s?: number }>;
+}
+
+export const AUDIOS = manifiesto as ManifiestoAudios;
+export const CACHE_AUDIOS = 'carpi-audios';
+export const urlAudio = (clave: string) => `${import.meta.env.BASE_URL}audio/${clave}.mp3`;
+export const tieneVozNatural = (texto: string) => !!AUDIOS.archivos[claveLocucion(texto)];
 
 export const vozDisponible = () => typeof window !== 'undefined' && 'speechSynthesis' in window;
 
@@ -28,20 +51,6 @@ export function useVoces() {
     return () => window.speechSynthesis.removeEventListener('voiceschanged', actualizar);
   }, []);
   return voces;
-}
-
-/** Adapta abreviaturas jurídicas para que la voz las lea bien. */
-export function textoParaVoz(texto: string): string {
-  return texto
-    .replace(/\bCPPBA\b/g, 'Código Procesal Penal bonaerense')
-    .replace(/\bCP\b/g, 'Código Penal')
-    .replace(/\bIPP\b/g, 'I P P')
-    .replace(/\bSCBA\b/g, 'Suprema Corte bonaerense')
-    .replace(/\bCSJN\b/g, 'Corte Suprema')
-    .replace(/\barts?\.\s/gi, (m) => (m.toLowerCase().startsWith('arts') ? 'artículos ' : 'artículo '))
-    .replace(/\binc\.\s/gi, 'inciso ')
-    .replace(/\s\(\d+\)/g, '')
-    .replace(/___/g, 'espacio en blanco');
 }
 
 /** Divide en fragmentos cortos: algunos motores cortan los textos largos. */
@@ -92,17 +101,71 @@ export interface OpcionesVoz {
   vozURI?: string | null;
   id?: string;
   alTerminar?: () => void;
+  /** Usar la voz natural pregrabada si existe (por defecto, sí). */
+  natural?: boolean;
 }
 
+let audioActual: HTMLAudioElement | null = null;
+
+const terminar = (id: string, alTerminar?: () => void) => {
+  if (hablandoId === id) {
+    hablandoId = null;
+    notificar();
+  }
+  alTerminar?.();
+};
+
 export function detener() {
-  if (!vozDisponible()) return;
-  window.speechSynthesis.cancel();
+  if (audioActual) {
+    audioActual.onended = null;
+    audioActual.onerror = null;
+    audioActual.pause();
+    audioActual = null;
+  }
+  if (vozDisponible()) window.speechSynthesis.cancel();
   hablandoId = null;
   notificar();
 }
 
-export function hablar(texto: string, { velocidad = 1, vozURI, id = 'general', alTerminar }: OpcionesVoz = {}) {
-  if (!vozDisponible()) return;
+/** ¿Hay alguna forma de leer este texto? */
+export const puedeHablar = (texto: string, natural = true) => (natural && tieneVozNatural(texto)) || vozDisponible();
+
+export function hablar(texto: string, opciones: OpcionesVoz = {}) {
+  const { velocidad = 1, id = 'general', alTerminar, natural = true } = opciones;
+  detener();
+  const clave = claveLocucion(texto);
+  if (natural && AUDIOS.archivos[clave] && typeof Audio !== 'undefined') {
+    const audio = new Audio(urlAudio(clave));
+    audio.playbackRate = velocidad;
+    audioActual = audio;
+    hablandoId = id;
+    notificar();
+    audio.onended = () => {
+      audioActual = null;
+      terminar(id, alTerminar);
+    };
+    // Sin conexión y sin el audio guardado: se lee con la voz del dispositivo.
+    audio.onerror = () => {
+      if (audioActual !== audio) return;
+      audioActual = null;
+      hablarDispositivo(texto, opciones);
+    };
+    audio.play().catch(() => {
+      if (audioActual === audio) {
+        audioActual = null;
+        hablarDispositivo(texto, opciones);
+      }
+    });
+    return;
+  }
+  hablarDispositivo(texto, opciones);
+}
+
+function hablarDispositivo(texto: string, { velocidad = 1, vozURI, id = 'general', alTerminar }: OpcionesVoz) {
+  if (!vozDisponible()) {
+    terminar(id);
+    return;
+  }
   const synth = window.speechSynthesis;
   synth.cancel();
   const voces = vocesEnEspanol();
@@ -116,21 +179,8 @@ export function hablar(texto: string, { velocidad = 1, vozURI, id = 'general', a
     if (voz) u.voice = voz;
     u.rate = velocidad;
     u.pitch = 1;
-    if (i === partes.length - 1) {
-      u.onend = () => {
-        if (hablandoId === id) {
-          hablandoId = null;
-          notificar();
-        }
-        alTerminar?.();
-      };
-    }
-    u.onerror = () => {
-      if (hablandoId === id) {
-        hablandoId = null;
-        notificar();
-      }
-    };
+    if (i === partes.length - 1) u.onend = () => terminar(id, alTerminar);
+    u.onerror = () => terminar(id);
     synth.speak(u);
   });
 }

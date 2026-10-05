@@ -1,0 +1,97 @@
+name: Generar voces naturales (ElevenLabs)
+
+# Graba con Eleven v4 los textos que la app lee en voz alta y los guarda como
+# archivos estáticos (public/audio). Cada texto se graba una sola vez: si ya
+# tiene audio no se vuelve a pedir. Luego publica la app.
+#
+# Requiere el secreto ELEVENLABS_API_KEY (Settings → Secrets and variables →
+# Actions). La clave nunca se escribe en el código ni en la app publicada.
+on:
+  workflow_dispatch:
+    inputs:
+      alcance:
+        description: 'todo (lecciones, preguntas, fallos, glosario y luego los códigos completos) o nucleo (sin el articulado completo)'
+        type: choice
+        options: [todo, nucleo]
+        default: todo
+      max_caracteres:
+        description: 'Tope de caracteres en esta corrida (además del saldo del plan)'
+        default: '800000'
+      voz:
+        description: 'ID de una voz de ElevenLabs (opcional; si no, se elige una voz argentina)'
+        required: false
+        default: ''
+  # Cuando cambian los textos, graba sólo lo nuevo.
+  push:
+    branches: [main, claude/pwa-derecho-procesal-penal-454jcu]
+    paths:
+      - src/data/unidades/**
+      - src/data/glosario.ts
+      - src/data/codigos/*.json
+      - src/lib/locucion.ts
+
+permissions:
+  contents: write
+
+concurrency:
+  group: voces
+  cancel-in-progress: false
+
+jobs:
+  voces:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Grabar voces
+        id: grabar
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+          ALCANCE: ${{ inputs.alcance || 'todo' }}
+          MAX: ${{ inputs.max_caracteres || '200000' }}
+          VOZ: ${{ inputs.voz }}
+          EVENTO: ${{ github.event_name }}
+        run: |
+          if [ -z "$ELEVENLABS_API_KEY" ]; then
+            if [ "$EVENTO" = "push" ]; then
+              echo "::notice::Sin el secreto ELEVENLABS_API_KEY no se graban voces nuevas."
+              echo "omitir=1" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "::error::Falta el secreto ELEVENLABS_API_KEY (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+          ARGS=(--alcance "$ALCANCE" --max "$MAX")
+          if [ -n "$VOZ" ]; then ARGS+=(--voz "$VOZ"); fi
+          npx vite-node scripts/generar-audios.ts -- "${ARGS[@]}"
+      - name: Guardar los audios en el repositorio
+        if: ${{ always() && steps.grabar.outputs.omitir != '1' }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/audio src/data/audios.json
+          if git diff --cached --quiet; then echo "Sin audios nuevos."; exit 0; fi
+          git commit -q -m "Voces naturales (ElevenLabs v4): $(git diff --cached --name-only -- public/audio | wc -l) audios"
+          for i in 1 2 3 4; do
+            git pull -q --rebase origin "$GITHUB_REF_NAME" && git push -q origin "HEAD:$GITHUB_REF_NAME" && break
+            sleep $((i * 5))
+          done
+      - name: Compilar
+        if: ${{ steps.grabar.outputs.omitir != '1' }}
+        run: npm test && npm run build && touch dist/.nojekyll
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+      - name: Publicar
+        if: ${{ steps.grabar.outputs.omitir != '1' }}
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          force_orphan: true
+          commit_message: 'Publicar Carpi Penal con voces naturales'

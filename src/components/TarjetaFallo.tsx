@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { AmbitoFallo, FalloClave } from '../data/tipos';
+import { locuciones } from '../lib/locucion';
 import { BotonEscuchar } from './TarjetaArticulo';
 import { TextoGlosario } from './Glosario';
 
@@ -67,7 +68,7 @@ export function TarjetaFallo({ fallo, idArticulo, plegable, alAbrir }: Props) {
           </div>
           {fallo.nota && <p className="text-xs text-suave">ℹ️ {fallo.nota}</p>}
           <div className="flex flex-wrap items-center gap-2">
-            <BotonEscuchar id={`fallo-${idArticulo}-${fallo.caso}`} texto={`${fallo.caso}. ${fallo.resumen}. La regla: ${fallo.regla}`} />
+            <BotonEscuchar id={`fallo-${idArticulo}-${fallo.caso}`} texto={locuciones.fallo(fallo).texto} />
             {fallo.enlaces.map((e) => (
               <a
                 key={e.url}

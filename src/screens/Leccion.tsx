@@ -13,6 +13,7 @@ import { TarjetaFallo } from '../components/TarjetaFallo';
 import { articulo, etiquetaArticulo } from '../data/codigos';
 import { buscarLeccion, sinPenalidad } from '../data/curriculo';
 import type { Articulo } from '../data/tipos';
+import { locuciones } from '../lib/locucion';
 import { detener } from '../lib/voz';
 import { useProgreso, type ResultadoActividad } from '../store/progreso';
 
@@ -126,7 +127,7 @@ export function PantallaLeccion() {
             <BotonEscuchar
               id={`intro-${leccion.id}`}
               etiqueta="Escuchar explicación"
-              texto={[leccion.intro.titulo, ...leccion.intro.parrafos, leccion.intro.enLaPractica ?? ''].join('. ')}
+              texto={locuciones.intro(leccion).texto}
             />
           </motion.div>
         )}

@@ -14,18 +14,20 @@
     "iconos": "node scripts/generar-iconos.mjs"
   },
   "dependencies": {
+    "@fontsource/nunito": "^5.2.0",
     "canvas-confetti": "^1.9.4",
     "framer-motion": "^12.43.0",
     "idb-keyval": "^6.2.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.0",
+    "workbox-cacheable-response": "^7.4.1",
     "workbox-core": "^7.4.0",
     "workbox-precaching": "^7.4.0",
+    "workbox-range-requests": "^7.4.1",
     "workbox-routing": "^7.4.0",
     "workbox-strategies": "^7.4.0",
-    "zustand": "^5.0.8",
-    "@fontsource/nunito": "^5.2.0"
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.18",

@@ -11,7 +11,9 @@ La mascota es **Carpi**, un carpincho con toga.
 | Lecciones de 3 a 5 minutos | Cada lección tiene intro en lenguaje llano + "En los tribunales bonaerenses", lectura de la norma y 3–5 preguntas. Cronómetro visual con el objetivo de minutos. |
 | 3–4 artículos por día | Meta diaria configurable (3 o 4 artículos) con anillo de progreso. |
 | 1 a 5 lecciones por artículo | Artículos densos (p. ej. art. 169, art. 148, art. 1) se desglosan en varias lecciones. |
-| Lectura de la norma + audio | Tarjeta "pergamino" con el texto, foco resaltado y botón 🔊 (SpeechSynthesis, voz es-AR si existe). |
+| Lectura de la norma + audio | Tarjeta "pergamino" con el texto, foco resaltado y botón 🔊. Voces naturales pregrabadas con ElevenLabs (Eleven v4); si un texto no tiene audio, lee la voz del dispositivo. |
+| Voces sin conexión | Los audios son archivos estáticos (`public/audio`): no gastan créditos al escucharse y se guardan en el teléfono (Perfil › «Descargar voces»). |
+| Corregir los errores | Cada pregunta fallada vuelve al final de la lección (o del repaso) hasta responderla bien: no se termina con errores pendientes. |
 | Glosario desplegable | 59 términos enlazados automáticamente en todos los textos; se abren en una hoja sin salir de la lección. |
 | Preguntas gamificadas | Opción múltiple, verdadero/falso, ordenar pasos y completar el hueco, con feedback inmediato y explicación. |
 | Mapa interactivo | Camino en zigzag por unidades y etapas procesales, nodos bloqueados/desbloqueados, ramas opcionales de "Fallo clave". |
@@ -61,6 +63,15 @@ npm test && npm run build
 ```
 
 El importador también acepta `--pdf`, `--docx` y `--txt`. Un test verifica que cada fragmento resaltado en las lecciones aparezca literalmente en el artículo que se lee: si una reforma cambia la redacción, indica qué lección revisar.
+
+## Voces naturales (ElevenLabs)
+
+Los textos que la app lee (explicaciones, preguntas, artículos, fallos, casos y glosario) se arman en `src/lib/locucion.ts`, el mismo módulo que usa el generador, así cada audio corresponde exactamente al texto en pantalla. Se graban **una sola vez** con el workflow **«Generar voces naturales (ElevenLabs)»** (`.github/workflows/voces.yml`):
+
+1. Cargá la clave como secreto del repositorio: *Settings → Secrets and variables → Actions → New repository secret*, nombre `ELEVENLABS_API_KEY`.
+2. *Actions → Generar voces naturales → Run workflow* (alcance `todo`: primero lecciones, preguntas, fallos y glosario; después el articulado completo, hasta el saldo de créditos del plan).
+
+Cada audio se nombra con una clave del texto: si un texto no cambia, no se vuelve a grabar; si cambia, sólo se graba ése (el workflow corre solo cuando cambian los textos). La clave de ElevenLabs nunca queda en el código ni en la app publicada. Localmente: `ELEVENLABS_API_KEY=… npx vite-node scripts/generar-audios.ts -- --alcance nucleo` (con `--simular` sólo cuenta caracteres).
 
 ## Desarrollo
 

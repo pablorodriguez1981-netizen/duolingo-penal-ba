@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Boton } from '../components/Boton';
 import { Hoja } from '../components/Hoja';
 import { Llama } from '../components/Indicadores';
@@ -9,7 +9,9 @@ import { UNIDADES_NUCLEO } from '../data/curriculo';
 import { diaLocal, inicialDia, ultimosDias } from '../lib/fechas';
 import { instalar, pedirPermisoNotificaciones, usePWA } from '../lib/pwa';
 import { compartirRespaldo, descargarRespaldo, leerRespaldo, puedeCompartirArchivo } from '../lib/respaldo';
-import { hablar, useVoces, vozDisponible } from '../lib/voz';
+import { contarGuardados, descargarAudios, megasAudios, totalAudios } from '../lib/audiosOffline';
+import { locuciones } from '../lib/locucion';
+import { AUDIOS, hablar, tieneVozNatural, useVoces, vozDisponible } from '../lib/voz';
 import { rachaVigente, useProgreso, type DatosProgreso, type Tema } from '../store/progreso';
 
 function Estadistica({ icono, valor, etiqueta }: { icono: string; valor: string | number; etiqueta: string }) {
@@ -37,6 +39,88 @@ function Interruptor({ activo, alCambiar, etiqueta }: { activo: boolean; alCambi
     >
       <span className={`absolute top-1 h-6 w-6 rounded-full bg-white shadow transition-all ${activo ? 'left-7' : 'left-1'}`} />
     </button>
+  );
+}
+
+/** Voz natural (ElevenLabs) y descarga para usarla sin conexión. */
+function VozNatural() {
+  const s = useProgreso();
+  const total = totalAudios();
+  const [guardados, setGuardados] = useState<number | null>(null);
+  const [avance, setAvance] = useState<{ hechos: number; total: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    void contarGuardados().then(setGuardados);
+  }, []);
+  const muestra = UNIDADES_NUCLEO[0].temas[0].lecciones[0];
+  const textoMuestra = locuciones.intro(muestra).texto;
+  if (total === 0) {
+    return (
+      <Fila titulo="Voz natural" detalle="Las voces naturales se están preparando. Mientras tanto se usa la voz del dispositivo.">
+        <span aria-hidden>🎙️</span>
+      </Fila>
+    );
+  }
+  const completos = guardados !== null && guardados >= total;
+  return (
+    <>
+      <Fila titulo="Voz natural (ElevenLabs v4)" detalle={`${total} audios · ${AUDIOS.voz?.nombre ?? 'voz en español'}`}>
+        <div className="flex items-center gap-2">
+          {tieneVozNatural(textoMuestra) && (
+            <button
+              className="text-xl"
+              aria-label="Probar la voz natural"
+              onClick={() => hablar(textoMuestra, { velocidad: s.ajustes.vozVelocidad, id: 'prueba-natural', natural: true })}
+            >
+              🔊
+            </button>
+          )}
+          <Interruptor etiqueta="Voz natural" activo={s.ajustes.vozNatural} alCambiar={(v) => s.actualizarAjustes({ vozNatural: v })} />
+        </div>
+      </Fila>
+      {s.ajustes.vozNatural && (
+        <div className="py-3">
+          {completos ? (
+            <p className="text-sm font-bold text-verde-600">✔ Voces guardadas en este dispositivo: funcionan sin conexión.</p>
+          ) : avance ? (
+            <div>
+              <div className="h-3 overflow-hidden rounded-full bg-borde">
+                <div className="h-full rounded-full bg-verde-500 transition-all" style={{ width: `${(avance.hechos / avance.total) * 100}%` }} />
+              </div>
+              <p className="mt-1 text-xs font-bold text-suave">
+                Descargando voces… {avance.hechos} de {avance.total}
+              </p>
+            </div>
+          ) : (
+            <Boton
+              ancho
+              chico
+              variante="azul"
+              onClick={async () => {
+                setError(null);
+                setAvance({ hechos: 0, total });
+                try {
+                  const fallidos = await descargarAudios((hechos, t) => setAvance({ hechos, total: t }));
+                  if (fallidos) setError(`No se pudieron descargar ${fallidos} audios. Revisá la conexión y volvé a intentar.`);
+                } catch (e) {
+                  setError((e as Error).message);
+                }
+                setAvance(null);
+                setGuardados(await contarGuardados());
+              }}
+            >
+              Descargar voces para usar sin conexión ({Math.max(1, Math.round(megasAudios()))} MB)
+            </Boton>
+          )}
+          {!completos && !avance && guardados !== null && guardados > 0 && (
+            <p className="mt-1 text-xs font-semibold text-suave">
+              Ya hay {guardados} de {total} guardadas (las que escuchaste).
+            </p>
+          )}
+          {error && <p className="mt-1 text-sm font-bold text-rojo-500">⚠️ {error}</p>}
+        </div>
+      )}
+    </>
   );
 }
 
@@ -150,6 +234,7 @@ export function PantallaPerfil() {
             <option value="oscuro">Oscuro</option>
           </select>
         </Fila>
+        <VozNatural />
         {vozDisponible() && (
           <>
             <Fila titulo="Velocidad de lectura" detalle={`${a.vozVelocidad.toFixed(1)}×`}>
@@ -164,7 +249,10 @@ export function PantallaPerfil() {
                 className="w-32 accent-azul-500"
               />
             </Fila>
-            <Fila titulo="Voz" detalle={voces.length ? 'Voces en español del dispositivo' : 'No se encontraron voces en español'}>
+            <Fila
+              titulo={totalAudios() && a.vozNatural ? 'Voz del dispositivo (respaldo)' : 'Voz'}
+              detalle={voces.length ? 'Voces en español del dispositivo' : 'No se encontraron voces en español'}
+            >
               <div className="flex items-center gap-2">
                 <select
                   value={a.vozURI ?? ''}
@@ -182,7 +270,14 @@ export function PantallaPerfil() {
                 <button
                   className="text-xl"
                   aria-label="Probar voz"
-                  onClick={() => hablar('Artículo 1. Nadie podrá ser juzgado por otros jueces que los instituidos por la ley antes del hecho.', { velocidad: a.vozVelocidad, vozURI: a.vozURI, id: 'prueba' })}
+                  onClick={() =>
+                    hablar('Artículo 1. Nadie podrá ser juzgado por otros jueces que los designados de acuerdo con la Constitución de la Provincia.', {
+                      velocidad: a.vozVelocidad,
+                      vozURI: a.vozURI,
+                      id: 'prueba',
+                      natural: false,
+                    })
+                  }
                 >
                   🔊
                 </button>

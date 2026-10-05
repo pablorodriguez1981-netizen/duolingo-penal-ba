@@ -124,6 +124,7 @@ export interface ResultadoSesion {
 interface PropsSesion {
   preguntas: PreguntaEnContexto[];
   usaVidas?: boolean;
+  /** Las preguntas falladas vuelven al final hasta responderlas bien: no se termina con errores sin corregir. */
   reencolarErrores?: boolean;
   objetivoMin?: number;
   /** Progreso previo (p. ej., pasos de intro y lectura de la lección). */
@@ -134,7 +135,7 @@ interface PropsSesion {
   segundosIniciales?: number;
 }
 
-/** Motor de sesión de preguntas: progreso, vidas, reencolado de errores y estadísticas. */
+/** Motor de sesión de preguntas: progreso, vidas, corrección obligatoria de errores y estadísticas. */
 export function SesionPreguntas({
   preguntas,
   usaVidas = true,
@@ -149,7 +150,10 @@ export function SesionPreguntas({
   const [cola, setCola] = useState(preguntas);
   const [indice, setIndice] = useState(0);
   const [aciertos, setAciertos] = useState(0);
-  const [reencoladas, setReencoladas] = useState<Set<string>>(new Set());
+  /** Preguntas que todavía no se respondieron bien. */
+  const [pendientes, setPendientes] = useState<Set<string>>(() => new Set(preguntas.map((q) => q.pregunta.id)));
+  /** Preguntas falladas al menos una vez. */
+  const [falladas, setFalladas] = useState<Set<string>>(new Set());
   const [sinVidas, setSinVidas] = useState(false);
   const [salir, setSalir] = useState(false);
   const registrar = useProgreso((s) => s.registrarRespuesta);
@@ -169,18 +173,23 @@ export function SesionPreguntas({
       const primera = !primerIntento.current.has(id);
       primerIntento.current.add(id);
       if (ok && primera) setAciertos((a) => a + 1);
-      if (!ok) {
-        if (reencolarErrores && !reencoladas.has(id)) {
-          setReencoladas((r) => new Set(r).add(id));
-          setCola((c) => [...c, actual]);
-        }
+      if (ok) {
+        setPendientes((p) => {
+          const n = new Set(p);
+          n.delete(id);
+          return n;
+        });
+      } else {
+        setFalladas((f) => new Set(f).add(id));
+        // Vuelve al final de la cola cada vez que se falla, hasta acertarla.
+        if (reencolarErrores) setCola((c) => [...c, actual]);
         if (usaVidas) {
           const restantes = perderVida();
           if (restantes <= 0) window.setTimeout(() => setSinVidas(true), 700);
         }
       }
     },
-    [actual, registrar, reencolarErrores, reencoladas, usaVidas, perderVida],
+    [actual, registrar, reencolarErrores, usaVidas, perderVida],
   );
 
   const alContinuar = useCallback(() => {
@@ -193,20 +202,40 @@ export function SesionPreguntas({
     }
   }, [indice, cola.length, alTerminar, aciertos, preguntas.length, segTotal, usaVidas, sinVidas]);
 
-  const progreso = progresoInicial + (1 - progresoInicial) * (indice / Math.max(1, cola.length));
+  const total = Math.max(1, preguntas.length);
+  const progreso = reencolarErrores
+    ? progresoInicial + (1 - progresoInicial) * ((total - pendientes.size) / total)
+    : progresoInicial + (1 - progresoInicial) * (indice / Math.max(1, cola.length));
+  const erroresPendientes = [...falladas].filter((id) => pendientes.has(id)).length;
+  const esCorreccion = !!actual && falladas.has(actual.pregunta.id) && cola.indexOf(actual) < indice;
 
   return (
     <div className="flex min-h-dvh flex-col bg-fondo">
       <CabeceraSesion
         progreso={progreso}
         vidas={usaVidas ? cantidad : undefined}
-        derecha={objetivoMin ? <Cronometro segundos={segTotal} objetivoMin={objetivoMin} /> : undefined}
+        derecha={
+          <div className="flex items-center gap-2">
+            {reencolarErrores && erroresPendientes > 0 && (
+              <span className="rounded-full bg-naranja-100 px-2 py-0.5 text-xs font-black text-naranja-600 dark:bg-naranja-600/20 dark:text-naranja-400" title="Errores por corregir">
+                🔁 {erroresPendientes}
+              </span>
+            )}
+            {objetivoMin ? <Cronometro segundos={segTotal} objetivoMin={objetivoMin} /> : null}
+          </div>
+        }
         alSalir={() => setSalir(true)}
       />
       <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col">
         {actual && (
           <motion.div key={`${actual.pregunta.id}-${indice}`} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} className="flex flex-1 flex-col">
-            <PreguntaInteractiva pregunta={actual.pregunta} alResponder={alResponder} alContinuar={alContinuar} etiquetaContexto={etiqueta?.(actual)} />
+            <PreguntaInteractiva
+              pregunta={actual.pregunta}
+              alResponder={alResponder}
+              alContinuar={alContinuar}
+              etiquetaContexto={[esCorreccion ? '🔁 Corregí este error' : null, etiqueta?.(actual)].filter(Boolean).join(' · ') || undefined}
+              avisoError={reencolarErrores ? '🔁 Esta pregunta vuelve al final: para terminar tenés que responderla bien.' : undefined}
+            />
           </motion.div>
         )}
       </div>

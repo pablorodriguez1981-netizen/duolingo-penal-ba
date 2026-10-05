@@ -74,3 +74,18 @@ describe('lectura en voz alta', () => {
     expect(partes.join(' ').replace(/\s+/g, ' ').trim()).toBe(largo.replace(/\s+/g, ' ').trim());
   });
 });
+
+describe('voces naturales', () => {
+  it('la clave de un texto es estable y distingue textos', async () => {
+    const { claveLocucion } = await import('./locucion');
+    expect(claveLocucion('Art. 1 CPPBA')).toBe(claveLocucion('Art. 1 CPPBA'));
+    expect(claveLocucion('Art. 1 CPPBA')).not.toBe(claveLocucion('Art. 2 CPPBA'));
+    expect(claveLocucion('hola')).toMatch(/^[0-9a-f]{16}$/);
+  });
+
+  it('el guion desarrolla abreviaturas y quita números duplicados', async () => {
+    const { textoParaVoz } = await import('./locucion');
+    expect(textoParaVoz('arts. 1 y 2 CPPBA, inc. 3')).toBe('artículos 1 y 2 Código Procesal Penal bonaerense, inciso 3');
+    expect(textoParaVoz('quince (15) años')).toBe('quince años');
+  });
+});

@@ -15,7 +15,7 @@ const datos = {
   vidas: { cantidad: 2, recargaDesde: null },
   supervivenciaRecord: 0,
   vueltas: 0,
-  ajustes: { sonido: true, vozVelocidad: 1, vozURI: null, metaDiaria: 3, recordatorios: false, horaRecordatorio: 20, tema: 'sistema' },
+  ajustes: { sonido: true, vozVelocidad: 1, vozURI: null, vozNatural: true, metaDiaria: 3, recordatorios: false, horaRecordatorio: 20, tema: 'sistema' },
   bienvenidaVista: true,
 } as DatosProgreso;
 

@@ -3,6 +3,7 @@ import { GLOSARIO } from '../data/glosario';
 import type { TerminoGlosario } from '../data/tipos';
 import { useProgreso } from '../store/progreso';
 import { hablar } from '../lib/voz';
+import { locuciones } from '../lib/locucion';
 import { Hoja } from './Hoja';
 
 const CtxGlosario = createContext<(id: string) => void>(() => {});
@@ -36,7 +37,9 @@ export function GlosarioProvider({ children }: { children: ReactNode }) {
             <div>
               <button
                 className="text-sm font-bold text-azul-500"
-                onClick={() => hablar(`${abierto.termino}. ${abierto.definicion}`, { velocidad: ajustes.vozVelocidad, vozURI: ajustes.vozURI, id: 'glosario' })}
+                onClick={() =>
+                  hablar(locuciones.glosario(abierto).texto, { velocidad: ajustes.vozVelocidad, vozURI: ajustes.vozURI, id: 'glosario', natural: ajustes.vozNatural })
+                }
               >
                 🔊 Escuchar definición
               </button>

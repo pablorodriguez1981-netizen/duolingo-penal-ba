@@ -7,6 +7,7 @@ import { Boton } from '../Boton';
 import { TextoGlosario } from '../Glosario';
 import { Mascota } from '../Mascota';
 import { BotonEscuchar } from '../TarjetaArticulo';
+import { locuciones } from '../../lib/locucion';
 
 const FRASES_OK = ['¡Excelente!', '¡Muy bien!', '¡Impecable!', '¡Eso es!', '¡Bien ahí!', '¡Brillante, colega!'];
 const FRASES_MAL = ['¡Casi! Así se aprende.', 'Ojo con este detalle.', 'Los mejores abogados también se equivocan.', 'Tranqui: este error ya no se repite.'];
@@ -29,6 +30,8 @@ interface Props {
   /** Modo supervivencia: feedback breve y avance automático. */
   rapido?: boolean;
   etiquetaContexto?: string;
+  /** Aviso extra cuando la respuesta es incorrecta (p. ej., «vuelve al final»). */
+  avisoError?: string;
 }
 
 type Respuesta = { tipo: 'indice'; valor: number } | { tipo: 'bool'; valor: boolean } | { tipo: 'orden'; valor: number[] } | null;
@@ -45,7 +48,7 @@ function respuestaCorrectaTexto(p: Pregunta): string {
   }
 }
 
-export function PreguntaInteractiva({ pregunta, alResponder, alContinuar, rapido, etiquetaContexto }: Props) {
+export function PreguntaInteractiva({ pregunta, alResponder, alContinuar, rapido, etiquetaContexto, avisoError }: Props) {
   const [respuesta, setRespuesta] = useState<Respuesta>(null);
   const [resultado, setResultado] = useState<boolean | null>(null);
   const frase = useMemo(() => ({ ok: azarFrase(FRASES_OK), mal: azarFrase(FRASES_MAL) }), []);
@@ -122,7 +125,7 @@ export function PreguntaInteractiva({ pregunta, alResponder, alContinuar, rapido
           <BotonEscuchar
             id={`preg-${pregunta.id}`}
             etiqueta="Oír"
-            texto={`${pregunta.enunciado} ${pregunta.tipo === 'completar' ? pregunta.frase : ''}`}
+            texto={locuciones.pregunta(pregunta).texto}
           />
         </div>
 
@@ -184,6 +187,7 @@ export function PreguntaInteractiva({ pregunta, alResponder, alContinuar, rapido
                         <TextoGlosario texto={pregunta.explicacion} />
                       </p>
                     )}
+                    {!resultado && avisoError && <p className="mt-1 text-sm font-black text-rojo-700 dark:text-rojo-100">{avisoError}</p>}
                   </div>
                 </div>
                 {!rapido && (

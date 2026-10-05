@@ -5,7 +5,10 @@
  */
 import { get } from 'idb-keyval';
 import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
+import { RangeRequestsPlugin } from 'workbox-range-requests';
 import { NavigationRoute, registerRoute } from 'workbox-routing';
+import { CacheFirst } from 'workbox-strategies';
 
 declare let self: ServiceWorkerGlobalScope;
 
@@ -16,6 +19,16 @@ interface PeriodicSyncEvent extends ExtendableEvent {
 precacheAndRoute(self.__WB_MANIFEST);
 cleanupOutdatedCaches();
 registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html')));
+
+// Voces naturales: cada audio que se escucha (o se descarga desde Perfil)
+// queda guardado para usarlo sin conexión. Los reproductores piden rangos.
+registerRoute(
+  ({ url }) => url.pathname.includes('/audio/') && url.pathname.endsWith('.mp3'),
+  new CacheFirst({
+    cacheName: 'carpi-audios',
+    plugins: [new CacheableResponsePlugin({ statuses: [200] }), new RangeRequestsPlugin()],
+  }),
+);
 
 self.addEventListener('message', (e) => {
   if (e.data && e.data.type === 'SKIP_WAITING') void self.skipWaiting();

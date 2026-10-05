@@ -9,6 +9,7 @@ import { PantallaResultado } from '../components/Resultado';
 import { CabeceraSesion, ConfirmarSalida } from '../components/Sesion';
 import { BotonEscuchar, TarjetaArticulo } from '../components/TarjetaArticulo';
 import { articulo, idDe } from '../data/codigos';
+import { locuciones } from '../lib/locucion';
 import { unidadPorId } from '../data/curriculo';
 import type { Articulo } from '../data/tipos';
 import { mezclar } from '../lib/azar';
@@ -100,7 +101,7 @@ export function PantallaCaso() {
               ))}
             </div>
           </div>
-          <BotonEscuchar id={`caso-${caso.id}`} etiqueta="Escuchar los hechos" texto={caso.hechos.join(' ')} />
+          <BotonEscuchar id={`caso-${caso.id}`} etiqueta="Escuchar los hechos" texto={locuciones.caso(caso).texto} />
           <p className="text-sm font-semibold text-suave">
             Vas a enfrentar {caso.etapas.length} decisiones. Cada una se valora como óptima, viable o equivocada según el CPPBA y el Código Penal. Caso ficticio con fines didácticos.
           </p>
