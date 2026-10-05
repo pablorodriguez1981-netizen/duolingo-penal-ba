@@ -1,22 +1,27 @@
 # nombre	url
+# Textos oficiales de los códigos
 cppba-actualizado.html	https://normas.gba.gob.ar/documentos/V9OGJUPx.html
 cppba-ficha.html	https://normas.gba.gob.ar/ar-b/ley/1997/11922/4917
-ley15004.html	https://normas.gba.gob.ar/documentos/VGNLpSWB.html
 cp-infoleg.htm	http://servicios.infoleg.gob.ar/infolegInternet/anexos/15000-19999/16546/texact.htm
-cp-argentina-texto.html	https://www.argentina.gob.ar/normativa/nacional/ley-11179-16546/texto
 cp-argentina-actualizacion.html	https://www.argentina.gob.ar/normativa/nacional/ley-11179-16546/actualizacion
-fallo-verbitsky-cels.pdf	https://cels.org.ar/common/documentos/fallo_csjn_verbitsky.pdf
-fallo-verbitsky-mpd.pdf	https://repositorio.mpd.gov.ar/jspui/bitstream/123456789/4597/1/Verbitsky%20%28causa%20N%c2%b0%20117445%29.pdf
-fallo-bulacio.pdf	https://www.corteidh.or.cr/docs/casos/articulos/seriec_100_esp.pdf
-fallo-fernandez-prieto.pdf	https://corteidh.or.cr/docs/casos/articulos/seriec_411_esp.pdf
-scba-p83909-2022.doc	https://www-2020.scba.gov.ar/falloscompl/scba/inter/2022/05-03/p83909.doc
-scba-p125776-2016.doc	https://www-2020.scba.gov.ar/falloscompl/scba/2016/06-01/p125776.doc
-scba-pitman-noticia.html	https://www.scba.gov.ar/paginas.asp?id=54082
-tcp-abreviado-noticia.html	https://www.scba.gov.ar/paginas.asp?id=55453
-tcp-76889.pdf	https://www.scba.gov.ar/includes/descarga.asp?id=35615&n=Ver+Sentencia+%2876889%29.pdf
-tcp-81206.pdf	https://www.scba.gov.ar/includes/descarga.asp?id=37186&n=Ver+Sentencia+%2881206%29.pdf
-scba-p140776.pdf	https://www.scba.gov.ar/includes/descarga.asp?id=57393&n=Ver+sentencia+(causa+P140776).pdf
-scba-p141025.pdf	https://www.scba.gov.ar/includes/descarga.asp?id=57263&n=Ver+sentencia+(causa+P.141025)+.pdf
-fallo-peirano-basso.htm	https://www.cidh.oas.org/annualrep/2009sp/uruguay12553.sp.htm
-scba-p137668-pitman.pdf	https://www.scba.gov.ar/includes/descarga.asp?id=54082&n=Ver+sentencia+(causa+P137.668).pdf
-tcp-133216-abreviado.pdf	https://www.scba.gov.ar/includes/descarga.asp?id=55453&n=Ver+sentencia+(causa+N%C2%B0+133.216).pdf
+# Enlaces "Ver fallo" que usa la app (src/data/enlaces-fallos.ts)
+verif-csjn-polak	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoSumario.html?idDocumentoSumario=7009
+verif-csjn-mattei	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=7834641
+verif-csjn-mozzatti	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoSumario.html?idDocumentoSumario=16387
+verif-csjn-montenegro	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoSumario.html?idDocumentoSumario=23105
+verif-csjn-verbitsky	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=5824581
+verif-csjn-napoli	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=4627541
+verif-csjn-rayford	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoSumario.html?idDocumentoSumario=30882
+verif-csjn-llerena	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=5841071
+verif-csjn-mostaccio	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=5534771
+verif-csjn-acosta	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=6424841
+verif-csjn-gongora	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=7008981
+verif-csjn-casal	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=5921391
+verif-bulacio	https://www.corteidh.or.cr/docs/casos/articulos/seriec_100_esp.pdf
+verif-fernandezPrieto	https://corteidh.or.cr/docs/casos/articulos/seriec_411_esp.pdf
+verif-peiranoBasso	https://www.cidh.oas.org/annualrep/2009sp/uruguay12553.sp.htm
+verif-scbaVerbitsky2022	https://www-2020.scba.gov.ar/falloscompl/scba/inter/2022/05-03/p83909.doc
+verif-scbaCarrascosa	https://www-2020.scba.gov.ar/falloscompl/scba/2016/06-01/p125776.doc
+verif-scbaPitman	https://www.scba.gov.ar/includes/descarga.asp?id=54082&n=Ver+sentencia+(causa+P137.668).pdf
+verif-tcpAguero	https://www.scba.gov.ar/includes/descarga.asp?id=55453&n=Ver+sentencia+(causa+N%C2%B0+133.216).pdf
+verif-tcpGuerendiain	https://www.scba.gov.ar/includes/descarga.asp?id=35615&n=Ver+Sentencia+%2876889%29.pdf
