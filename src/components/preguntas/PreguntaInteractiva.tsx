@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Pregunta, PreguntaCompletar, PreguntaOpcion, PreguntaOrdenar, PreguntaVF } from '../../data/tipos';
 import { mezclar } from '../../lib/azar';
 import { sonidos, vibrar } from '../../lib/sonido';
@@ -48,9 +48,17 @@ function respuestaCorrectaTexto(p: Pregunta): string {
   }
 }
 
-export function PreguntaInteractiva({ pregunta, alResponder, alContinuar, rapido, etiquetaContexto, avisoError }: Props) {
+export function PreguntaInteractiva({ pregunta, alResponder, alContinuar: continuar, rapido, etiquetaContexto, avisoError }: Props) {
   const [respuesta, setRespuesta] = useState<Respuesta>(null);
   const [resultado, setResultado] = useState<boolean | null>(null);
+  // «Continuar» avanza una sola vez por pregunta (un doble toque, Enter o el
+  // avance automático no deben saltear la siguiente).
+  const continuado = useRef(false);
+  const alContinuar = useCallback(() => {
+    if (continuado.current) return;
+    continuado.current = true;
+    continuar();
+  }, [continuar]);
   const frase = useMemo(() => ({ ok: azarFrase(FRASES_OK), mal: azarFrase(FRASES_MAL) }), []);
 
   // Orden mezclado (estable para esta pregunta)

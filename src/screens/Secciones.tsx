@@ -7,7 +7,7 @@ import { Mascota } from '../components/Mascota';
 import { BotonEscuchar, InsigniaCodigo, TarjetaArticulo } from '../components/TarjetaArticulo';
 import { AMBITOS, TarjetaFallo } from '../components/TarjetaFallo';
 import { articulo, articulosCP, etiquetaArticulo, fuenteDe, idDe, todosLosArticulos } from '../data/codigos';
-import { preguntasVistas, temasConFallo, UNIDADES_NUCLEO, unidadesVisibles } from '../data/curriculo';
+import { preguntasParaPracticar, temasConFallo, UNIDADES_NUCLEO, unidadesVisibles } from '../data/curriculo';
 import { ESTRUCTURA_CPPBA } from '../data/estructura-cppba';
 import { GLOSARIO } from '../data/glosario';
 import type { AmbitoFallo, Articulo, FalloClave } from '../data/tipos';
@@ -43,7 +43,7 @@ function TarjetaModo({ a, icono, titulo, texto, color, extra }: { a: string; ico
 export function PantallaEntrenar() {
   const estado = useProgreso();
   const { unidades } = useMemo(() => unidadesVisibles(estado), [estado]);
-  const vistas = useMemo(() => preguntasVistas(unidades, estado), [unidades, estado]);
+  const vistas = useMemo(() => preguntasParaPracticar(unidades, estado), [unidades, estado]);
   const errores = vistas.filter((q) => errorFrecuente(estado.preguntas[q.pregunta.id])).length;
   const casosHechos = UNIDADES_NUCLEO.filter((u) => estado.casosCompletados[u.id]);
   return (

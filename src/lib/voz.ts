@@ -106,6 +106,31 @@ export interface OpcionesVoz {
 }
 
 let audioActual: HTMLAudioElement | null = null;
+/** URL temporal de un audio leído directamente del almacenamiento del teléfono. */
+let urlLocal: string | null = null;
+
+const liberarUrlLocal = () => {
+  if (urlLocal) URL.revokeObjectURL(urlLocal);
+  urlLocal = null;
+};
+
+/**
+ * Busca la voz entre las descargadas en el teléfono. Hace falta cuando el
+ * service worker todavía no controla la página (p. ej., la primera vez que se
+ * abre la app) y se cortó la conexión.
+ */
+async function audioGuardado(clave: string): Promise<string | null> {
+  try {
+    if (typeof caches === 'undefined') return null;
+    const r = await (await caches.open(CACHE_AUDIOS)).match(urlAudio(clave));
+    if (!r) return null;
+    liberarUrlLocal();
+    urlLocal = URL.createObjectURL(await r.blob());
+    return urlLocal;
+  } catch {
+    return null;
+  }
+}
 
 const terminar = (id: string, alTerminar?: () => void) => {
   if (hablandoId === id) {
@@ -122,6 +147,7 @@ export function detener() {
     audioActual.pause();
     audioActual = null;
   }
+  liberarUrlLocal();
   if (vozDisponible()) window.speechSynthesis.cancel();
   hablandoId = null;
   notificar();
@@ -142,20 +168,31 @@ export function hablar(texto: string, opciones: OpcionesVoz = {}) {
     notificar();
     audio.onended = () => {
       audioActual = null;
+      liberarUrlLocal();
       terminar(id, alTerminar);
     };
-    // Sin conexión y sin el audio guardado: se lee con la voz del dispositivo.
-    audio.onerror = () => {
+    const conDispositivo = () => {
       if (audioActual !== audio) return;
       audioActual = null;
       hablarDispositivo(texto, opciones);
     };
-    audio.play().catch(() => {
-      if (audioActual === audio) {
-        audioActual = null;
-        hablarDispositivo(texto, opciones);
-      }
-    });
+    // Si falla la descarga, se prueba con la copia guardada en el teléfono y,
+    // si tampoco está, se lee con la voz del dispositivo.
+    let fase: 'red' | 'buscando' | 'guardado' = 'red';
+    const alFallar = () => {
+      if (audioActual !== audio || fase === 'buscando') return;
+      if (fase === 'guardado') return conDispositivo();
+      fase = 'buscando';
+      void audioGuardado(clave).then((url) => {
+        if (audioActual !== audio) return;
+        if (!url) return conDispositivo();
+        fase = 'guardado';
+        audio.src = url;
+        audio.play().catch((e: Error) => e?.name !== 'AbortError' && alFallar());
+      });
+    };
+    audio.onerror = alFallar;
+    audio.play().catch((e: Error) => e?.name !== 'AbortError' && alFallar());
     return;
   }
   hablarDispositivo(texto, opciones);

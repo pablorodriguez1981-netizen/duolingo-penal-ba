@@ -4,6 +4,7 @@
  * conexión), navegación SPA y recordatorios de racha en segundo plano.
  */
 import { get } from 'idb-keyval';
+import { clientsClaim } from 'workbox-core';
 import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching';
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { RangeRequestsPlugin } from 'workbox-range-requests';
@@ -16,6 +17,9 @@ interface PeriodicSyncEvent extends ExtendableEvent {
   tag: string;
 }
 
+// En la primera visita, el service worker toma el control apenas se instala
+// (así las voces descargadas ya se pueden escuchar sin conexión).
+clientsClaim();
 precacheAndRoute(self.__WB_MANIFEST);
 cleanupOutdatedCaches();
 registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html')));

@@ -162,6 +162,10 @@ export function SesionPreguntas({
   const seg = useCronometro();
   const segTotal = seg + segundosIniciales;
   const primerIntento = useRef(new Set<string>());
+  /** La pregunta actual ya se respondió (para avanzar después de recargar un corazón). */
+  const respondida = useRef(false);
+  /** Se acaban de agotar los corazones: no se avanza hasta recargar. */
+  const agotadas = useRef(false);
 
   const actual = cola[indice];
 
@@ -169,6 +173,7 @@ export function SesionPreguntas({
     (ok: boolean) => {
       if (!actual) return;
       const id = actual.pregunta.id;
+      respondida.current = true;
       registrar(id, ok);
       const primera = !primerIntento.current.has(id);
       primerIntento.current.add(id);
@@ -185,22 +190,30 @@ export function SesionPreguntas({
         if (reencolarErrores) setCola((c) => [...c, actual]);
         if (usaVidas) {
           const restantes = perderVida();
-          if (restantes <= 0) window.setTimeout(() => setSinVidas(true), 700);
+          if (restantes <= 0) {
+            agotadas.current = true;
+            window.setTimeout(() => agotadas.current && setSinVidas(true), 700);
+          }
         }
       }
     },
     [actual, registrar, reencolarErrores, usaVidas, perderVida],
   );
 
+  const avanzar = useCallback(() => {
+    respondida.current = false;
+    if (indice + 1 >= cola.length) alTerminar({ aciertos, total: preguntas.length, segundos: segTotal });
+    else setIndice((i) => i + 1);
+  }, [indice, cola.length, alTerminar, aciertos, preguntas.length, segTotal]);
+
   const alContinuar = useCallback(() => {
     detener();
-    if (usaVidas && sinVidas) return;
-    if (indice + 1 >= cola.length) {
-      alTerminar({ aciertos, total: preguntas.length, segundos: segTotal });
-    } else {
-      setIndice((i) => i + 1);
+    if (usaVidas && agotadas.current) {
+      setSinVidas(true);
+      return;
     }
-  }, [indice, cola.length, alTerminar, aciertos, preguntas.length, segTotal, usaVidas, sinVidas]);
+    avanzar();
+  }, [avanzar, usaVidas]);
 
   const total = Math.max(1, preguntas.length);
   const progreso = reencolarErrores
@@ -244,9 +257,9 @@ export function SesionPreguntas({
         abierta={sinVidas}
         alSalir={alSalir}
         alSeguir={() => {
+          agotadas.current = false;
           setSinVidas(false);
-          if (indice + 1 >= cola.length) alTerminar({ aciertos, total: preguntas.length, segundos: segTotal });
-          else setIndice((i) => i + 1);
+          if (respondida.current) avanzar();
         }}
       />
     </div>

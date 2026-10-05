@@ -8,7 +8,7 @@ import { PantallaResultado } from '../components/Resultado';
 import { ConfirmarSalida } from '../components/Sesion';
 import { PreguntaInteractiva } from '../components/preguntas/PreguntaInteractiva';
 import { articulo, etiquetaArticulo } from '../data/codigos';
-import { preguntasVistas, unidadesVisibles } from '../data/curriculo';
+import { preguntasParaPracticar, unidadesVisibles } from '../data/curriculo';
 import type { PreguntaEnContexto } from '../data/tipos';
 import { mmss } from '../lib/fechas';
 import { volverAtras } from '../lib/navegacion';
@@ -27,6 +27,8 @@ export function PantallaSupervivencia() {
   const [fase, setFase] = useState<'portada' | 'juego' | 'fin'>('portada');
   const [restante, setRestante] = useState(DURACION);
   const [indice, setIndice] = useState(0);
+  /** Cuenta las preguntas mostradas: cambia sólo al pasar a la siguiente. */
+  const [turno, setTurno] = useState(0);
   const [correctas, setCorrectas] = useState(0);
   const [respondidas, setRespondidas] = useState(0);
   const [salir, setSalir] = useState(false);
@@ -36,7 +38,7 @@ export function PantallaSupervivencia() {
 
   const pool = useMemo(() => {
     const { unidades } = unidadesVisibles(estado);
-    return preguntasVistas(unidades, estado);
+    return preguntasParaPracticar(unidades, estado);
     // El pozo se arma al entrar.
   }, []);
 
@@ -45,6 +47,7 @@ export function PantallaSupervivencia() {
   const empezar = () => {
     setCola(seleccionarParaRepaso(pool, estado.preguntas, pool.length));
     setIndice(0);
+    setTurno(0);
     setCorrectas(0);
     setRespondidas(0);
     setRestante(DURACION);
@@ -87,8 +90,16 @@ export function PantallaSupervivencia() {
   );
 
   const alContinuar = useCallback(() => {
+    if (terminado.current) return;
+    setTurno((t) => t + 1);
     if (indice + 1 >= cola.length) {
-      setCola((c) => seleccionarParaRepaso(c, useProgreso.getState().preguntas, c.length));
+      // Vuelta nueva: se re-prioriza sin repetir de inmediato la última pregunta.
+      setCola((c) => {
+        const nueva = seleccionarParaRepaso(c, useProgreso.getState().preguntas, c.length);
+        const ultima = c[c.length - 1];
+        if (nueva.length > 1 && nueva[0] === ultima) nueva.push(nueva.shift()!);
+        return nueva;
+      });
       setIndice(0);
     } else setIndice((i) => i + 1);
   }, [indice, cola.length]);
@@ -161,7 +172,7 @@ export function PantallaSupervivencia() {
       </div>
       <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col">
         {q && (
-          <motion.div key={`${q.pregunta.id}-${respondidas}`} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} className="flex flex-1 flex-col">
+          <motion.div key={turno} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} className="flex flex-1 flex-col">
             <PreguntaInteractiva pregunta={q.pregunta} alResponder={alResponder} alContinuar={alContinuar} rapido etiquetaContexto={a ? etiquetaArticulo(a) : undefined} />
           </motion.div>
         )}
