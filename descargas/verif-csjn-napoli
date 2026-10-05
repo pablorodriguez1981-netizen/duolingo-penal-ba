@@ -1,0 +1,1782 @@
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="google-site-verification" content="hG-I3oPPnpRtnYhxnXtmD3c1LBqgmriFSO4wssXcwVQ" />
+	<meta name="robots" content="noindex">
+	<script src='/sjconsulta/js/jquery-1.11.2.min.js'></script>
+    <script type="text/javascript" src='/sjconsulta/jquery-ui-1.11.4.lightness/jquery-ui.js'></script>
+    <script src="/sjconsulta/bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src='/sjconsulta/js/pdfobject.js'></script>
+	<script type="text/javascript" src='/sjconsulta/js/jquery.qrcode.min.js'></script>
+	<script type="text/javascript" src='/sjconsulta/js/funcionesComunes.js'></script>
+	
+	<link rel="stylesheet" type="text/css" href='/sjconsulta/bootstrap-3.3.4-dist/css/bootstrap.min.css' /> 
+	<link href='/sjconsulta/images/favicon-sj.ico' rel='shortcut icon'  type="image/x-icon"/> 
+	<link rel="stylesheet" type="text/css" href='/sjconsulta/css/font-awesome-4.3.0/css/font-awesome.min.css' />
+	<link rel="stylesheet" type="text/css" href='/sjconsulta/css/consultadefallos.css' />
+	<link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,700|Roboto:400,500,700' rel='stylesheet' type='text/css'> 
+	<title>NAPOLI ERIKA ELIZABETH  Y OTROS s/INFRACCION ARTS. 139 BIS DEL C.P. CAUSA N° 134264</title>
+	<style type="text/css">
+		@media screen and (min-width:767px){
+			#acordeonDescargasMovil{display:none}
+		}
+		@media screen and (max-width:766px){
+			#pdfDiv{display:none}
+			#acordeonReferenciantes{display:none}
+			#acordeonCitados{display:none}
+			#linkEnviar{display:none}
+			#linkDescargar{display:none}
+			#acordeonDescargas{display:none}
+			#acordeonDescargasMovil{display:block}
+		}	
+	</style>
+	<script>	  
+	  <!-- Google Tag Manager -->
+	  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	  })(window,document,'script','dataLayer','GTM-WZ93GMQ');
+	  <!-- End Google Tag Manager -->
+	</script>
+	
+	<!-- Google tag (gtag.js) -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-DVTNPN35DM"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	  gtag('config', 'G-DVTNPN35DM');
+	</script>
+	
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="cache-control" content="no-store" />
+	<meta http-equiv="expires" content="-1" />
+	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+	<meta http-equiv="pragma" content="no-cache" />
+</head>
+
+<script type="text/javascript">
+	var conCitas = true;
+	var conReferenciantes = true;
+	var conDictamenes = true;
+	var conDocumentos = false;
+	var conTomo = true;
+	var conAD = false;
+	var idDocumento = 4627541;
+	var numeroPagina = 0;
+	var idCita = '';
+	var idAnalisis = '462754';//694532;
+	var analisisPublico = 'S';
+	var fechaFallo = '914295600000';
+	var bibliotecaActiva = 'true';
+	var milisegundosFallo = '259200000';
+	var milisegundosCache = '86400000';
+	var analisisDocumental;
+	var sumarios;
+	var htmlOtraInformacion = '';
+	var listarEnlacesAD = false;
+	var idBiblioteca = [];
+	var numeroID = '';
+	var anioFallo = '';
+	
+	$(document).ready(function() {
+		var tomo = '';
+		var pagina = '';
+		var referer = "";
+		tomo = '321';
+		pagina = '3630';
+		numeroID = '6571';
+		anioFallo = '1998';
+		contexto = '';
+		fecha = '22/12/1998';
+		autos = "NAPOLI ERIKA ELIZABETH  Y OTROS s\/INFRACCION ARTS. 139 BIS DEL C.P. CAUSA N\u00B0 134264";
+		articulos = "147901,154653";
+		fechaCheck = "2026-10-03";
+
+		if (referer.includes("novedades") == true){
+			$("#subtitulo").css('background-color', '#964145');
+			$(".minisubtitulo").css('background-color', '#964145');
+			$("#divInfo").css('border-right', '4px solid #964145');
+			$("#botonShow").css('border-right', '4px solid #964145');
+			$("#resena").css('background-color', '#e0b8ba');
+		}
+		
+		else if (contexto){
+			$("#subtitulo").css('background-color', '#2ECC71');
+			$(".minisubtitulo").css('background-color', '#2ECC71');
+			$("#divInfo").css('border-right', '4px solid #2ECC71');
+			$("#botonShow").css('border-right', '4px solid #2ECC71');
+			$("#resena").css('background-color', '#e0b8ba');
+		}		
+		
+		
+		
+		if(idAnalisis != ''){
+			if(analisisPublico != '' && analisisPublico != 'N'){
+				buscaAd(idAnalisis);
+			}				
+			if((tomo != '' && pagina != '') /*|| numeroID != ''*/){
+				var htmlCitarComo = '<div class="well well-sm" style="background-color: #e5e7e9; margin-bottom: 0px;">';
+				/*if(numeroID != ''){
+					htmlCitarComo +='<div class="row"><div class="col-sm-12" style="text-align:left; margin-left: 10px;"><a title="'+fecha+" - "+autos+'">CS '+anioFallo+':'+numeroID+'</a></div></div>';
+				}*/
+				if(tomo != '' && pagina != ''){
+					htmlCitarComo +='<div class="row"><div class="col-sm-12" style="text-align:left; margin-left: 5px;"><a id="cita" title="'+fecha+" - "+autos+'">Fallos: '+tomo+':'+pagina+'</a>'+
+					'<i class="fa fa-sm fa-copy" style="font-size: 1.25em; float: right; cursor: pointer; color: black; margin: 4px 5px 0 0;" title="Copiar Cita" onclick="copiarCita()"></i></div></div>';
+				}
+				htmlCitarComo += '</div>';
+				$("#divPublicado").html(htmlCitarComo);
+				$("#divPublicado").show();//ojo
+				//$("#divPublicadoBottom").html(htmlCitarComo);				
+			}else{
+				conTomo = false;				
+			}	
+		}
+		else if (bibliotecaActiva == "true"){
+			chequearBiblioteca();
+		}
+		if(idAnalisis == '' || analisisPublico == '' || analisisPublico == 'N'){
+			$.ajax({
+		        url: "/sjconsulta/documentos/getCitantes.html?idDocumento="+idDocumento,//idAnalisis,
+		        type: 'GET',     
+		        dataType: 'json',
+		        success: rtaMuestraReferenciantes,
+		        error: function (xhr, status, error) {
+		            if (xhr.status === 200 && xhr.responseText.trim() === "") {
+		                console.warn("Respuesta vacía con status 200. Posiblemente es null.");
+		                rtaMuestraReferenciantes(null);
+		                return;
+		            }
+		            console.error("AJAX error:");
+		            console.error("Status:", status);
+		            console.error("Error:", error);
+		            console.error("Response:", xhr.responseText);
+		       	 	alert('Error Citantes: ' + error);
+		        }
+			});
+		}
+
+		//Reemplaza a funciones 'habilita'
+		$('#divAnalisisDocumental').on('show.bs.collapse', function (event) {
+		    var parent = $(event.target).parents('.collapse.in');
+		    $('.collapse.in').not(parent).collapse('hide');
+		});
+
+		$("#asunto").val("Fallo CSJN | "+document.title);
+		
+		$('#divInfo').on('shown.bs.collapse', function (e) {
+			if ($('#divInfo').outerHeight() != $('#pdfDiv').outerHeight()){
+				$('#pdfObj').attr('height', $('#divInfo').outerHeight());
+			}
+		});
+
+		$('#divInfo').on('hidden.bs.collapse', function (e) {
+			if ($('#divInfo').outerHeight() != $('#pdfDiv').outerHeight()){
+				$('#pdfObj').attr('height', $('#divInfo').outerHeight());
+			}
+		});
+	});
+	
+	$(document).on("ajaxComplete", function() {
+		toggleCargando();
+	});
+
+	function chequearBiblioteca(){
+		if ((analisisDocumental == '' || analisisDocumental.formulas.length == 0 || analisisDocumental.votosOpinion == 'S')
+				&& new Date().getTime() - fechaFallo >= milisegundosFallo && (fechaCheck == '' || new Date().getTime() - new Date(fechaCheck).getTime() >= milisegundosCache)){
+			$.ajax({
+				url: "/sjconsulta/documentos/chequearBiblioteca.html?idDocumento="+idDocumento,
+		        type: 'GET',        
+		        success: function(data){
+		        	if (data != ''){
+		    			idBiblioteca = data.split(",");
+		        		rtaMuestraBiblioteca();
+			        }
+		        },
+		        error: function (xhr, status, error) {
+		            if (xhr.status === 200 && xhr.responseText.trim() === "") {
+		                console.warn("Respuesta vacía con status 200. Posiblemente es null.");
+		                //No llama a rtaMuestraBiblioteca porque está vacío
+		                return;
+		            }
+		            console.error("AJAX error:");
+		            console.error("Status:", status);
+		            console.error("Error:", error);
+		            console.error("Response:", xhr.responseText);
+		       	 	alert('Error Biblioteca: ' + error);
+		        }
+		    });
+		}
+		else if (articulos != ''){
+			idBiblioteca = articulos.split(",");
+			rtaMuestraBiblioteca();
+		}
+	}
+	
+	function respuestaAD(data){
+		analisisDocumental = data;
+		var htmlBotonAD = '';	
+
+		if (data.inconstitucional){
+			htmlBotonAD += '<div class="panel panel-danger" title="Ver Normas" onclick="muestraAd(&quot;inconst&quot;)"  data-toggle="modal"  data-target="#analisisDocumental"><div class="panel-body" style="padding: 1px;">';
+			htmlBotonAD += 	'<a><h4 class="panel-title" style="padding: 12px; font-size: 14px;"><i class="barrita inconst"></i>&ensp;Declara Inconstitucionalidad: <span class="glyphicon glyphicon-chevron-right" aria-hidden="true" style="float: right;"></span></h4></a>';
+			htmlBotonAD += '</div></div>';
+		}
+
+		for (i = 0; i < data.cuestionesFederales.length ; i++){
+			if (data.cuestionesFederales[i].tipoCuestionFederal.codigoValor == 2){
+				htmlBotonAD += '<div class="panel panel-default"><div class="panel-body" style="padding: 1px; cursor: default">';
+				htmlBotonAD += 	'<span><h4 class="panel-title" style="padding: 12px; font-size: 14px;"><i class="barrita arbit" style="cursor: default"></i>&ensp;Sentencia Arbitraria</h4></span>';
+				htmlBotonAD += '</div></div>';
+			}
+		}
+		 
+		if(data.htmlVotos != ""){
+			htmlBotonAD +='<div id="acordeonVotos" class="panel-group" role="tablist" aria-multiselectable="true">'
+				+'<div class="panel panel-default">'
+				+'<div class="panel-heading" role="tab" aria-expanded="true" id="tituloVotos" style="padding: 0px; background-color:white;">'
+					+'<a data-toggle="collapse" data-parent="#acordeonVotos" href="#panelVotos" aria-expanded="true" aria-controls="panelVotos">'
+						+'<h4 class="panel-title" style="padding: 12px; font-size: 14px;">&nbsp;Votos: <span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="float: right;"></span></h4>'
+					+'</a>'
+				+'</div>'
+				+'<div id="panelVotos" style="margin-bottom: 10px" class="panel-collapse collapse" role="tabpanel" aria-labelledby="tituloVotos"><div class="panel-wrapper">';
+			htmlBotonAD	+= 	data.htmlVotos;
+			htmlBotonAD += '</div></div></div></div></div>';
+		}
+		
+		else if(data.stringVotosAnalisis != "" || data.stringMayoria != "" || data.stringVoto != "" || data.stringDisidencia != "" || data.stringDisidenciaParcial != ""){
+			htmlBotonAD += '<div class="panel panel-default" style="padding: 2px;" title="Ver Votos" onclick="muestraAd(&quot;votos&quot;)"  data-toggle="modal"  data-target="#analisisDocumental"><div class="panel-body" style="padding: 1px;">';
+			htmlBotonAD += 		'<a class="btn btn-link"> Votos</a>';
+			htmlBotonAD += '</div></div>';			
+		}
+		
+		htmlOtraInformacion += '<div class="panel panel-default" id="linkAD" style="padding: 2px;" title="Ver Informaci&oacute;n" onclick="muestraAd(&quot;datos&quot;)"  data-toggle="modal"  data-target="#analisisDocumental"><div class="panel-body" style="padding: 1px;">';
+		htmlOtraInformacion += 		'<a class="btn btn-link"> <span class="fa fa-plus reducido" aria-hidden="true"></span>&ensp;M&aacute;s Informaci&oacute;n</a>';
+		htmlOtraInformacion += '</div></div>';
+		
+		htmlBotonAD += '</div>';	
+		
+		$("#votos").replaceWith(htmlBotonAD);
+		//$("#divAnalisisBottom").html(htmlBotonAD);
+		if(numeroPagina > 0 && idCita == ""){
+			$('#panelVotos').collapse('show');
+		}
+		conAD = true;
+		
+		if (bibliotecaActiva == "true")
+			chequearBiblioteca();
+		
+		$.ajax({
+			url: "/sjconsulta/sumarios/getSumariosAnalisis.html?idAnalisis="+idAnalisis,
+	        type: 'GET',  
+	        dataType: 'json',
+	        success: listarSumariosADLinks,
+	        error: function (xhr, status, error) {    
+		        if (xhr.status === 200 && xhr.responseText.trim() === "") {
+		            console.warn("Respuesta vacía con status 200. Posiblemente es null.");
+		            listarSumariosADLinks(null);
+		            return;
+		        }
+	            console.error("AJAX error:");
+	            console.error("Status:", status);
+	            console.error("Error:", error);
+	            console.error("Response:", xhr.responseText);
+	       	 	alert('Error Sumarios Analisis: ' + error);
+	        }
+	    });
+		
+	}
+	
+	function irAPagina(numero){
+		gtag('event', 'Voto', {
+			  'event_category': 'Documentos',
+			  'event_label': 'Visor'
+		});
+		//$('#pdfObj').attr('data','https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoById.html?idDocumento='+idDocumento+'#page='+numero);
+		location.href="/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento="+idDocumento+"&numeroPagina="+numero;
+	}
+	
+	function verContexto(numero){
+		gtag('event', 'Contexto', {
+			  'event_category': 'Documentos',
+			  'event_label': 'Visor'
+		});
+		location.href="/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento="+idDocumento+"&paginaContexto="+numero;
+	}
+	
+	function crearLinksDocumentos(documentos){
+		var insertaLink = false;
+		var logos = "";
+		var insertarLinkWord = false;
+		var insertarLinkPdf = false;
+		var insertarLeyendaDictamen = false;
+		var logoPdf = '<span class="fa fa-file-pdf-o fa-lg" style="color:red"></span>';
+		var logoWord = '<span class="fa fa-file-word-o fa-lg" style="color:#0069ff"></span>';
+		var htmlLinks = '';
+		var htmlDescargas = '';
+		//var cantidadLinks = 0;
+		var link = '';
+		var descargaQr = '';
+		for(var i = documentos.length-1;i >= 0; i--){
+			var doc = documentos[i];
+			if (doc.tipoDocumento.codigoRelacion == 150001 || doc.tipoDocumento.codigoRelacion == 150011){ //FALLO PDF o DIGITAL (DICTAMEN 150003)
+				descargaQr = "https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdQr.html?idDocumento="+doc.codigo; //Hardcode
+				insertaLink = true;		
+				insertarLinkPdf = true;
+				link = "/sjconsulta/documentos/verDocumentoById.html?idDocumento="+doc.codigo+"&cache="+ new Date().getTime();
+				htmlLinks += '<div class="panel panel-default" style="padding: 2px;"><div class="panel-body" style="padding: 1px;">';
+				htmlLinks += 	'<a class = "btn btn-link" href="'+link+'" target="_lang" download>PDF &nbsp;' + logoPdf;
+				if (doc.tipoDocumento.codigoRelacion == 150011 || (doc.tipoDocumento.codigoRelacion == 150001 && doc.digital != null && doc.digital == 'S' && !insertarLeyendaDictamen)){
+					htmlLinks += '&ensp;(con Firma Digital)';
+					insertarLeyendaDictamen = true;
+				}
+				else if (doc.tipoDocumento.codigoRelacion == 150001 && insertarLeyendaDictamen && (analisisDocumental.remision.codigoValor == 1 || analisisDocumental.remision.codigoValor == 2)){
+					htmlLinks += '&ensp;(con Dictamen)';
+				}
+				htmlLinks += '</a></div></div>';
+				
+				
+			}
+			else if (doc.tipoDocumento.codigoRelacion == 150004){ //FALLO WORD
+				descargaQr = "https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/bajarDocumentoWordByIdQr.html?idDocumento="+doc.codigo;
+				insertaLink = true;
+				insertarLinkWord = true;
+				link = "/sjconsulta/documentos/bajarDocumentoWordById.html?idDocumento="+doc.codigo+"&cache="+ new Date().getTime();
+				htmlLinks += '<div class="panel panel-default" style="padding: 2px;"><div class="panel-body" style="padding: 1px;">';
+				htmlLinks += 	'<a class = "btn btn-link" href="'+link+'" download>Word &nbsp;'+logoWord+'</a>';
+				htmlLinks += '</div></div>';
+			}			
+		}
+		if(insertaLink){
+			//logos = '<span style="float: right;">'+(insertarLinkWord?logoWord:'')+(insertarLinkPdf?logoPdf:'')+'</span>';
+			logos = (insertarLinkPdf?logoPdf+'&ensp;':'')+(insertarLinkWord?logoWord:'');
+			
+			htmlDescargas = '<div id="acordeonDescargas" class="panel-group" role="tablist" aria-multiselectable="true">'
+								+'<div class="panel panel-default">'
+									+'<div class="panel-heading" role="tab" aria-expanded="true" id="tituloDescargas" style="padding: 0px; background-color:white;">'
+										+'<a data-toggle="collapse" data-parent="#acordeonDescargas" href="#panelDescargas" aria-expanded="true" aria-controls="panelDescargas">'
+											+'<h4 class="panel-title" style="padding: 12px; font-size: 14px;">&nbsp;Descargar:&ensp;'+logos+'<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="float: right;"></span></h4>'
+										+'</a>'
+									+'</div>'
+								+'<div id="panelDescargas" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="tituloDescargas"><div class="panel-wrapper">';
+			htmlDescargas += 		htmlLinks;
+			htmlDescargas += '</div></div></div></div>';
+
+			htmlDescargas += '<div id="acordeonDescargasMovil" class="panel-group" role="tablist" aria-multiselectable="true">'
+				+'<div class="panel panel-default">'
+					+'<div class="panel-heading" role="tab" aria-expanded="true" id="tituloDescargasMovil" style="padding: 0px; background-color:white;">'
+						+'<a data-toggle="collapse" data-parent="#acordeonDescargasMovil" href="#panelDescargasMovil" aria-expanded="true" aria-controls="panelDescargasMovil">'
+							+'<h4 class="panel-title" style="padding: 12px; font-size: 14px;">&nbsp;Descargar Fallo:&ensp;'+logos+'<span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="float: right;"></span></h4>'
+						+'</a>'
+					+'</div>'
+				+'<div id="panelDescargasMovil" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="tituloDescargasMovil"><div class="panel-wrapper">';
+			htmlDescargas += 		htmlLinks;
+			htmlDescargas += '</div></div></div></div>';
+
+			$("#descargas").replaceWith(htmlDescargas);
+			
+			//$("#divAnalisisBottom").append(htmlDescargas);
+			$('#panelDescargas').collapse();
+		}
+		
+		var htmlCompartir = '<div id="acordeonCompartir" class="panel-group" role="tablist" aria-multiselectable="true">'
+			+'<div class="panel panel-default">'
+			+'<div class="panel-heading" role="tab" aria-expanded="true" id="tituloCompartir" style="padding: 0px; background-color:white;">'
+				+'<a data-toggle="collapse" data-parent="#acordeonCompartir" href="#panelCompartir" aria-expanded="true" aria-controls="panelCompartir">'
+					+'<h4 class="panel-title" style="padding: 12px; font-size: 14px;">&nbsp;Compartir:&ensp;<span class="fa fa-chain fa-lg" style="color: dimgrey"></span>&ensp;<span class="fa fa-whatsapp fa-lg" style="color: limegreen"></span>&ensp;<span class="fa fa-envelope-o fa-lg"></span>&ensp;<span class="fa fa-qrcode fa-lg"></span><span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="float: right;"></span></h4>'
+				+'</a>'
+			+'</div>'
+			+'<div id="panelCompartir" class="panel-collapse collapse" role="tabpanel" aria-labelledby="tituloCompartir"><div class="panel-wrapper">';
+		
+
+		htmlCompartir += '<div title="Copiar Enlace" class="panel panel-default" style="padding: 2px;" onclick="copiarEnlace()"><div class="panel-body" style="padding: 1px;">';
+		htmlCompartir += 	'<a class="btn btn-link">Copiar Enlace &nbsp;<span class="fa fa-chain fa-lg" style="color: grey"></span></a>';
+		htmlCompartir += '</div></div>';
+			
+		htmlCompartir += '<div title="Enviar por WhatsApp" class="panel panel-default" style="padding: 2px;" onclick="enviarWhatsapp('+idDocumento+')"><div class="panel-body" style="padding: 1px;">';
+		htmlCompartir += 	'<a class="btn btn-link">Enviar Mensaje &nbsp;<span class="fa fa-whatsapp fa-lg" style="color: limegreen"></span></a>';
+		htmlCompartir += '</div></div>';
+			
+		htmlCompartir += '<div id="linkEnviar" title="Enviar por Mail" data-toggle="modal" data-target="#tablaMail" class="panel panel-default" style="padding: 2px;"><div class="panel-body" style="padding: 1px;">';
+		htmlCompartir += 	'<a class="btn btn-link">Enviar Correo &nbsp;<span class="fa fa-envelope-o fa-lg"></span></a>';
+		htmlCompartir += '</div></div>';
+
+		if (descargaQr != ''){
+			//htmlCompartir += '<div id="linkDescargar" class="panel panel-default" style="padding: 2px; cursor: default"><div class="panel-body" style="padding: 4px;">';
+			//htmlCompartir += 	'<div><a style="padding-left: 8px;">Compartir por m&oacute;vil</a></div>';	
+			htmlCompartir += 	'<div class="text-center" id="descargaQr" style="padding: 6px; margin-top: 15px"></div>';	
+			//htmlCompartir += '</div></div>';
+
+			/*var comparteQr = "https://sjconsulta.csjn.gov.ar";//Hardcode
+			comparteQr += "/sjconsulta/documentos/verDocumentoByIdLinksJSP.html";
+			var str = "idDocumento=4627541";
+			var param = str.split("&");
+			comparteQr += "?"+param[0];*/
+
+			htmlCompartir += '</div></div></div></div></div>';
+			
+			$("#compartir").replaceWith(htmlCompartir);
+
+			$('#descargaQr').qrcode({width: 115,height: 115,text: descargaQr});
+		}
+	}
+	
+	function rtaMuestraDoctrinas(data){
+		var htmlDoctrina = '<div id="acordeonDoctrina" class="panel-group" role="tablist" aria-multiselectable="true">'
+			+'<div class="panel panel-default">'
+				+'<div class="panel-heading" role="tab" aria-expanded="true" id="tituloDoctrina" style="padding: 0px; background-color:white;">'
+					+'<a data-toggle="collapse" data-parent="#acordeonDoctrina" href="#panelDoctrina" aria-expanded="true" aria-controls="panelDoctrina">'
+						+'<h4 class="panel-title" style="padding: 12px; font-size: 14px;">&nbsp;Citas de Doctrina: <span class="badge" style="padding: 2px 4px 2px 4px; position: relative; background: #e02e2a; border-radius: 5px; margin-left: 5px">Nuevo</span><span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="float: right;"></span></h4>'
+					+'</a>'
+				+'</div>'
+			+'<div id="panelDoctrina" class="panel-collapse collapse" role="tabpanel" aria-labelledby="tituloDoctrina"><div class="panel-wrapper">';
+		for (var i=0;i<data.length;i++){
+			htmlDoctrina += '<div class="panel panel-default"><div class="panel-body" style="padding: 8px; text-align: justify">';
+			htmlDoctrina += 	'<span><b>'+data[i].autoresString+'</b> - '+data[i].titulo;
+			htmlDoctrina += (data[i].editorial !== null? ', ' + data[i].editorial : '') +
+            	(data[i].lugar !== null? ', ' + data[i].lugar : '') +
+            	(data[i].anio !== null? ', ' + data[i].anio : '') +
+            	(data[i].traductor !== null? ', ' + data[i].traductor : '') +
+            	(data[i].tomoObra !== null? ', Tomo ' + data[i].tomoObra : '') +
+            	(data[i].paginaObra !== null? ', pág. ' + data[i].paginaObra : '') +
+            	(data[i].votoDisidencia !== null? ' <i>(' + data[i].votoDisidencia + ')</i>' : '');
+			htmlDoctrina += '</span></div></div>';
+		}
+		htmlDoctrina += '</div></div></div></div>';
+		$("#doctrina").replaceWith(htmlDoctrina);
+	}
+	
+	function toggleCargando(){
+		if ($.active > 1)
+			$("#divSpinner").show();
+		else
+			$("#divSpinner").hide();
+	}
+	
+	
+	function listarSumariosADLinks(data){
+		sumarios = data;		
+		if(data && data.length > 0){
+			var htmlBotonAD =	'<div class="panel panel-default" title="Ver Sumarios" onclick="muestraAd(&quot;sumarios&quot;)" data-toggle="modal"  data-target="#analisisDocumental" style="padding: 2px;"><div class="panel-body" style="padding: 1px;">';
+			htmlBotonAD += 			'<a class="btn btn-link"> Sumarios</a>';
+			htmlBotonAD +=		'</div></div>';
+			$("#sumarios").replaceWith(htmlBotonAD);			
+			//$("#divAnalisisBottom").append(htmlBotonAD);
+		}
+		$.ajax({
+	        url: "/sjconsulta/fallos/getSintesisAnalisis.html?idAnalisis="+idAnalisis,
+	        type: 'GET', 
+	        dataType: 'json',
+	        success: rtaMuestraSintesis,
+	        error: function (xhr, status, error) {
+		        if (xhr.status === 200 && xhr.responseText.trim() === "") {
+		            console.warn("Respuesta vacía con status 200. Posiblemente es null.");
+		            rtaMuestraSintesis(null);
+		            return;
+		        }
+	            console.error("AJAX error:");
+	            console.error("Status:", status);
+	            console.error("Error:", error);
+	            console.error("Response:", xhr.responseText);
+	       	 	alert('Error Sintesis Analisis: ' + error);
+	    	}
+	    });	
+	}
+	
+	function checkHideMenu(){
+		if(!conReferenciantes){
+			if(!conCitas){
+				if(!conDictamenes){
+					if(!conTomo){
+						if(!conAD){
+							ocultarMenu();
+						}
+					}
+				}
+			}			
+		}
+	}
+	
+	function rtaMuestraDictamenes(data){	
+		var htmlDictamenes = "";		
+		if(data && data.length > 0){	
+			conDocumentos = true;
+			htmlDictamenes = '<div id="acordeonDictamenes" class="panel-group" role="tablist" aria-multiselectable="true">'
+				+'<div class="panel panel-default">'
+				+'<div class="panel-heading" role="tab" aria-expanded="true" id="tituloDictamenes" style="padding: 0px; background-color:white;">'
+					+'<a data-toggle="collapse" data-parent="#acordeonDictamenes" href="#panelDictamenes" aria-expanded="true" aria-controls="panelDictamenes">'
+						+'<h4 class="panel-title" style="padding: 12px; font-size: 14px;">&nbsp;Dictamen: <span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="float: right;"></span></h4>'
+					+'</a>'
+				+'</div>'
+				+'<div id="panelDictamenes" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="tituloDictamenes"><div class="panel-wrapper">';	
+			for(var i = 0; i < data.length; i++){
+				htmlDictamenes += '<div class="panel panel-default" onclick="return verDictamen('+data[i].codigo+')"><div class="panel-body" style="padding: 1px;">';
+				htmlDictamenes += 	'<a class="btn btn-link">'+data[i].fechaString+' '+data[i].tipoDocumento.valor+'</a>';
+				htmlDictamenes += '</div></div>';
+			}			
+			htmlDictamenes += '</div></div></div></div></div>';		
+			$("#dictamenes").replaceWith(htmlDictamenes);			
+			//$("#divAnalisisBottom").append(htmlDictamenes);
+			$('#panelDictamenes').collapse();
+		}
+		$.ajax({
+	        url: "/sjconsulta/documentos/getCitantes.html?idDocumento="+idDocumento,//idAnalisis,
+	        type: 'GET',  
+	        dataType: 'json',
+	        success: rtaMuestraReferenciantes,
+	        error: function (xhr, status, error) {
+	        	if (xhr.status === 200 && xhr.responseText.trim() === "") {
+		            console.warn("Respuesta vacía con status 200. Posiblemente es null.");
+		            rtaMuestraReferenciantes(null);
+		            return;
+		        }
+	            console.error("AJAX error:");
+	            console.error("Status:", status);
+	            console.error("Error:", error);
+	            console.error("Response:", xhr.responseText);
+	       	 	alert('Error Citantes: ' + error);
+	        }
+		});	
+		VerEnlaces(idAnalisis);
+		return;
+	}
+	
+	function rtaMuestraSintesis(data){	
+		var htmlSintesis = "";		
+		if(data && data.length > 0){	
+			conDocumentos = true;
+			htmlSintesis = '';			
+			for(var i = 0; i < data.length; i++){
+				htmlSintesis += '<div class="panel panel-default" title="Ver Rese&ntilde;a" style="padding: 2px;" id="resena" onclick="return verSintesis('+data[i].codigo+')"><div class="panel-body" style="padding: 1px;">';
+				htmlSintesis += 	'<a class="btn btn-link">'+jsUcfirst(data[i].tipoDocumento.valor)+'</a>';
+				htmlSintesis += '</div></div>';
+			}
+			
+		}	
+		$("#resena").replaceWith(htmlSintesis);
+		if (referer.includes("novedades") == true){				
+			$("#resena").css('background-color', '#EEDFE0');
+		}
+		//$("#divAnalisisBottom").append(htmlSintesis);
+		$.ajax({
+	        url: "/sjconsulta/fallos/getDictamenesAnalisis.html?idAnalisis="+idAnalisis,
+	        type: 'GET',  
+	        dataType: 'json',
+	        success: rtaMuestraDictamenes,
+	        error: function (xhr, status, error) {
+	        	if (xhr.status === 200 && xhr.responseText.trim() === "") {
+		            console.warn("Respuesta vacía con status 200. Posiblemente es null.");
+		            rtaMuestraDictamenes(null);
+		            return;
+		        }
+	            console.error("AJAX error:");
+	            console.error("Status:", status);
+	            console.error("Error:", error);
+	            console.error("Response:", xhr.responseText);
+	       	 	alert('Error Dictamenes: ' + error);
+	    	}
+	    });	
+		return;
+	}
+	
+	function rtaMuestraCitas(data){
+		if(data && data.length > 0){
+			var	htmlContenidoReferidos = '<div id="acordeonCitados" class="panel-group" role="tablist" aria-multiselectable="true">'
+				+'<div class="panel panel-default">'
+				+'<div class="panel-heading" role="tab" aria-expanded="true" id="tituloCitados" style="padding: 0px; background-color:white;">'
+					+'<a data-toggle="collapse" data-parent="#acordeonCitados" href="#panelCitados" aria-expanded="true" aria-controls="panelCitados">'
+						+'<h4 class="panel-title" style="padding: 12px; font-size: 14px;">&nbsp;Este fallo cita a: <span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="float: right;"></span></h4>'
+					+'</a>'
+				+'</div>'
+				+'<div id="panelCitados" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="tituloCitados"><div class="panel-wrapper">';
+			for (var i = 0; i < data.length; i++) {
+				var str = data[i].alias;
+				var deskLink = str.replace("#", "</br>");
+				if (idCita != "" && data[i].id == idCita)
+					htmlContenidoReferidos += 		'<div id="cita' + data[i].id + '" class="panel panel-default" style="padding: 2px; background: #ffffb3; border-color: palevioletred">';
+				else
+					htmlContenidoReferidos += 		'<div id="cita' + data[i].id + '" class="panel panel-default" style="padding: 2px;">';
+				htmlContenidoReferidos +=				'<a class="btn btn-link" style="padding-left: 8px; text-align: left;" href="/sjconsulta'+data[i].link+'" target="_blank" onclick="registra(&quot;cita&quot;)">';
+				if (idCita != "" && data[i].id == idCita)
+					htmlContenidoReferidos += 		'<b>' + deskLink + '</b>';
+				else
+					htmlContenidoReferidos += 			deskLink;
+				htmlContenidoReferidos += 			'</a></div>';
+			}			
+			htmlContenidoReferidos += '</div></div></div></div></div>';
+			$("#citados").replaceWith(htmlContenidoReferidos);
+			//$("#divAnalisisBottom").append(htmlContenidoReferidos);
+		}else{
+			conCitas = false;
+			checkHideMenu();			
+		}
+		if(htmlOtraInformacion != ''){
+			$("#informacion").replaceWith(htmlOtraInformacion);
+			//$("#divAnalisisBottom").append(htmlOtraInformacion);
+		}
+		if (idCita != ""){
+			$('#panelCitados').find('.panel-wrapper').prepend($('#cita'+idCita));
+			$('#panelCitados').collapse('show');
+			$('#cita'+idCita).get(0).scrollIntoView({block: "center"});
+			$('#cita'+idCita).find('a').get(0).click();
+		}
+		else {
+			$('#panelCitados').collapse();
+		}
+		$.ajax({
+			url: "/sjconsulta/documentos/getAllDocumentos.html?idAnalisis="+idAnalisis,
+	        type: 'GET',   
+	        dataType: 'json',
+	        success: crearLinksDocumentos,
+	        error: function (xhr, status, error) {
+	        	if (xhr.status === 200 && xhr.responseText.trim() === "") {
+		            console.warn("Respuesta vacía con status 200. Posiblemente es null.");
+		            crearLinksDocumentos(null);
+		            return;
+		        }
+	            console.error("AJAX error:");
+	            console.error("Status:", status);
+	            console.error("Error:", error);
+	            console.error("Response:", xhr.responseText);
+	       	 	alert('Error Documentos: ' + error);
+	        }
+	    });				
+	}
+	
+	function rtaMuestraReferenciantes(data){
+		if(data){
+			var	htmlContenidoReferidos = '<div id="acordeonReferenciantes" class="panel-group" role="tablist" aria-multiselectable="true">'
+				+'<div class="panel panel-default">'
+				+'<div class="panel-heading" role="tab" aria-expanded="true" id="tituloReferenciantes" style="padding: 0px; background-color:white;">'
+					+'<a data-toggle="collapse" data-parent="#acordeonReferenciantes" href="#panelReferenciantes" aria-expanded="true" aria-controls="panelReferenciantes">'
+						+'<h4 class="panel-title" style="padding: 12px; font-size: 14px;">&nbsp;Citan este fallo: <span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="float: right;"></span></h4>'
+					+'</a>'
+				+'</div>'
+				+'<div id="panelReferenciantes" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="tituloReferenciantes"><div class="panel-wrapper">';
+							
+			htmlContenidoReferidos += data;
+					
+			htmlContenidoReferidos += '</div></div></div></div></div>';
+			$("#referidos").replaceWith(htmlContenidoReferidos);
+			//$("#divAnalisisBottom").append(htmlContenidoReferidos);
+			$('#panelReferenciantes').collapse();
+		}else{
+			conReferenciantes = false;
+			checkHideMenu();
+		}
+		$.ajax({
+	        url: "/sjconsulta/documentos/getCitas.html?idDocumento="+idDocumento,
+	        type: 'GET',  
+	        //dataType: 'json',
+	        success: rtaMuestraCitas,
+	        error: function (xhr, status, error) {
+	        	/*if (xhr.status === 200 && xhr.responseText.trim() === "") {
+		            console.warn("Respuesta vacía con status 200. Posiblemente es null.");
+		            rtaMuestraCitas(null);
+		            return;
+		        }
+	            console.error("AJAX error:");
+	            console.error("Status:", status);
+	            console.error("Error:", error);
+	            console.error("Response:", xhr.responseText);
+	       	 	alert('Error Citas: ' + error);*/
+	        }
+	    });
+	}
+	
+	function VerEnlaces(idAnalisis){
+		$.ajax({
+	        url: "/sjconsulta/enlaces/getEnlacesAnalisis.html?idAnalisis="+idAnalisis,
+	        type: 'GET',   
+	        dataType: 'json',
+	        success: showEnlacesAnalisis,
+	        error: function (xhr, status, error) {
+	        	if (xhr.status === 200 && xhr.responseText.trim() === "") {
+		            console.warn("Respuesta vacía con status 200. Posiblemente es null.");
+		            showEnlacesAnalisis(null);
+		            return;
+		        }
+	            console.error("AJAX error:");
+	            console.error("Status:", status);
+	            console.error("Error:", error);
+	            console.error("Response:", xhr.responseText);
+	       	 	alert('Error Enlaces: ' + error);
+	        }
+	    });
+	    return false;
+	}
+	
+	function showEnlacesAnalisis(data){
+		var htmlEnlaces = "";
+		if (data && data.length > 0) {
+			htmlEnlaces = '';
+			if(!($("#panelDictamenes").length > 0)){
+				htmlAcordeonEnlaces = '<div id="acordeonDictamenes" class="panel-group" role="tablist" aria-multiselectable="true">'
+					+'<div class="panel panel-default">'
+					+'<div class="panel-heading" role="tab" aria-expanded="true" id="tituloDictamenes" style="padding: 0px">'
+						+'<a data-toggle="collapse" data-parent="#acordeonDictamenes" href="#panelDictamenes" aria-expanded="true" aria-controls="panelDictamenes">'
+							+'<h4 class="panel-title" style="padding: 12px; font-size: 14px;"> Dictamen: <span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="float: right;"></span></h4>'
+						+'</a>'
+					+'</div>'
+					+'<div id="panelDictamenes" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="tituloCitados">';	
+				$("#divDictamenes").replaceWith(htmlAcordeonEnlaces);
+				//$("#divDictamenesBottom").html(htmlAcordeonEnlaces);
+				$('#panelDictamenes').collapse();
+			}
+			for (var i = 0; i < data.length; i++) {
+				var desc= data[i].descripcion;
+				//var shortText = jQuery.trim(desc).substring(0, 25).split(" ").slice(0, -1).join(" ") + "...";
+				var shortText = jQuery.trim(desc).substring(0, 26);
+				htmlEnlaces += '<div class="panel-wrapper"><div class="panel panel-default"><div class="panel-body" style="padding: 1px;">';
+				htmlEnlaces += 	'<a class="btn btn-link" href='+data[i].enlace+' target="_blank" >'+shortText+'</a>';			
+				htmlEnlaces += '</div></div></div>';
+			}
+			$("#panelDictamenes").append(htmlEnlaces);
+		}else{
+			if(!conDocumentos){
+				conDictamenes = false;
+				checkHideMenu();
+			}
+		} 		
+		return;	
+	}
+	
+	function rtaMuestraBiblioteca(){
+		/*var htmlBiblioteca = '<div id="acordeonBiblioteca" class="panel-group" role="tablist" aria-multiselectable="true">'
+			+'<div class="panel panel-default">'
+			+'<div class="panel-heading" role="tab" aria-expanded="true" id="tituloBiblioteca" style="padding: 0px; background-color:white;">'
+				+'<a data-toggle="collapse" data-parent="#acordeonBiblioteca" href="#panelBiblioteca" aria-expanded="true" aria-controls="panelBiblioteca">'
+					+'<h4 class="panel-title" style="padding: 12px; font-size: 14px;">&nbsp;Art&iacute;culos de doctrina: <span class="glyphicon glyphicon-chevron-down" aria-hidden="true" style="float: right;"></span></h4>'
+				+'</a>'
+			+'</div>'
+			+'<div id="panelBiblioteca" style="margin-bottom: 10px" class="panel-collapse collapse" role="tabpanel" aria-labelledby="tituloBiblioteca"><div class="panel-wrapper">';
+		htmlBiblioteca	+= 	'<a href="' + data.link + '">Ver Nota</a>';
+		htmlBiblioteca += '</div></div></div></div></div>';*/
+		htmlBiblioteca = '<div class="panel panel-default" title="Ver publicaciones catalogadas" onclick="abrirBiblioteca()"><div class="panel-body" style="padding: 1px;">';
+		htmlBiblioteca += 		'<a><h4 class="panel-title" style="padding: 12px; font-size: 14px;"><i class="fa fa-book"></i>&ensp;Art&iacute;culos en Biblioteca</h4></a>';
+		//<span class="glyphicon glyphicon-chevron-right" aria-hidden="true" style="float: right;"></span>
+		htmlBiblioteca += '</div></div>';
+		
+		$('#biblioteca').replaceWith(htmlBiblioteca);
+	}
+	
+	function abrirBiblioteca(){
+		gtag('event', 'Ver', {
+			  'event_category': 'Documentos',
+			  'event_label': 'Biblioteca'
+		});
+		var link = "https://biblioteca.csjn.gov.ar/cgi-bin/koha/opac-search.pl?idx=&q=";
+		for (var i=0;i<idBiblioteca.length;i++){
+			if (i>0)
+				link += "+OR+"
+			link += "Local-number:"+idBiblioteca[i];
+		}
+		var w = window.open(link,idBiblioteca);
+		w.focus();
+		return false;
+	}
+
+	
+	function ocultarMenu(){
+		$('#divInfo').removeClass();
+		$('#divInfo').hide();		
+		//$('#botonShow').show();
+		$('#botonShow').css( "display", "block")
+		$('#pdfDiv').removeClass();
+		$('#pdfDiv').addClass('col-xs-11');
+		//$('#pdfDiv').addClass('col-xs-offset-1');
+		
+		return;
+	}
+	
+	function mostrarMenu(){
+		$('#divInfo').addClass('visible-md-block');
+		$('#divInfo').addClass('visible-lg-block');
+		$('#divInfo').addClass('col-md-3');
+		$('#divInfo').show();
+		$('#pdfDiv').removeClass();
+		$('#pdfDiv').addClass('col-md-9');
+		$('#botonShow').hide();
+		return;
+	}
+	
+	function verDictamen(idDocumento){
+		gtag('event', 'Ver_Visor', {
+			  'event_category': 'Documentos',
+			  'event_label': 'Dictamen'
+		});
+		link = "/sjconsulta/documentos/verDocumentoById.html?idDocumento="+idDocumento+"&cache="+ new Date().getTime();    
+	    var w = window.open(link, 'Dictamen '+idDocumento);
+		w.focus();
+		return false;
+	}
+	
+	function verSintesis(idDocumento){
+		gtag('event', 'Ver_Visor', {
+			  'event_category': 'Documentos',
+			  'event_label': 'Sintesis'
+		});
+		link = "/sjconsulta/documentos/verDocumentoById.html?idDocumento="+idDocumento+"&cache="+ new Date().getTime();    
+	    var w = window.open(link, 'Documento '+idDocumento);
+		w.focus();
+		return false;
+	}
+	
+	function closePopupIfOpen(popupName){
+		  if(typeof(window[popupName]) != 'undefined' && !window[popupName].closed){
+		    window[popupName].close();
+		  }
+		}
+	
+	function muestraAd(seccion) {
+		$("#contenidoAnalisis").html('<div style="text-align:center;"><img id="img-spinner" src="/sjconsulta/images/ajax-loader.gif" alt="Cargando"/> Cargando</div>');
+		rtaVisorMuestraAD(analisisDocumental, seccion);	   
+	    return;
+	}
+	
+	function registra(label){
+		gtag('event', 'Ver', {
+			  'event_category': 'Documentos',
+			  'event_label': label
+		});
+		return;
+	}
+
+	function buscaAd(idAnalisis) {		
+		$.ajax({
+	        url: "/sjconsulta/fallos/abrirAnalisis.html?idAnalisis="+idAnalisis,
+	        type: 'GET',  
+	        dataType: 'json',
+	        success: respuestaAD,
+	        error: function (xhr, status, error) {
+	        	if (xhr.status === 200 && xhr.responseText.trim() === "") {
+		            console.warn("Respuesta vacía con status 200. Posiblemente es null.");
+		            respuestaAD(null);
+		            return;
+		        }
+	            console.error("AJAX error:");
+	            console.error("Status:", status);
+	            console.error("Error:", error);
+	            console.error("Response:", xhr.responseText);
+	       	 	alert('Error Analisis: ' + error);
+	        }
+	    });
+	    return;
+	}
+	
+	function enviarWhatsapp(idDocumento){
+		gtag('event', 'Visor', {
+			  'event_category': 'Compartir',
+			  'event_label': 'WhatsApp'
+		});
+	    link = "https://api.whatsapp.com/send?&text=" + document.title + "%0A";
+		link += "https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento="+idDocumento;
+	   	var w = window.open(link,'Enviar por WhatsApp');
+		w.focus();
+		return false;
+	}
+	
+	function copiarEnlace(){
+		gtag('event', 'Visor', {
+			  'event_category': 'Compartir',
+			  'event_label': 'Enlace'
+		});
+		navigator.clipboard.writeText("https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento="+idDocumento+"&cache=" + new Date().getTime());
+	}
+	
+	function copiarID(){
+		gtag('event', 'Visor', {
+			  'event_category': 'Compartir',
+			  'event_label': 'NumeroID'
+		});
+		navigator.clipboard.writeText($('#numeroID').text());
+	}
+	
+	function copiarCita(){
+		gtag('event', 'Visor', {
+			  'event_category': 'Compartir',
+			  'event_label': 'Cita'
+		});
+		navigator.clipboard.writeText($('#cita').text());
+	}
+	
+	function jsUcfirst(string) 
+	{
+	    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+	}
+
+	function enviarMail(){
+		gtag('event', 'Visor', {
+			  'event_category': 'Compartir',
+			  'event_label': 'Mail'
+		});
+		var mail = $('#mail').val();
+		var emisor = $('#emisor').val();
+		var rtaCaptcha = $('#rtaCaptcha').val();
+		var asunto = $('#asunto').val();
+		if(rtaCaptcha != ""){
+			if(emisor != "" && emisor != "jurisprudencia@csjn.gov.ar" && isValidEmail(emisor) && mail != "" && isValidEmail(mail)){
+				var urlmail = "/sjconsulta/impresiones/enviarMailFallo.html?destinatario="+mail+"&emisor="+emisor+"&captcha="+rtaCaptcha;
+				
+				if(asunto != ""){
+					urlmail += '&asunto=' + encodeURIComponent(asunto);
+				}
+				$("#btnEnviar").button('loading');
+				$.ajax({				
+			        	url: urlmail,                       
+			            type: 'GET',
+			            dataType: 'json',
+			            success: function (data) {
+			                resultadoEnvio(data); 	               
+			            },
+				        error: function (xhr, status, error) {
+				            console.error("AJAX error:");
+				            console.error("Status:", status);
+				            console.error("Error:", error);
+				            console.error("Response:", xhr.responseText);
+				       	 	alert('Error Mail: ' + error);
+			            }
+			    });				
+				$('#msgMail').hide();
+			}else{
+				$('#msgMail').html("El email ingresado no es valido");
+				$('#msgMail').show();		
+			}
+		}else{
+			$('#msgMail').html("Debe ingresar el valor del c&oacute;digo");
+			$('#msgMail').show();	
+		}
+		$('#msgMailOk').hide();		
+	}
+	
+	function resultadoEnvio(resultado){
+		$("#btnEnviar").button('reset');
+		if(resultado == 'OK'){
+			$('#msgMailOk').show();
+		}else{
+			$('#msgMail').html(resultado);
+			$('#msgMail').show();	
+		}
+		recargaCapcha();
+	}
+
+	function recargaCapcha(){
+		var newImage = new Image();	    
+		newImage.src = "/sjconsulta/CaptchaService?tipo=P&" + new Date();
+		$("#captchaImg").attr("src", newImage.src);		
+	}
+	
+/* 	String.prototype.trunc = String.prototype.trunc ||
+    function(n){
+        return (this.length > n) ? this.substr(0,n-1)+'&hellip;' : this;
+    }; */
+	
+	</script>
+	
+<body>
+  	<!-- Google Tag Manager (noscript) -->
+	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WZ93GMQ"	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	<!-- End Google Tag Manager (noscript) -->
+
+<!-- 		<div  class="hidden-md hidden-lg">
+			<div id="subtitulo" class="col-xs-12">
+				An&aacute;lisis Documental: 
+			</div>
+			<div class=" col-xs-12" id="divPublicadoBottom" style="padding: 10px; color:  #444444">
+				
+			</div>
+			<div class=" col-xs-12" id="divAnalisisBottom" style="padding: 10px;">
+				
+			</div>			
+		</div> -->
+	<div class="row" style="height: 100%; overflow: auto;background-color: #F0F0F0;">		
+			
+		<div style='display: none; background-color: #F0F0F0; min-height:100%; padding-right: 0px;' id='botonShow' class='col-xs-1'>
+			<div class="miniSubtitulo" style="margin: 10px;">
+			<a class="btn btn-default" onclick="mostrarMenu();">
+				<i class="fa fa-chevron-right" aria-hidden="true"></i>
+			</a>
+			</div>
+		</div>
+		<div class="cal-xs-12 col-md-3 " id="divInfo" style="background-color: #F0F0F0;min-height:100%; padding-right: 0px;">
+			<div id="subtitulo" class="row" style="margin: 10px;">
+			<div class="col-xs-10 col-lg-10">
+				An&aacute;lisis Documental: 
+			</div>
+			<div class="hidden-xs hidden-sm col-xs-2 col-lg-1" style="padding-left: 0px;">
+				<a class="btn btn-default" onclick="ocultarMenu();">
+					 <i class="fa fa-chevron-left" aria-hidden="true"></i>
+				</a>
+			</div>
+			</div>
+			
+			<div class="col-xs-12" id="divPublicado" style="padding: 5px 10px 5px 10px; text-align: center; color: #444444; display: none">
+			</div>
+			<div class=" col-xs-12" id="divAnalisisDocumental" style="padding: 10px;">
+				<div id="sentencia"></div>
+				<div id="votos"></div>
+				<div id="sumarios"></div>
+				<div id="resena"></div>
+				<div id="dictamenes"></div>
+				<div id="referidos"></div>
+				<div id="citados"></div>
+				<div id="doctrina"></div>
+				<div id="biblioteca"></div>
+				<div id="panelID"></div>
+				<div id="informacion"></div>
+				<div id="descargas"></div>
+				<div id="compartir"></div>
+			</div>
+			<div class="col-xs-12" id="divSpinner" style="padding: 10px;">
+				<div class="panel panel-default" style="text-align:center;"><img id="img-spinner" src="/sjconsulta/images/ajax-loader.gif" alt="Cargando"/> Cargando..</div>
+			</div>
+		</div> 
+			
+		
+		<div class="col-md-9" id="pdfDiv" style="padding-left: 0px;">
+		 	<object id="pdfObj" data='https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoById.html?idDocumento=4627541#page=0' type='application/pdf' width="100%" height="100%" >
+			<param name='src' value='https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoById.html?idDocumento=4627541#page=0'/>
+			<a href='https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoById.html?idDocumento=4627541#page=0'></a></object> 
+		<!--	 
+			  <iframe style="display: block; width: 100%; height: 100%" src='https://sjconsulta.csjn.gov.ar/sjconsulta/pdf/web/viewer.html?file=%2Fsjconsulta%2Fdocumentos%2FverDocumentoById.html%3FidDocumento%3D4627541&cache=1791168630297'></iframe> 
+		-->
+		</div>
+	</div>
+	
+	<div class="modal fade" id="tablaMail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+		    <div class="modal-content">
+			    <div class="modal-header">
+			     	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">Enviar por Mail</h4>
+			     </div>
+				 <div class="modal-body" style="margin: 5px;">			  	
+					<div class="row">	
+			        	<div class="alert alert-danger" role="alert" id="msgMail" style="display: none;"></div>
+			        	<div class="alert alert-success" role="alert" id="msgMailOk" style="display: none;">				
+							Se envi&oacute; el link del Fallo correctamente
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+						   		<label for="emisor"><b>Remitente: </b></label>
+								<input type="email" id="emisor" name="emisor" value="" class="form-control" placeholder="ejemplo@gmail.com"/>
+							</div>
+						</div>
+					</div>	
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+						   		<label for="mail"><b>Destinatario: </b></label>
+								<input type="email" id="mail" name="mail" value="" class="form-control" placeholder="ejemplo@csjn.gov.ar"/>
+							</div>
+						</div>
+					</div>	
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+						   		<label for="asunto"><b>Asunto (opcional): </b></label>
+								<input id="asunto" name="asunto" class="form-control"/>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+					    	<div class="col-sm-4 text-center" style="padding-top: 11px;">
+								<img src="/sjconsulta/CaptchaService" alt="ingrese el valor" id="captchaImg">
+				       			<!--Esto lo que hace es buscar un codigo captcha, mostrarlo como imagen y guardar el captcha en la sesion para despues hacer la comparacion con el ingresado y validarlo  -->										        
+							</div>
+							<div class="col-sm-6 col-height col-middle"> 
+							   	<div class="form-group">
+							   		<label for="rtaCaptcha"><b>Ingrese el C&oacute;digo: </b></label>
+									<input id="rtaCaptcha" name="rtaCaptcha" value=""  class="form-control" style="size: 6em;" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+      			<div class="modal-footer">
+	 				<a class="btn btn-default" onclick="return enviarMail();" data-loading-text="Enviando..." id="btnEnviar">Enviar</a>
+	 				<a class="btn btn-default"  data-dismiss="modal">Cerrar</a>
+		  		</div>
+	  		</div>
+		</div>
+	</div>
+		
+	
+<script type="text/javascript">
+//var listarEnlaces = true;
+var mostrarDatos = true;
+var mostrarSumarios = true;
+var mostrarVotos = true;
+var soloVotos = false;
+var mostrarOtros = true;
+var soloInconst = false;
+var referer = "";
+var idAnalisis;
+
+
+function rtaVisorMuestraAD(data, seccion){
+	gtag('event', 'Ver_Visor', {
+		  'event_category': 'Documentos',
+		  'event_label': 'AnalisisDocumental'
+	});
+	if(seccion == 'votos'){
+		mostrarDatos = false;
+		mostrarSumarios = false;
+		mostrarVotos = true;
+	}
+	if(seccion == 'sumarios'){
+		mostrarDatos = false;
+		mostrarSumarios = true;
+		mostrarVotos = false;
+	}
+	if(seccion == 'datos'){
+		mostrarDatos = true;
+		mostrarSumarios = false;
+		mostrarVotos = false;
+	}
+	if(seccion == 'inconst'){
+		soloInconst = true;
+		mostrarDatos = false;
+		mostrarSumarios = false;
+		mostrarVotos = false;
+	}
+	else{
+		soloInconst = false;
+	}
+	rtaMuestraAd(data);
+	
+	return;
+}
+
+function rtaMuestraAd(data){	
+	idAnalisis = data.id;
+	identificacionExpediente = data/*.recursoExpediente*/.identificacionExpediente;
+	
+	var htmlContenidoAnalisis = '';
+
+	if(mostrarVotos){		
+		rtaMuestraVotos(data);
+	}
+		
+	if(mostrarDatos){
+		
+		if (data.falloDestacado != null && !mostrarOtros){
+			htmlContenidoAnalisis += '<div class="row" id="falloDestacado"><div class="col-xs-12">';
+			htmlContenidoAnalisis += 	'<div class="panel panel-primary"><div class="panel-body">';
+			htmlContenidoAnalisis += 		'<a href="javascript:ver(' + codigoActual + ')" class="titulo" style="color: #24709e;font-weight:bold;margin-bottom: 5px">'+data.falloDestacado.titulo+'</a>';
+			htmlContenidoAnalisis += 		'<div class="titulo" style="text-align: justify;">'+data.falloDestacado.cabecilla+'</div>';
+			htmlContenidoAnalisis += 	'</div></div>';
+			htmlContenidoAnalisis += '</div></div>';
+		}
+		
+		if(data.cuestionesFederales.length > 0 || data.formulas.length > 0){
+
+			if(data.cuestionesFederales.length > 0){
+				htmlContenidoAnalisis += '<div class="row"><div class="col-sm-12"><div class="panel">';
+	
+				var panelCuestiones = '<ul class="nav nav-tabs" style="border: 0px">' +
+										'<li class="active"><a class="tituloTab">Se abri&oacute; la instancia por</a></li>' +
+									 '</ul>';
+				
+				panelCuestiones += '<div class="tab-content">' +
+									'<div class="tab-pane active cuerpoTab">';
+				for(var i = 0; i < data.cuestionesFederales.length; i++){
+					
+					panelCuestiones +=		'<p>'+data.cuestionesFederales[i].tipoCuestionFederal.valor + '</p>';
+				}
+				htmlContenidoAnalisis += panelCuestiones;
+				htmlContenidoAnalisis +='</div></div></div></div></div>';
+			}
+			
+			
+			if(data.formulas.length > 0){
+				htmlContenidoAnalisis += '<div class="row"><div class="col-sm-12"><div class="panel">';
+			
+				var panelFormulas = '<ul class="nav nav-tabs" style="border: 0px">' +
+										'<li class="active"><a class="tituloTab">La Corte consider&oacute;</a></li>' +
+									 '</ul>';
+				
+				panelFormulas += '<div class="tab-content">' +
+									'<div class="tab-pane active cuerpoTab">';
+				for(var i = 0; i < data.formulas.length; i++){
+					panelFormulas += '<p>'+data.formulas[i].tipoFormula.valor+'</p>';
+				}
+				htmlContenidoAnalisis += panelFormulas;
+				htmlContenidoAnalisis +='</div></div></div></div></div>';
+			}
+		}
+
+		if (data.inconstitucional){
+			htmlContenidoAnalisis += listarReferenciasInconst(data.referenciasNormativas);
+		}
+		
+		if(data.referenciasNormativas != null && data.referenciasNormativas.length > 0){
+			htmlContenidoAnalisis += listarReferenciasNormativas(data.referenciasNormativas);
+		}
+
+		htmlContenidoAnalisis += '<div id="divReferido"></div>';
+		
+		if(data.observaciones != null && data.observaciones != ""){
+			htmlContenidoAnalisis += '<div class="row"><div class="col-sm-12"><div class="panel">';
+			htmlContenidoAnalisis += 	'<ul class="nav nav-tabs" style="border: 0px">' +
+											'<li class="active"><a class="tituloTab">Comentarios a la sentencia</a></li>' +
+										 '</ul>';
+			htmlContenidoAnalisis += 	'<div class="tab-content"><div class="tab-pane active cuerpoTab">';
+			htmlContenidoAnalisis += 		'<div style="text-align: justify; padding-bottom: 8px">'+data.observaciones+'</div>';
+			htmlContenidoAnalisis += 	'</div></div>';
+			htmlContenidoAnalisis += '</div></div></div>';
+		}
+
+		//htmlContenidoAnalisis += '<div id="divSintesis"></div>'; //Reseña
+	    
+		if(mostrarSumarios){
+			if(typeof sumarios !== 'undefined' && sumarios){
+				htmlContenidoAnalisis += '<div class="row" id="divSumarios">'+contentListarSumariosAnalisis(sumarios)+'</div>';
+			}else{
+				htmlContenidoAnalisis += '<div class="row" id="divSumarios"><div class="panel panel-default" style="text-align:center;"><img id="img-spinner" src="/sjconsulta/images/ajax-loader.gif" alt="Cargando"/> Cargando..</div></div>';
+				$.ajax({
+					url: "/sjconsulta/sumarios/getSumariosAnalisis.html?idAnalisis="+idAnalisis,
+			        type: 'GET', 
+			        dataType: 'json',
+			        success: listarSumariosAnalisis,
+			        error: function (e) {
+			       		alert('Error: ' + e);
+			        }
+			    });
+			}
+		}//fin mostrarSumarios
+
+		
+		if (mostrarOtros){
+			htmlContenidoAnalisis += '<div class="row"><div class="col-xs-12"><div class="blackLine"></div></div></div>';
+		
+			var tieneChecks = data.amicue_curie == "S" ||data.audPublica == "S" || data.articulo16Ley48 == "S";
+			
+			//Mas Informacion
+			if ((data.reciboEntrada.secretaria && data.reciboEntrada.secretaria.id != 18) || data.competencia || data.tipoRecurso || data.sentidoPronunciamiento || data.remision || (data.voces && data.voces.length > 0) || tieneChecks || (data.enlaces != null && data.enlaces.length > 0)){
+				htmlContenidoAnalisis += '<div class="row"><div class="col-xs-12"><div class="panel panel-info"><div class="panel-heading" data-toggle="collapse" data-target="#panel-informacion" style="cursor: pointer"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>&ensp;Otra Informaci&oacute;n:</h3></div><div class="panel-body collapse" id="panel-informacion">';
+		
+				htmlContenidoAnalisis += '<div class="panel-wrapper">';
+				if ((data.reciboEntrada.secretaria && data.reciboEntrada.secretaria.id != 18)){
+					htmlContenidoAnalisis += '<div class="row">';
+					/*if (numeroID != '')
+						htmlContenidoAnalisis += '<div class="col-sm-4"><div class="well well-sm">ID: <span style="font-style: italic;">CS '+anioFallo+'-'+numeroID+'</span></div></div>';*/
+					if (data.reciboEntrada.secretaria && data.reciboEntrada.secretaria.id != 18){
+						htmlContenidoAnalisis += '<div class="col-sm-12"><div class="well well-sm">'+data.reciboEntrada.secretaria.descripcion+'</div></div>';
+					}
+					htmlContenidoAnalisis += '</div>';
+				}
+		
+				if(data.competencia || data.tipoRecurso || data.sentidoPronunciamiento){
+					htmlContenidoAnalisis += '<div class="row">';
+					if(data.competencia){
+						htmlContenidoAnalisis += '<div class="col-xs-4"><div class="well well-sm">'+data.competencia.valor+'</div></div>';
+					}
+					if(data.tipoRecurso && data.sentidoPronunciamiento){
+						htmlContenidoAnalisis += '<div class="col-xs-5"><div class="well well-sm">'+data.tipoRecurso.valor+'</div></div>';
+					}
+					if (data.sentidoPronunciamiento){
+						htmlContenidoAnalisis += 	 '<div class="col-xs-3"><div class="well well-sm">'+data.sentidoPronunciamiento.valor+'</div></div>';
+					}
+					htmlContenidoAnalisis += '</div>';
+				}
+				
+				/*if(data.materia){
+					htmlContenidoAnalisis += '<div class="row"><div class="col-xs-12"><div class="blackLine"></div></div></div>';
+					htmlContenidoAnalisis += '<div class="row"><div class="col-xs-12">'+data.materia.valor+'</div></div>';
+				}*/	
+						
+				if(data.remision != null){
+					htmlContenidoAnalisis += '<div class="row"><div class="col-xs-12"><div class="well well-sm">'+data.remision.valor+'</div></div></div>';
+				}
+		
+				if(tieneChecks){
+					htmlContenidoAnalisis += '<div class="row"><div class="col-xs-12"><div class="well well-sm">';	
+					var //contenidoChecks = (data.inicializacion == "S"?" Iniciales -":"");
+					contenidoChecks = (data.amicue_curie == "S"?" Amicus Curiae -":"");
+					contenidoChecks += (data.audPublica == "S"?" Audiencia P&uacute;blica -":"");
+					contenidoChecks += (data.articulo16Ley48 == "S"?" Art. 16 Ley 48 -":"");		
+					contenidoChecks = contenidoChecks.slice(0, -1);
+					htmlContenidoAnalisis += contenidoChecks+'</div></div></div>';	
+				}
+		
+				if(data.voces.length > 0){
+					htmlContenidoAnalisis += '<div class="row"><div class="col-xs-12"><div class="well well-sm">';
+					for(var i = 0; i < data.voces.length; i++){
+						if(data.voces[i].tipoVoz.visible != 'N' && data.voces[i].tipoVoz.valor != "(.)" && data.voces[i].tipoVoz.valor != "(*)" 
+										&& data.voces[i].tipoVoz.valor != "(**)" && data.voces[i].tipoVoz.valor != "(***)"){
+							htmlContenidoAnalisis +=' '+data.voces[i].tipoVoz.valor+' -';
+						}
+					}
+					htmlContenidoAnalisis = htmlContenidoAnalisis.slice(0, -1);
+					htmlContenidoAnalisis += '</div></div></div>';
+				}
+				if(data.enlaces != null && data.enlaces.length > 0){
+					htmlContenidoAnalisis += '<div class="row" id="divEnlaces">';
+					htmlContenidoAnalisis += 	listarEnlaces(data.enlaces);
+					htmlContenidoAnalisis += '</div>';
+				}
+			}
+		}
+		htmlContenidoAnalisis += '</div></div></div></div></div></div>';
+	}
+
+	else if(mostrarSumarios){
+		if(typeof sumarios !== 'undefined' && sumarios){
+			htmlContenidoAnalisis += '<div class="row" id="divSumarios">'+contentListarSumariosAnalisis(sumarios)+'</div>';
+		}else{
+			htmlContenidoAnalisis += '<div class="row" id="divSumarios"><img id="img-spinner2" src="/sjconsulta/images/ajax-loader.gif" alt="Cargando"/></div>';
+			$.ajax({
+				url: "/sjconsulta/sumarios/getSumariosAnalisis.html?idAnalisis="+idAnalisis,
+		        type: 'GET',  
+		        dataType: 'json',
+		        success: function(data){
+		        	listarSumariosAnalisis(data);
+		            $('#panel-sumarios').addClass('in');
+		        },
+		        error: function (e) {
+		       		alert('Error: ' + e);
+		        }
+		    });
+		}
+	}//fin mostrarSumarios
+		
+	else if (soloInconst){
+		if (data.inconstitucional){
+			htmlContenidoAnalisis += listarReferenciasInconst(data.referenciasNormativas);
+		}
+	}
+	//htmlContenidoAnalisis += '<div class="col-sm-8"><div class="blackLine"></div></div>';
+	//htmlContenidoAnalisis += '<div class="row"><div class="col-sm-4 expediente">'+identificacionExpediente+'</div>';
+	//htmlContenidoAnalisis += '<div class="col-sm-8">'+data.expediente.caratula+'</div></div>';
+
+	/* if(data.materia){
+		htmlContenidoAnalisis += '<div class="row"><div class="col-xs-12"><div class="blackLine"></div></div></div>';
+		htmlContenidoAnalisis += '<div class="row"><div class="col-xs-12">'+data.materia.valor+'</div></div>';
+	} */
+	
+	/*var tribunal = "";
+	if(data.tribunalProcedencia){
+		tribunal = data.tribunalProcedencia.descripcion+"   ";
+	}
+	if(data.tribunalProcedenciaHijo){
+		tribunal += data.tribunalProcedenciaHijo.descripcion;
+	}
+	if(tribunal != ""){
+		htmlContenidoAnalisis += '<div class="row"><div class="col-xs-12"><div class="blackLine"></div></div></div>';
+		htmlContenidoAnalisis += '<div class="row"><div class="col-xs-12">'+tribunal+'</div></div>';
+	}
+	
+	 if(data.tipoAccion){
+		htmlContenidoAnalisis += '<div class="row"><div class="col-sm-3"><b>Tipo de Acci&oacute;n<b></div><div class="col-sm-9">'+data.tipoAccion.valor+'</div></div>';
+		htmlContenidoAnalisis += '<div class="blackLine"></div>';
+	} */	
+	
+	/*
+	if(data.recursoExpediente.expediente.hijos  && data.recursoExpediente.expediente.hijos.length > 0){
+		htmlHijos = "<button title='Ver Hijos' onclick='return verHijos("+data.id+")' >Ver Hijos</button>"
+	}
+	$("#botonHijos").html(htmlHijos);	*/
+	$("#contenidoAnalisis").html(htmlContenidoAnalisis);
+	$("#analisisDocumental").show();
+	
+	if (!mostrarDatos && !mostrarVotos){
+        $('#panel-sumarios').addClass('in');
+	}
+	
+	if (soloInconst) {
+		$('#panel-inconst').addClass('in');
+	}
+	else {
+		$('#panel-inconst').removeClass('in');
+	}
+
+	if (!mostrarVotos){
+        $('#panel-informacion').addClass('in');
+    	//$('#panel-inconst').addClass('in');
+	}
+
+	if (referer.includes("novedades") == true){
+		$("#analisisDocumental").find(".panel-heading").css('background-color', '#964145');
+		$("#analisisDocumental").find(".panel-title").css('color', 'white');
+	}
+	
+	$.ajax({
+        url: "/sjconsulta/fallos/getSintesisAnalisis.html?idAnalisis="+idAnalisis,
+        type: 'GET',
+        dataType: 'json',
+        success: showSintesis,
+        error: function (e) {
+       		alert('Error: ' + e);
+    	}
+    });
+	
+	$.ajax({
+        url: "/sjconsulta/sumarios/getCitantesPorFallo.html?idAnalisis="+idAnalisis,
+        type: 'GET',  
+        dataType: 'json',
+        success: function (citas){
+            if (data != ""){
+	       		showReferencias(citas);
+            }
+            else
+            	$('#divReferido').html("");
+        },
+        error: function (e) {
+       		alert('Error: ' + e);
+        }
+    });
+}
+
+function rtaMuestraVotos(data){
+	var htmlContenidoVotos = '';
+	var tieneVotosViejos = ((data.stringVotosMayoria != undefined && data.stringVotosMayoria != "") || (data.stringVotosVoto != undefined && data.stringVotosVoto != "") 
+			|| (data.stringVotosDisidencia != undefined && data.stringVotosDisidencia != "") || (data.stringVotosDisidenciaParcial != undefined && data.stringVotosDisidenciaParcial != "") 
+			|| (data.stringVotosAbstencion != undefined && data.stringVotosAbstencion != ""));
+	var tieneVotosAD = ((data.stringMayoria != undefined && data.stringMayoria != "") || (data.stringVoto !=undefined && data.stringVoto != "")
+			|| (data.stringDisidencia != undefined && data.stringDisidencia != "") || (data.stringDisidenciaParcial !=undefined && data.stringDisidenciaParcial != ""));
+
+	if(data.htmlVotos != null && data.htmlVotos != ""){
+		htmlContenidoVotos += '<div class="row"><div class="col-xs-12 panel-group" style="margin-bottom:0px; padding: 0 20px 0 20px">';
+		htmlContenidoVotos += 	'<div class="panel panel-primary"><div class="panel-body">';
+		htmlContenidoVotos += 		data.htmlVotos;
+		htmlContenidoVotos += 	'</div></div>';
+		htmlContenidoVotos += '</div></div>';
+
+		if (soloVotos){
+			$('.modal-dialog').css('max-width', '60%');
+			$('.modal-dialog').removeClass('modal-lg');
+			$('.modal-dialog').addClass('modal-sm');
+		}
+	}
+	else if(data.stringVotosAnalisis != undefined && data.stringVotosAnalisis != ""){
+		htmlContenidoVotos += '<div class="row"><div class="col-xs-12" style="padding: 0 20px 0 20px"><div class="panel panel-primary"><div class="panel-body">'+data.stringVotosAnalisis+'</div></div></div></div>';
+	}
+	else if (tieneVotosAD){
+		htmlContenidoVotos += '<div class="row"><div class="col-xs-12" style="padding: 0 20px 0 20px"><div class="panel panel-primary"><div class="panel-body">';
+		if(data.stringMayoria != ""){
+			htmlContenidoVotos += ' '+data.stringMayoria+' (Mayoria) -';
+		}
+		if(data.stringVoto != ""){
+			htmlContenidoVotos += ' '+data.stringVoto+' (Voto) -';
+		}
+		if(data.stringDisidencia != ""){
+			htmlContenidoVotos += ' '+data.stringDisidencia+' (Disidencia) -';
+		}
+		if(data.stringDisidenciaParcial != ""){
+			htmlContenidoVotos += ' '+data.stringDisidenciaParcial+' (Disidencia Parcial) -';
+		}
+		htmlContenidoVotos = htmlContenidoVotos.slice(0, -1);
+		htmlContenidoVotos += '</div></div></div></div>';
+			
+		if(data.recusExcus && data.recusExcus.length > 0){
+			htmlContenidoVotos += '<div class="row"><div class="col-xs-12" style="padding: 0 20px 0 20px"><div class="panel panel-primary"><div class="panel-body">';
+			for(var i = 0; i < data.recusExcus.length; i++){
+				htmlContenidoVotos +=' '+data.recusExcus[i].ministro.descripcion+',';	 
+			}
+			htmlContenidoVotos = htmlContenidoVotos.slice(0, -1);
+			htmlContenidoVotos +=' (Recusaciones y Excusaciones)</div></div></div></div>';		
+		}
+	}
+	else if(tieneVotosViejos){
+		htmlContenidoVotos += '<div class="row"><div class="col-xs-12" style="padding: 0 20px 0 20px"><div class="panel panel-primary"><div class="panel-body"><b>Votos:</b>';
+		if(data.stringVotosMayoria != ""){
+			htmlContenidoVotos += ' '+data.stringVotosMayoria+' (Mayoria) -';
+		}
+		if(data.stringVotosVoto != ""){
+			htmlContenidoVotos += ' '+data.stringVotosVoto+' (Voto) -';
+		}
+		if(data.stringVotosDisidencia != ""){
+			htmlContenidoVotos += ' '+data.stringVotosDisidencia+' (Disidencia) -';
+		}
+		if(data.stringVotosDisidenciaParcial != ""){
+			htmlContenidoVotos += ' '+data.stringVotosDisidenciaParcial+' (Disidencia Parcial) -';
+		}
+		if(data.stringVotosAbstencion != ""){
+			htmlContenidoVotos += ' '+data.stringVotosAbstencion+' (Abstenci&oacute;n) -';
+		}
+		htmlContenidoVotos = htmlContenidoVotos.slice(0, -1);
+		htmlContenidoVotos += '</div></div></div></div>';
+	}
+	if (htmlContenidoVotos != "")
+		$("#divVotos").html(htmlContenidoVotos);
+}
+
+function muestraVotos(codigo) {
+	codigoActual = codigo;
+	soloVotos = true;
+	$("#divVotos").html('');
+	$("#contenidoAnalisis").html('<div style="text-align:center;"><img id="img-spinner" src="/sjconsulta/images/ajax-loader.gif" alt="Cargando"/> Cargando..</div>');
+	$("#contenidoAnalisis").show();
+
+	$('#btnImprimirAD').hide();
+	$('#tituloAnalisis').html("&ensp;Votos");
+	$('#contenidoAnalisis').hide();
+	
+	$.ajax({
+        url: "/sjconsulta/fallos/abrirAnalisis.html?idAnalisis="+Math.floor(codigo / 10),
+        type: 'GET', 
+        dataType: 'json',
+        success: function (data){
+        	rtaMuestraVotos(data);
+        },
+        error: function (e) {
+       	 alert('Error: ' + e);
+        }
+    });
+    return;
+}
+
+function listarEnlaces(data){	
+	var htmlEnlaces = "";
+	htmlEnlaces += '<div class="col-xs-12"><div class="blackLine"></div></div>';
+	htmlEnlaces += '<div class="col-sm-3"><b>Enlaces</b></div><div class="col-sm-9">';
+	for (var i = 0; i < data.length; i++) {
+		htmlEnlaces += '<div class="row" ><a href="'+data[i].enlace+'" target="_blank" class="btn btn-link">'+data[i].descripcion+'</a></div>';			   
+	}
+	htmlEnlaces += "</div>";
+	return htmlEnlaces;
+}
+
+function listarReferenciasNormativas(data){
+	var htmlReferenciasNormativas = '<div class="row"><div class="col-sm-12"><div class="panel panel-info"><div class="panel-heading" data-toggle="collapse" data-target="#panel-normas" style="cursor: pointer"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>&ensp;Normas Consideradas:</h3></div>';
+	htmlReferenciasNormativas += '<div class="panel-body collapse" id="panel-normas"><div class="panel-wrapper">';
+	for (var i = 0; i < data.length; i++) {	
+		if (data[i].inconstitucional == "S"){
+			htmlReferenciasNormativas += '<div class="well well-sm" style="background: #f3c1c19e">';
+		}
+		else{
+			htmlReferenciasNormativas += '<div class="well well-sm">';
+		}
+		
+		htmlReferenciasNormativas += '<div class="row"><div class="col-sm-12">';
+		if (data[i].inconstitucional==-1 == "S"){
+			htmlReferenciasNormativas += '<i title="Declara inconstitucionalidad" class="barrita inconst" style="color: #FF0000"></i>&nbsp;';
+		}
+		htmlReferenciasNormativas += data[i].norma.valor;
+		
+		htmlReferenciasNormativas += '</div>';
+		
+		if(data[i].numeroNorma){
+			htmlReferenciasNormativas += '<div class="col-sm-3">N&uacute;mero: ' + (data[i].numeroNorma?data[i].numeroNorma:"") + '</div>';
+			if (data[i].anioNorma?data[i].anioNorma:""){
+				htmlReferenciasNormativas += '<div class="col-sm-3">A&ntilde;o: ' + (data[i].anioNorma?data[i].anioNorma:"") + '</div>';
+			}
+		}				
+		if(data[i].denominacion){
+			htmlReferenciasNormativas += '<div class="col-sm-12">' + data[i].denominacion.valor + '</div>';
+		}
+		if(data[i].emisor){
+			htmlReferenciasNormativas += '<div class="col-sm-12">' + data[i].emisor.valor + '</div>';
+		}
+		if(data[i].jurisdiccion){
+			htmlReferenciasNormativas += '<div class="col-sm-12">'  + data[i].jurisdiccion.valor + '</div>';
+		}
+		if(data[i].articulo){
+			htmlReferenciasNormativas += '<div class="col-xs-3">Articulo: ' + (data[i].articulo?data[i].articulo:"") + '</div>';
+		}
+		if (data[i].parrafo){
+			htmlReferenciasNormativas += '<div class="col-xs-3">Parrafo: ' + (data[i].parrafo?data[i].parrafo:"") + '</div>';
+		}
+		if(data[i].inciso){
+			htmlReferenciasNormativas += '<div class="col-xs-3">Inciso: ' + (data[i].inciso?data[i].inciso:"") + '</div>';
+		}
+		if (data[i].apartado){
+			htmlReferenciasNormativas += '<div class="col-xs-3">Apartado: ' + (data[i].apartado?data[i].apartado:"") +'</div>';
+		}
+		htmlReferenciasNormativas += "</div></div>";
+	}
+	htmlReferenciasNormativas += "</div></div></div></div></div>";
+	return htmlReferenciasNormativas;
+}
+
+function listarReferenciasInconst(data){
+	var htmlReferenciasNormativas = '<div class="row"><div class="col-sm-12"><div class="panel panel-danger"><div class="panel-heading" data-toggle="collapse" data-target="#panel-inconst" style="cursor: pointer"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>&ensp;Declara Inconstitucionalidad:</h3></div>';
+	htmlReferenciasNormativas += '<div class="panel-body collapse" id="panel-inconst"><div class="panel-wrapper">';
+	for (var i = 0; i < data.length; i++) {	
+		if (data[i].inconstitucional == "S"){
+			htmlReferenciasNormativas += '<div class="well well-sm" style="background: #f3c1c19e">';
+		
+			htmlReferenciasNormativas += '<div class="row"><div class="col-sm-12">';
+			//htmlReferenciasNormativas += 	'<i title="Declara inconstitucionalidad" class="barrita inconst" style="cursor: auto"></i>&ensp;';
+			htmlReferenciasNormativas += 	data[i].norma.valor;
+			
+			htmlReferenciasNormativas += '</div>';
+			
+			if(data[i].numeroNorma){
+				htmlReferenciasNormativas += '<div class="col-sm-3">N&uacute;mero: ' + (data[i].numeroNorma?data[i].numeroNorma:"") + '</div>';
+				if (data[i].anioNorma?data[i].anioNorma:""){
+					htmlReferenciasNormativas += '<div class="col-sm-3">A&ntilde;o: ' + (data[i].anioNorma?data[i].anioNorma:"") + '</div>';
+				}
+			}				
+			if(data[i].denominacion){
+				htmlReferenciasNormativas += '<div class="col-sm-12">' + data[i].denominacion.valor + '</div>';
+			}
+			if(data[i].emisor){
+				htmlReferenciasNormativas += '<div class="col-sm-12">' + data[i].emisor.valor + '</div>';
+			}
+			if(data[i].jurisdiccion){
+				htmlReferenciasNormativas += '<div class="col-sm-12">'  + data[i].jurisdiccion.valor + '</div>';
+			}
+			if(data[i].articulo){
+				htmlReferenciasNormativas += '<div class="col-xs-3">Articulo: ' + (data[i].articulo?data[i].articulo:"") + '</div>';
+			}
+			if (data[i].parrafo){
+				htmlReferenciasNormativas += '<div class="col-xs-3">Parrafo: ' + (data[i].parrafo?data[i].parrafo:"") + '</div>';
+			}
+			if(data[i].inciso){
+				htmlReferenciasNormativas += '<div class="col-xs-3">Inciso: ' + (data[i].inciso?data[i].inciso:"") + '</div>';
+			}
+			if (data[i].apartado){
+				htmlReferenciasNormativas += '<div class="col-xs-3">Apartado: ' + (data[i].apartado?data[i].apartado:"") +'</div>';
+			}
+			htmlReferenciasNormativas += "</div></div>";
+		}
+	}
+	htmlReferenciasNormativas += "</div></div></div></div></div>";
+	return htmlReferenciasNormativas;
+}
+
+function listarSumariosAnalisis(data){
+	$("#divSumarios").html('<div class="panel panel-default" style="text-align:center;"><img id="img-spinner" src="/sjconsulta/images/ajax-loader.gif" alt="Cargando"/> Cargando..</div>');
+	$("#divSumarios").html(contentListarSumariosAnalisis(data));
+}
+
+
+function contentListarSumariosAnalisis(data) {
+	var htmlSumariosAnalisis = '';
+	if (data && data.length > 0) {
+		htmlSumariosAnalisis += '<div class="col-xs-12"><div class="panel panel-info"><div class="panel-heading" data-toggle="collapse" data-target="#panel-sumarios"><h3 class="panel-title"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>&ensp;Sumarios</h3></div><div class="panel-body collapse" id="panel-sumarios" style="text-align:center"><div class="col-sm-12">';
+		for (var i = 0; i < data.length; i++) {
+			if (data[i].publico == 'S'){
+				if (data[i].holding > 0)
+					htmlSumariosAnalisis += '<div class="panel panel-default holder"><div style="text-align: right; margin-right: 12em"><i class="holding">Núcleo del Fallo</i></div><div class="panel-body">';
+				else
+					htmlSumariosAnalisis += '<div class="panel panel-default"><div class="panel-body">';
+				htmlSumariosAnalisis += 		'<div class="col-xs-12" style="font-family: Roboto; text-align: justify; font-weight:500; margin: 5px 0 5px 0">'+ data[i].voces + '</div>';
+				htmlSumariosAnalisis += 		'<div class="col-xs-12 cuerpo" style="text-align: justify;">'+ data[i].texto;
+				if (data[i].paginaFallo != null && data[i].paginaFallo != ""){
+					htmlSumariosAnalisis += 		'&ensp;<span class="ojito" onclick="verContexto('+data[i].paginaFallo+","+i+')" title="Ver en contexto del Fallo"><i class="fa fa-search-plus fa-lg ojito"></i>&nbsp;[Ver el contexto]</span>';
+				}
+				htmlSumariosAnalisis += '</div></div></div>';
+			}
+		}
+		htmlSumariosAnalisis += '</div></div></div></div>';
+	} 	
+	return htmlSumariosAnalisis;
+}
+
+function showReferencias(data){
+	if (data && data.length > 0 && listarEnlacesAD) {
+		var htmlReferencias = '<div class="row"><div class="col-xs-12"><div class="blackLine"></div></div></div>';
+		htmlReferencias += '<div class="row"><div class="col-xs-12"><p style="font-weight: bold; margin: 5px 0 5px 5px;">Esta sentencia es referida por la Corte en:</p>';
+		htmlReferencias += data;
+		htmlReferencias += '</div></div>';
+		$("#divReferido").html(htmlReferencias);
+	}
+	return;
+}
+
+function rtaMuestraReferenciasADPrivado(data){
+	if(data){
+		var htmlContenidoReferidos = '<div class="row"><div class="col-xs-12"><div class="blackLine"></div></div></div>';
+		htmlContenidoReferidos += '<div class="row"><div class="col-xs-12"><p style="font-weight: bold; margin: 5px 0 5px 5px;">Esta sentencia es referida por la Corte en:</p>';
+		htmlContenidoReferidos += data;
+		htmlContenidoReferidos += '</div></div>';
+		$("#contenidoAnalisis").html(htmlContenidoReferidos);
+		$("#analisisDocumental").show();	
+	}
+}
+
+function VerFalloExt(idAnalisis){
+	link = "/sjconsulta/documentos/getDocumentosExterno.html?idAnalisis="+idAnalisis;    
+    var w = window.open(link,'Fallo CSJN '+idAnalisis);
+	w.focus();
+	return false;
+}
+
+function verHijos(idFallo,recurso){
+	$.ajax({
+        url: "/sjconsulta/expedientes/getHijos.html?idFallo="+idFallo,
+        type: 'GET',
+        dataType: 'json',
+        success: showHijos,
+        error: function (e) {
+       	 alert('Error: ' + e);
+        }
+    });
+	identificacionExpediente = recurso;
+    return false;
+}
+
+
+function volverAD(){
+	$("#analisisDocumental").attr("style", "display: none;");	
+	$("#tablaFallosDivCompleto").removeAttr("style");
+}
+
+function imprimirAnalisis(){
+	var win = window.open("/sjconsulta/impresiones/analisisDocumental.html?idAnalisisDocumental="+idAnalisis, 'Imprimir Informaci&oacute;n');
+	win.focus();
+	return false;
+}
+
+function showSintesis(data){	
+	var htmlSintesis = "";		
+	if(data && data.length > 0){
+		for(var i = 0; i < data.length; i++){
+			htmlSintesis += '<div class="row"><div class="col-xs-12"><div class="panel panel-primary"><div class="panel-body" style="padding: 6px">';
+			htmlSintesis += 	'&emsp;<i class="fa fa-file-pdf-o fa-lg fa-pull-right" style="color:red"/><a class = "btn btn-link" onclick="return verSintesis('+data[i].codigo+')"><b>'+jsUcfirst(data[i].tipoDocumento.valor)+'</b></a>';
+			htmlSintesis += '</div></div></div></div>';
+		}
+		$("#divSintesis").html(htmlSintesis);
+	}
+}
+
+function jsUcfirst(string) 
+{
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}
+
+function verSintesis(idDocumento){
+	gtag('event', 'Ver_Analisis', {
+	  'event_category': 'Documentos',
+	  'event_label': 'Sintesis'
+	});
+	link = "/sjconsulta/documentos/verDocumentoById.html?idDocumento="+idDocumento+"&cache="+ new Date().getTime();
+	var w = window.open(link, 'Documento '+idDocumento);
+	w.focus();
+	return false;
+}
+
+</script>
+
+<div class="modal fade" id="analisisDocumental" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h5 class="modal-title" id="tituloAnalisis">&nbsp;</h5>
+			</div>
+			<div class="modal-body" style="margin: 6px;">
+				<div class="row">
+					<div class="col-xs-12">
+						<div id="divVotos"></div>
+						<div id="contenidoAnalisis"></div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer" id="footerAnalisis">
+				<a class="btn btn-default" id="btnImprimirAD" onclick="return imprimirAnalisis()">Imprimir</a>
+				<a class="btn btn-default" data-dismiss="modal">Cerrar</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>

@@ -1,0 +1,25 @@
+nombre	url	http	bytes	tipo
+cppba-actualizado.html	https://normas.gba.gob.ar/documentos/V9OGJUPx.html	200	662370	text/html
+cppba-ficha.html	https://normas.gba.gob.ar/ar-b/ley/1997/11922/4917	200	21694	text/html; charset=utf-8
+cp-infoleg.htm	http://servicios.infoleg.gob.ar/infolegInternet/anexos/15000-19999/16546/texact.htm	200	334120	text/html
+cp-argentina-actualizacion.html	https://www.argentina.gob.ar/normativa/nacional/ley-11179-16546/actualizacion	200	374602	text/html; charset=utf-8
+verif-csjn-polak	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoSumario.html?idDocumentoSumario=7009	200	60022	application/pdf
+verif-csjn-mattei	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=7834641	200	77978	text/html; charset=UTF-8
+verif-csjn-mozzatti	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoSumario.html?idDocumentoSumario=16387	200	423080	application/pdf
+verif-csjn-montenegro	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoSumario.html?idDocumentoSumario=23105	200	1211820	application/pdf
+verif-csjn-verbitsky	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=5824581	200	78046	text/html; charset=UTF-8
+verif-csjn-napoli	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=4627541	200	78141	text/html; charset=UTF-8
+verif-csjn-rayford	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoSumario.html?idDocumentoSumario=30882	200	1009309	application/pdf
+verif-csjn-llerena	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=5841071	200	78168	text/html; charset=UTF-8
+verif-csjn-mostaccio	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=5534771	200	78075	text/html; charset=UTF-8
+verif-csjn-acosta	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=6424841	200	78129	text/html; charset=UTF-8
+verif-csjn-gongora	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=7008981	200	78225	text/html; charset=UTF-8
+verif-csjn-casal	https://sjconsulta.csjn.gov.ar/sjconsulta/documentos/verDocumentoByIdLinksJSP.html?idDocumento=5921391	200	78196	text/html; charset=UTF-8
+verif-bulacio	https://www.corteidh.or.cr/docs/casos/articulos/seriec_100_esp.pdf	200	467645	application/pdf
+verif-fernandezPrieto	https://corteidh.or.cr/docs/casos/articulos/seriec_411_esp.pdf	200	519864	application/pdf
+verif-peiranoBasso	https://www.cidh.oas.org/annualrep/2009sp/uruguay12553.sp.htm	000	0	ERR\t0\t-
+verif-scbaVerbitsky2022	https://www-2020.scba.gov.ar/falloscompl/scba/inter/2022/05-03/p83909.doc	200	364032	application/msword
+verif-scbaCarrascosa	https://www-2020.scba.gov.ar/falloscompl/scba/2016/06-01/p125776.doc	200	108032	application/msword
+verif-scbaPitman	https://www.scba.gov.ar/includes/descarga.asp?id=54082&n=Ver+sentencia+(causa+P137.668).pdf	200	241062	application/pdf
+verif-tcpAguero	https://www.scba.gov.ar/includes/descarga.asp?id=55453&n=Ver+sentencia+(causa+N%C2%B0+133.216).pdf	200	231186	application/pdf
+verif-tcpGuerendiain	https://www.scba.gov.ar/includes/descarga.asp?id=35615&n=Ver+Sentencia+%2876889%29.pdf	200	183434	application/pdf
