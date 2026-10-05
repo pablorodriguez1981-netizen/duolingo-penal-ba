@@ -8,6 +8,8 @@ on:
   push:
     paths:
       - fuentes/urls.tsv
+      - fuentes/fallos-csjn.tsv
+      - scripts/resolver-fallos-csjn.py
       - .github/workflows/descargar-normativa.yml
 
 permissions:
@@ -35,6 +37,10 @@ jobs:
             esac
           done
           cat salida/estado.tsv
+      - name: Fallos de la CSJN (enlace al texto completo)
+        run: |
+          python3 scripts/resolver-fallos-csjn.py fuentes/fallos-csjn.tsv salida/csjn || true
+          for f in salida/csjn/*.pdf; do [ -e "$f" ] && pdftotext -layout "$f" "$f.txt" 2>/dev/null || true; done
       - name: Publicar en la rama fuentes-normativa
         run: |
           cd salida
