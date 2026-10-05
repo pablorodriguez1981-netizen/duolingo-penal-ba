@@ -5,8 +5,9 @@
  * archivo (misma voz y mismo texto), no se vuelve a pedir ni se gastan
  * créditos. Si cambia un texto, sólo se graba ese.
  *
- * Uso (la clave se pasa por variable de entorno, nunca en el código):
- *   ELEVENLABS_API_KEY=... npx vite-node scripts/generar-audios.ts -- --alcance nucleo
+ * Uso: poné la clave en un archivo .env (ignorado por git, ver .env.example)
+ * o en la variable de entorno ELEVENLABS_API_KEY, y corré:
+ *   npm run voces
  *
  * Opciones:
  *   --alcance nucleo|todo   nucleo: lecciones, preguntas, artículos de las 8
@@ -30,6 +31,8 @@ import type { FalloClave } from '../src/data/tipos';
 import { claveLocucion, locuciones, type Locucion } from '../src/lib/locucion';
 
 const raiz = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+// Clave local en .env (está en .gitignore: nunca se sube al repositorio).
+if (existsSync(resolve(raiz, '.env'))) process.loadEnvFile(resolve(raiz, '.env'));
 const API = 'https://api.elevenlabs.io';
 const FORMATO = 'mp3_22050_32';
 const KBPS = 32;

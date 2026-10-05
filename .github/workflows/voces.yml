@@ -12,8 +12,8 @@ on:
       alcance:
         description: 'todo (lecciones, preguntas, fallos, glosario y luego los códigos completos) o nucleo'
         type: choice
-        options: [todo, nucleo]
-        default: todo
+        options: [nucleo, todo]
+        default: nucleo
       modelo:
         description: 'Modelo de ElevenLabs'
         type: choice
@@ -95,7 +95,7 @@ jobs:
         if: ${{ !inputs.muestra && steps.clave.outputs.omitir != '1' }}
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
-          ALCANCE: ${{ inputs.alcance || 'todo' }}
+          ALCANCE: ${{ inputs.alcance || 'nucleo' }}
           MODELO: ${{ inputs.modelo || 'eleven_v4' }}
           MAX: ${{ inputs.max_caracteres || '200000' }}
           VOZ: ${{ inputs.voz }}

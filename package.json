@@ -11,7 +11,8 @@
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.sw.json && tsc -p tsconfig.node.json",
     "importar:codigo": "node scripts/importar-codigo.mjs",
-    "iconos": "node scripts/generar-iconos.mjs"
+    "iconos": "node scripts/generar-iconos.mjs",
+    "voces": "vite-node scripts/generar-audios.ts -- --alcance nucleo --modelo eleven_v4"
   },
   "dependencies": {
     "@fontsource/nunito": "^5.2.0",

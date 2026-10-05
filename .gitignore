@@ -5,3 +5,8 @@ dev-dist
 .DS_Store
 coverage
 .vite
+
+# Claves locales (nunca se suben)
+.env
+.env.*
+!.env.example
