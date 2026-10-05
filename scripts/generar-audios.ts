@@ -17,6 +17,8 @@
  *                           una voz argentina de la biblioteca).
  *   --modelo ID             por defecto eleven_v4.
  *   --simular               sólo cuenta caracteres, no llama a la API.
+ *   --muestra DIR           graba dos textos de ejemplo con Eleven v4 y con
+ *                           v4 Turbo en DIR (para comparar antes de grabar todo).
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, unlinkSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -41,6 +43,7 @@ const alcance = opcion('alcance', 'nucleo') as 'nucleo' | 'todo';
 const maxCaracteres = Number(opcion('max', '1000000'));
 const modelo = opcion('modelo', 'eleven_v4')!;
 const simular = args.includes('--simular');
+const dirMuestra = opcion('muestra');
 const clave = process.env.ELEVENLABS_API_KEY ?? '';
 
 const dirAudio = resolve(raiz, 'public/audio');
@@ -177,18 +180,50 @@ async function elegirVoz(anterior: Manifiesto['voz']): Promise<{ id: string; nom
 
 let conIdioma = true;
 
-async function grabar(vozId: string, guion: string): Promise<Buffer> {
-  const cuerpo = (idioma: boolean) => JSON.stringify({ text: guion, model_id: modelo, ...(idioma ? { language_code: 'es' } : {}) });
-  let r = await api(`/v1/text-to-speech/${vozId}?output_format=${FORMATO}`, { method: 'POST', body: cuerpo(conIdioma) });
+async function grabar(vozId: string, guion: string, modeloId = modelo, formato = FORMATO): Promise<Buffer> {
+  const cuerpo = (idioma: boolean) => JSON.stringify({ text: guion, model_id: modeloId, ...(idioma ? { language_code: 'es' } : {}) });
+  let r = await api(`/v1/text-to-speech/${vozId}?output_format=${formato}`, { method: 'POST', body: cuerpo(conIdioma) });
   if (r.status === 400 || r.status === 422) {
     const detalle = await r.text();
     if (conIdioma && /language/i.test(detalle)) {
+      console.warn('  (el modelo no acepta language_code; se omite)');
       conIdioma = false;
-      r = await api(`/v1/text-to-speech/${vozId}?output_format=${FORMATO}`, { method: 'POST', body: cuerpo(false) });
+      r = await api(`/v1/text-to-speech/${vozId}?output_format=${formato}`, { method: 'POST', body: cuerpo(false) });
     } else throw new Error(`TTS ${r.status}: ${detalle}`);
   }
   if (!r.ok) throw new Error(`TTS ${r.status}: ${await r.text()}`);
+  const costo = [...r.headers.entries()].filter(([k]) => /char|cost|credit/i.test(k)).map(([k, v]) => `${k}=${v}`).join(' ');
+  if (costo) ultimoCosto = costo;
   return Buffer.from(await r.arrayBuffer());
+}
+
+let ultimoCosto = '';
+
+/** Graba dos textos de ejemplo con cada modelo para comparar calidad y costo. */
+async function muestras(dir: string, manifiesto: Manifiesto) {
+  mkdirSync(dir, { recursive: true });
+  const voz = await elegirVoz(manifiesto.voz);
+  const l = UNIDADES_NUCLEO[0].temas[0].lecciones[0];
+  const art = articulo('cppba-358');
+  const textos = [
+    { nombre: 'explicacion', guion: locuciones.intro(l).guion },
+    ...(art ? [{ nombre: 'articulo-358', guion: locuciones.articulo(art).guion }] : []),
+  ];
+  const informe: string[] = [`Voz: ${voz.nombre} (${voz.id})`];
+  for (const m of ['eleven_v4', 'eleven_v4_turbo']) {
+    for (const t of textos) {
+      const antes = await json<{ character_count: number }>('/v1/user/subscription').catch(() => null);
+      const audio = await grabar(voz.id, t.guion, m, 'mp3_44100_128');
+      const despues = await json<{ character_count: number }>('/v1/user/subscription').catch(() => null);
+      writeFileSync(resolve(dir, `${m}-${t.nombre}.mp3`), audio);
+      const gastado = antes && despues ? despues.character_count - antes.character_count : NaN;
+      const linea = `${m} · ${t.nombre}: ${t.guion.length} caracteres enviados → ${Number.isNaN(gastado) ? '?' : gastado} créditos descontados ${ultimoCosto ? `(${ultimoCosto})` : ''} · ${(audio.length / 1024).toFixed(0)} KB`;
+      informe.push(linea);
+      console.log(linea);
+    }
+  }
+  writeFileSync(resolve(dir, 'informe.txt'), `${informe.join('\n')}\n`);
+  writeFileSync(resolve(dir, 'voz.json'), JSON.stringify(voz));
 }
 
 // ---------------------------------------------------------------------------
@@ -221,14 +256,18 @@ async function main() {
     return;
   }
   if (!clave) throw new Error('Falta la variable de entorno ELEVENLABS_API_KEY.');
+  if (dirMuestra) {
+    await muestras(resolve(raiz, dirMuestra), manifiesto);
+    return;
+  }
 
   const sub = await json<{ character_count: number; character_limit: number; tier: string }>('/v1/user/subscription').catch(() => null);
   const restantes = sub ? sub.character_limit - sub.character_count : Infinity;
   if (sub) console.log(`Plan ${sub.tier}: quedan ${restantes.toLocaleString('es-AR')} créditos de ${sub.character_limit.toLocaleString('es-AR')}`);
 
   const voz = await elegirVoz(manifiesto.voz);
-  if (manifiesto.voz && manifiesto.voz.id !== voz.id) {
-    console.log('Cambió la voz: se regrabará todo con la nueva.');
+  if ((manifiesto.voz && manifiesto.voz.id !== voz.id) || (manifiesto.modelo && manifiesto.modelo !== modelo)) {
+    console.log('Cambió la voz o el modelo: se regrabará todo.');
     for (const f of readdirSync(dirAudio)) if (f.endsWith('.mp3')) unlinkSync(resolve(dirAudio, f));
     manifiesto.archivos = {};
   }
