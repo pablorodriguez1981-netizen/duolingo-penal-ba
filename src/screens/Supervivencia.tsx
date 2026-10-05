@@ -35,6 +35,8 @@ export function PantallaSupervivencia() {
   const [resultado, setResultado] = useState<(ResultadoActividad & { record: boolean }) | null>(null);
   const inicio = useRef(0);
   const terminado = useRef(false);
+  /** Mientras se lee la explicación de un error, el reloj queda en pausa. */
+  const pausaDesde = useRef<number | null>(null);
 
   const pool = useMemo(() => {
     const { unidades } = unidadesVisibles(estado);
@@ -53,6 +55,7 @@ export function PantallaSupervivencia() {
     setRestante(DURACION);
     inicio.current = Date.now();
     terminado.current = false;
+    pausaDesde.current = null;
     setFase('juego');
   };
 
@@ -67,6 +70,7 @@ export function PantallaSupervivencia() {
   useEffect(() => {
     if (fase !== 'juego') return;
     const id = window.setInterval(() => {
+      if (pausaDesde.current !== null) return;
       const r = Math.max(0, DURACION - Math.floor((Date.now() - inicio.current) / 1000));
       setRestante(r);
       if (r <= 10 && r > 0) sonidos.tic();
@@ -85,12 +89,17 @@ export function PantallaSupervivencia() {
       useProgreso.getState().registrarRespuesta(q.pregunta.id, ok);
       setRespondidas((n) => n + 1);
       if (ok) setCorrectas((n) => n + 1);
+      else pausaDesde.current = Date.now();
     },
     [cola, indice],
   );
 
   const alContinuar = useCallback(() => {
     if (terminado.current) return;
+    if (pausaDesde.current !== null) {
+      inicio.current += Date.now() - pausaDesde.current;
+      pausaDesde.current = null;
+    }
     setTurno((t) => t + 1);
     if (indice + 1 >= cola.length) {
       // Vuelta nueva: se re-prioriza sin repetir de inmediato la última pregunta.
@@ -132,7 +141,7 @@ export function PantallaSupervivencia() {
         </p>
         <h1 className="text-2xl font-black">Modo Supervivencia</h1>
         <p className="max-w-md text-suave">
-          2 minutos a contrarreloj con preguntas al azar de artículos que ya viste, priorizando tus errores. Suma para tu racha diaria. ¡Sin corazones!
+          2 minutos a contrarreloj con preguntas al azar de artículos que ya viste, priorizando tus errores. Si fallás, el reloj se detiene mientras leés la explicación. Suma para tu racha diaria. ¡Sin corazones!
         </p>
         {record > 0 && <p className="font-black text-oro-500">🏅 Tu récord: {record} correctas</p>}
         <div className="w-full max-w-sm space-y-2">
@@ -173,7 +182,14 @@ export function PantallaSupervivencia() {
       <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col">
         {q && (
           <motion.div key={turno} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} className="flex flex-1 flex-col">
-            <PreguntaInteractiva pregunta={q.pregunta} alResponder={alResponder} alContinuar={alContinuar} rapido etiquetaContexto={a ? etiquetaArticulo(a) : undefined} />
+            <PreguntaInteractiva
+              pregunta={q.pregunta}
+              alResponder={alResponder}
+              alContinuar={alContinuar}
+              rapido
+              etiquetaContexto={a ? etiquetaArticulo(a) : undefined}
+              avisoError="⏸️ El reloj se detiene mientras leés por qué fallaste."
+            />
           </motion.div>
         )}
       </div>

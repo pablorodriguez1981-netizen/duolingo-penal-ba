@@ -14,6 +14,15 @@ const FRASES_MAL = ['¡Casi! Así se aprende.', 'Ojo con este detalle.', 'Los me
 
 const azarFrase = (l: string[]) => l[Math.floor(Math.random() * l.length)];
 
+/** Tiempo mínimo que queda a la vista el aviso de error, para leer por qué se falló. */
+export const LECTURA_ERROR_MS = 4000;
+
+/** En Supervivencia, el aviso de error dura lo que lleva leerlo: entre 4 y 10 segundos. */
+export function tiempoLectura(p: Pregunta): number {
+  const palabras = `${respuestaCorrectaTexto(p)} ${p.explicacion}`.split(/\s+/).length;
+  return Math.min(10000, Math.max(LECTURA_ERROR_MS, palabras * 260));
+}
+
 const TITULO_TIPO: Record<Pregunta['tipo'], string> = {
   opcion: 'Elegí la respuesta correcta',
   vf: '¿Verdadero o falso?',
@@ -54,11 +63,13 @@ export function PreguntaInteractiva({ pregunta, alResponder, alContinuar: contin
   // «Continuar» avanza una sola vez por pregunta (un doble toque, Enter o el
   // avance automático no deben saltear la siguiente).
   const continuado = useRef(false);
+  // Después de un error, «Continuar» se habilita recién cuando pasó el tiempo de lectura.
+  const [leido, setLeido] = useState(true);
   const alContinuar = useCallback(() => {
-    if (continuado.current) return;
+    if (continuado.current || !leido) return;
     continuado.current = true;
     continuar();
-  }, [continuar]);
+  }, [continuar, leido]);
   const frase = useMemo(() => ({ ok: azarFrase(FRASES_OK), mal: azarFrase(FRASES_MAL) }), []);
 
   // Orden mezclado (estable para esta pregunta)
@@ -87,16 +98,25 @@ export function PreguntaInteractiva({ pregunta, alResponder, alContinuar: contin
     else {
       sonidos.error();
       vibrar([60, 40, 60]);
+      setLeido(false);
     }
     alResponder(ok);
   }, [completa, resultado, respuesta, pregunta, alResponder]);
 
-  // Modo rápido: avanza solo después de un instante.
+  // Tras un error, el aviso queda al menos 4 segundos.
   useEffect(() => {
-    if (!rapido || resultado === null) return;
-    const t = window.setTimeout(alContinuar, resultado ? 650 : 1600);
+    if (resultado !== false) return;
+    const t = window.setTimeout(() => setLeido(true), LECTURA_ERROR_MS);
     return () => window.clearTimeout(t);
-  }, [rapido, resultado, alContinuar]);
+  }, [resultado]);
+
+  // Modo rápido: avanza solo (los errores, cuando hubo tiempo de leer la explicación).
+  const espera = resultado === null ? 0 : resultado ? 650 : tiempoLectura(pregunta);
+  useEffect(() => {
+    if (!rapido || resultado === null || !leido) return;
+    const t = window.setTimeout(alContinuar, Math.max(0, espera - (resultado ? 0 : LECTURA_ERROR_MS)));
+    return () => window.clearTimeout(t);
+  }, [rapido, resultado, leido, espera, alContinuar]);
 
   // Atajos de teclado (escritorio): 1-4 para elegir, Enter para comprobar/continuar.
   useEffect(() => {
@@ -190,17 +210,34 @@ export function PreguntaInteractiva({ pregunta, alResponder, alContinuar: contin
                         Respuesta correcta: <span className="font-extrabold">{respuestaCorrectaTexto(pregunta)}</span>
                       </p>
                     )}
-                    {!rapido && (
-                      <p className={`mt-1 max-h-32 overflow-y-auto text-[15px] leading-snug ${resultado ? 'text-verde-700 dark:text-verde-100' : 'text-rojo-700 dark:text-rojo-100'}`}>
+                    {(!rapido || !resultado) && (
+                      <p className={`mt-1 max-h-[38vh] overflow-y-auto text-[15px] leading-snug ${resultado ? 'text-verde-700 dark:text-verde-100' : 'text-rojo-700 dark:text-rojo-100'}`}>
                         <TextoGlosario texto={pregunta.explicacion} />
                       </p>
                     )}
                     {!resultado && avisoError && <p className="mt-1 text-sm font-black text-rojo-700 dark:text-rojo-100">{avisoError}</p>}
                   </div>
                 </div>
-                {!rapido && (
-                  <Boton ancho variante={resultado ? 'verde' : 'rojo'} onClick={alContinuar} autoFocus>
-                    Continuar
+                {(!rapido || !resultado) && (
+                  <Boton
+                    ancho
+                    variante={resultado ? 'verde' : 'rojo'}
+                    onClick={alContinuar}
+                    disabled={!leido}
+                    autoFocus={leido}
+                    className="overflow-hidden"
+                    aria-label={leido ? 'Continuar' : 'Continuar (leé la explicación)'}
+                  >
+                    {!resultado && (
+                      <motion.span
+                        aria-hidden
+                        className="absolute inset-y-0 left-0 bg-white/25"
+                        initial={{ width: '0%' }}
+                        animate={{ width: '100%' }}
+                        transition={{ duration: (rapido ? espera : LECTURA_ERROR_MS) / 1000, ease: 'linear' }}
+                      />
+                    )}
+                    <span className="relative">Continuar</span>
                   </Boton>
                 )}
               </div>
