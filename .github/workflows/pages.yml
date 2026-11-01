@@ -2,10 +2,9 @@ name: Publicar en GitHub Pages
 
 # Compila la app y la publica en la rama gh-pages (GitHub Pages la sirve en
 # https://<usuario>.github.io/<repo>/). Corre en cada push a la rama principal.
-# Incluye la herramienta de firma de documentos en https://<usuario>.github.io/<repo>/firma/.
 on:
   push:
-    branches: [main, claude/pwa-derecho-procesal-penal-454jcu, claude/pdf-digital-signature-client-5j3jsf]
+    branches: [main, claude/pwa-derecho-procesal-penal-454jcu]
   workflow_dispatch:
 
 permissions:
