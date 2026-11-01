@@ -22,8 +22,7 @@ interface PeriodicSyncEvent extends ExtendableEvent {
 clientsClaim();
 precacheAndRoute(self.__WB_MANIFEST);
 cleanupOutdatedCaches();
-// La herramienta de firma (firma/) tiene sus propias páginas: no se responde con la app.
-registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html'), { denylist: [/\/firma(\/|$)/] }));
+registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html')));
 
 // Voces naturales: cada audio que se escucha (o se descarga desde Perfil)
 // queda guardado para usarlo sin conexión. Los reproductores piden rangos.
