@@ -105,6 +105,29 @@ scripts/
   generar-iconos.mjs    íconos PNG de la PWA
 ```
 
+## Firma de documentos (herramienta aparte)
+
+Página para que un cliente firme a mano un PDF desde el celular o la computadora. Se publica junto con la app, en una ruta separada (no forma parte de la PWA ni de su modo sin conexión):
+
+- **Página de firma (cliente):** `https://<usuario>.github.io/<repo>/firma/`
+- **Panel del estudio:** `https://<usuario>.github.io/<repo>/firma/estudio/`
+
+Qué hace el cliente: lee el documento, escribe sus datos en un campo libre de varias líneas (nombre, DNI, domicilio…), dibuja la firma con el dedo o el mouse y elige **una hoja** o **todas las hojas**. La firma y los datos (más la fecha y hora, opcional) se arman como una imagen PNG que se inserta en el PDF; la ubicación se ajusta arrastrando la firma sobre la hoja, con tamaño regulable. Al terminar, descarga o comparte (WhatsApp, mail) el PDF firmado y, si quiere, la imagen de la firma sola. Hojas giradas o de distinto tamaño se firman en la posición correcta.
+
+### Mandar un documento con un link
+
+1. En el panel del estudio, conectá GitHub una sola vez con un *fine-grained token* (Repository access: sólo este repositorio; Permissions › Contents: **Read and write**). El token queda guardado sólo en ese navegador.
+2. Subí uno o varios PDF (título e indicaciones para el cliente opcionales; sugerencia «última hoja» o «todas las hojas»).
+3. Copiá el link (o mandalo por WhatsApp desde el panel). El cliente lo abre, firma y te devuelve el PDF.
+
+Cada PDF se **cifra en el navegador** (AES-GCM de 256 bits) antes de subirse a la rama `firmas-casos` (sin historial de la app, así no dispara compilaciones). La clave va sólo en el link, después del `#`, que los navegadores no envían a ningún servidor: en el repositorio público sólo queda el archivo cifrado. Desde el panel se puede borrar cada documento cuando ya no haga falta.
+
+Sin subir nada: abrí la página de firma, elegí el PDF desde el dispositivo y pasale el teléfono o la tablet al cliente. En ese modo el archivo nunca sale del navegador.
+
+> Es una **firma electrónica** (firma manuscrita digitalizada), no una *firma digital* con certificado en los términos de la Ley 25.506. Si el PDF ya tenía firmas digitales, al agregarle la firma dejan de verificarse (la página lo avisa). Los PDF protegidos con contraseña o contra cambios no se pueden firmar.
+
+Código: `firma/index.html`, `firma/estudio/index.html` y `src/firma/` (pdf-lib para insertar la firma, pdf.js para mostrar las hojas, signature_pad para el trazo). Tests en `src/firma/firma.test.ts`.
+
 ## Publicar e instalar en Android
 
 El build (`dist/`) es estático: se puede publicar en cualquier hosting (Netlify, Vercel, Cloudflare Pages, GitHub Pages). Si se publica en un subdirectorio, definí `BASE_PATH` (p. ej. `BASE_PATH=/duolingo-penal-ba/ npm run build`).

@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Firmar documento</title>
+    <meta name="description" content="Leé el documento, escribí tus datos, firmá a mano y descargá el PDF firmado." />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#16325c" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%8D%EF%B8%8F%3C/text%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <header class="barra">
+      <div class="barra-in">
+        <span class="marca"><span aria-hidden="true">✍️</span> Firma de documentos</span>
+      </div>
+    </header>
+
+    <main class="contenedor">
+      <section class="intro">
+        <h1 id="titulo">Firmá tu documento</h1>
+        <p id="bajada" class="bajada">
+          Leé el documento, escribí tus datos, firmá con el dedo (o con el mouse) y descargá el PDF firmado.
+        </p>
+        <div id="instrucciones" class="instrucciones" hidden>
+          <strong>Indicaciones del estudio</strong>
+          <p id="instrucciones-texto"></p>
+        </div>
+      </section>
+
+      <div id="error" class="aviso aviso-error" role="alert" hidden></div>
+      <div id="cargando" class="cargando" hidden><span class="ruedita" aria-hidden="true"></span><span id="cargando-texto">Abriendo el documento…</span></div>
+
+      <section id="elegir" class="tarjeta" hidden>
+        <label class="soltar" id="soltar">
+          <input type="file" id="archivo" accept="application/pdf,.pdf" />
+          <span class="soltar-icono" aria-hidden="true">📄</span>
+          <strong>Elegí el PDF para firmar</strong>
+          <span>o arrastralo acá</span>
+        </label>
+        <p class="nota">🔒 El archivo no sale de tu dispositivo: todo se hace en tu navegador.</p>
+      </section>
+
+      <div id="trabajo" class="trabajo" hidden>
+        <section class="columna-doc" aria-label="Documento">
+          <div class="doc-cabecera">
+            <div>
+              <div id="doc-nombre" class="doc-nombre"></div>
+              <div id="doc-hojas" class="doc-hojas"></div>
+            </div>
+            <button type="button" id="cambiar" class="boton chico" hidden>Cambiar PDF</button>
+          </div>
+          <div id="aviso-firmas-digitales" class="aviso aviso-alerta" hidden>
+            Este PDF ya tiene firmas digitales (con certificado). Al agregar tu firma, esas firmas digitales dejan de poder
+            verificarse.
+          </div>
+          <div id="aviso-firmado" class="aviso aviso-ok" hidden>Así quedó el documento firmado.</div>
+          <div id="hojas" class="hojas"></div>
+        </section>
+
+        <aside class="columna-pasos">
+          <section class="tarjeta paso" id="paso-datos">
+            <h2><span class="num">1</span> Tus datos</h2>
+            <p class="ayuda">Escribí lo que va debajo de tu firma: nombre completo, DNI y lo que necesites. Podés usar varias líneas.</p>
+            <textarea
+              id="texto"
+              rows="5"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Nombre y apellido: Juan Pérez&#10;DNI: 12.345.678&#10;Domicilio: …"
+            ></textarea>
+            <label class="check"><input type="checkbox" id="con-fecha" checked /> Agregar la fecha y la hora de la firma</label>
+          </section>
+
+          <section class="tarjeta paso" id="paso-firma">
+            <h2><span class="num">2</span> Tu firma</h2>
+            <p class="ayuda">Firmá dentro del recuadro con el dedo, un lápiz táctil o el mouse.</p>
+            <div class="pad-lugar" id="pad-lugar">
+              <div class="pad-marco" id="pad-marco">
+                <canvas id="pad" aria-label="Recuadro para firmar"></canvas>
+                <div class="pad-linea" aria-hidden="true"></div>
+                <div class="pad-guia" id="pad-guia" aria-hidden="true">Firmá acá</div>
+              </div>
+            </div>
+            <div class="fila-botones">
+              <button type="button" class="boton chico" id="deshacer">↶ Deshacer</button>
+              <button type="button" class="boton chico" id="borrar">Borrar</button>
+              <button type="button" class="boton chico" id="ampliar">⤢ Pantalla completa</button>
+              <span class="tintas" role="radiogroup" aria-label="Color de la tinta">
+                <button type="button" class="tinta activa" data-color="#1b3a8a" role="radio" aria-checked="true" title="Tinta azul" aria-label="Tinta azul"></button>
+                <button type="button" class="tinta" data-color="#111111" role="radio" aria-checked="false" title="Tinta negra" aria-label="Tinta negra"></button>
+              </span>
+            </div>
+          </section>
+
+          <section class="tarjeta paso" id="paso-lugar">
+            <h2><span class="num">3</span> Dónde va la firma</h2>
+            <div class="alcances" role="radiogroup">
+              <label class="alcance"><input type="radio" name="alcance" value="una" checked /><span><strong>Una hoja</strong><small>La que elijas</small></span></label>
+              <label class="alcance"><input type="radio" name="alcance" value="todas" /><span><strong>Todas las hojas</strong><small>En el mismo lugar de cada una</small></span></label>
+            </div>
+            <div class="editor-nav">
+              <button type="button" class="boton chico" id="ed-ant" aria-label="Hoja anterior">‹</button>
+              <select id="ed-hoja" aria-label="Hoja"></select>
+              <button type="button" class="boton chico" id="ed-sig" aria-label="Hoja siguiente">›</button>
+            </div>
+            <div class="editor-hoja" id="editor-hoja">
+              <img id="ed-img" alt="" />
+              <div class="firma-movil vacia" id="ed-firma"><img id="ed-firma-img" alt="Tu firma" draggable="false" /><span>Tu firma</span></div>
+            </div>
+            <p class="ayuda centrada">Arrastrá la firma o tocá la hoja donde la quieras.</p>
+            <div class="rapidos">
+              <button type="button" class="boton chico" data-pos="izq">↙ Abajo izq.</button>
+              <button type="button" class="boton chico" data-pos="centro">↓ Abajo al centro</button>
+              <button type="button" class="boton chico" data-pos="der">↘ Abajo der.</button>
+            </div>
+            <label class="tamano">
+              <span>Tamaño</span>
+              <input type="range" id="tamano" min="60" max="420" step="2" />
+              <span id="tamano-cm" class="tamano-cm"></span>
+            </label>
+          </section>
+
+          <section class="tarjeta paso" id="paso-final">
+            <button type="button" class="boton principal grande" id="firmar">Firmar el documento</button>
+            <p class="ayuda centrada" id="falta" role="status"></p>
+            <div id="resultado" class="resultado" hidden>
+              <p class="aviso aviso-ok">✅ ¡Listo! El documento quedó firmado. Descargalo o compartilo.</p>
+              <button type="button" class="boton principal grande" id="descargar">⬇ Descargar PDF firmado</button>
+              <button type="button" class="boton grande" id="compartir" hidden>Compartir / enviar (WhatsApp, mail…)</button>
+              <button type="button" class="boton" id="descargar-imagen">Descargar la firma como imagen</button>
+              <button type="button" class="boton enlace" id="editar">Volver a editar</button>
+            </div>
+          </section>
+        </aside>
+      </div>
+    </main>
+
+    <div id="pantalla-firma" class="pantalla-firma" hidden>
+      <div class="pantalla-firma-barra">
+        <span>Firmá en el recuadro</span>
+        <span class="pantalla-firma-acciones">
+          <button type="button" class="boton chico" id="pf-deshacer">↶ Deshacer</button>
+          <button type="button" class="boton chico" id="pf-borrar">Borrar</button>
+          <button type="button" class="boton principal chico" id="pf-listo">Listo</button>
+        </span>
+      </div>
+      <div class="pantalla-firma-lugar" id="pf-lugar"></div>
+      <p class="pantalla-firma-nota">En el celular, girá la pantalla para tener más lugar.</p>
+    </div>
+
+    <footer class="pie">
+      <p>Todo se procesa en tu navegador: el documento y tu firma no se envían a ningún servidor.</p>
+      <p id="pie-estudio" hidden><a href="estudio/">Panel del estudio</a> (subir PDF y generar links para clientes)</p>
+    </footer>
+
+    <script type="module" src="/src/firma/cliente.ts"></script>
+  </body>
+</html>
