@@ -111,13 +111,21 @@ Página para que un cliente firme a mano un PDF desde el celular o la computador
 
 - **Página de firma (cliente):** `https://<usuario>.github.io/<repo>/firma/`
 - **Panel del estudio:** `https://<usuario>.github.io/<repo>/firma/estudio/`
+- **Preparar un documento (estudio):** `https://<usuario>.github.io/<repo>/firma/#preparar`
 
-Qué hace el cliente: lee el documento, escribe sus datos en un campo libre de varias líneas (nombre, DNI, domicilio…), dibuja la firma con el dedo o el mouse y elige **una hoja** o **todas las hojas**. La firma y los datos (más la fecha y hora, opcional) se arman como una imagen PNG que se inserta en el PDF; la ubicación se ajusta arrastrando la firma sobre la hoja, con tamaño regulable. Al terminar, descarga o comparte (WhatsApp, mail) el PDF firmado y, si quiere, la imagen de la firma sola. Hojas giradas o de distinto tamaño se firman en la posición correcta.
+Qué hace el cliente: lee el documento, escribe sus datos en un campo libre de varias líneas (nombre, DNI, domicilio…) y firma con el dedo o el mouse. Elige cuántas firmas:
+
+- **Una firma**, en la hoja que elija (por defecto, la última).
+- **Todas las hojas**: firma una vez **por cada hoja**, por separado (Firma 1 → Siguiente/Enter → Firma 2 → …), así cada firma es distinta y no una copia de la misma imagen. Si son 18 hojas, son 18 firmas.
+- **Elegir**: una o varias firmas donde quiera (incluso varias en la misma hoja).
+
+Cada firma, con los datos debajo (y la fecha y hora, opcional), se arma como una imagen PNG que se inserta en el PDF. **Se ubica sola debajo de donde termina el texto** de cada hoja (analiza la hoja, así que funciona también con documentos escaneados, e ignora el número de página del pie); si no entra, prueba más chica y después busca otro lugar libre, y si no hay ninguno lo avisa con ⚠️. Cada firma se puede **mover** arrastrándola (o tocando la hoja donde se la quiere), alinear a izquierda, centro o derecha y cambiar de tamaño. Hay modo pantalla completa para firmar en el celular. Al terminar, descarga o comparte (WhatsApp, mail) el PDF firmado y, si quiere, las imágenes de las firmas (un ZIP si son varias). Hojas giradas o de distinto tamaño se firman en la posición correcta.
 
 ### Mandar un documento con un link
 
 1. En el panel del estudio, conectá GitHub una sola vez con un *fine-grained token* (Repository access: sólo este repositorio; Permissions › Contents: **Read and write**). El token queda guardado sólo en ese navegador.
-2. Subí uno o varios PDF (título e indicaciones para el cliente opcionales; sugerencia «última hoja» o «todas las hojas»).
+2. **Preparar documento**: elegí el PDF, marcá cuántas firmas y dónde (se ubican solas debajo del texto y las podés mover), escribí el título y las indicaciones y generá el link. Por defecto el cliente no puede cambiar cuántas firmas ni en qué hojas (sí correrlas un poco si tapan algo).
+   **Subida rápida**: subí uno o varios PDF sin marcar lugares (sugerencia: una firma en la última hoja o una en cada hoja); el cliente decide.
 3. Copiá el link (o mandalo por WhatsApp desde el panel). El cliente lo abre, firma y te devuelve el PDF.
 
 Cada PDF se **cifra en el navegador** (AES-GCM de 256 bits) antes de subirse a la rama `firmas-casos` (sin historial de la app, así no dispara compilaciones). La clave va sólo en el link, después del `#`, que los navegadores no envían a ningún servidor: en el repositorio público sólo queda el archivo cifrado. Desde el panel se puede borrar cada documento cuando ya no haga falta.
@@ -126,7 +134,7 @@ Sin subir nada: abrí la página de firma, elegí el PDF desde el dispositivo y 
 
 > Es una **firma electrónica** (firma manuscrita digitalizada), no una *firma digital* con certificado en los términos de la Ley 25.506. Si el PDF ya tenía firmas digitales, al agregarle la firma dejan de verificarse (la página lo avisa). Los PDF protegidos con contraseña o contra cambios no se pueden firmar.
 
-Código: `firma/index.html`, `firma/estudio/index.html` y `src/firma/` (pdf-lib para insertar la firma, pdf.js para mostrar las hojas, signature_pad para el trazo). Tests en `src/firma/firma.test.ts`.
+Código: `firma/index.html`, `firma/estudio/index.html` y `src/firma/` (pdf-lib para insertar las firmas, pdf.js para mostrar y analizar las hojas, signature_pad para el trazo; `autoubicar.ts` decide dónde va cada firma). Tests en `src/firma/firma.test.ts`.
 
 ## Publicar e instalar en Android
 

@@ -9,14 +9,26 @@
  * Formato: "FIRMA1" | iv (12 bytes) | AES-GCM( largo de cabecera (4 bytes) | cabecera JSON | PDF )
  */
 
+import type { Ubicacion } from './ubicacion';
+
 const MAGIA = new TextEncoder().encode('FIRMA1');
+
+export interface LugarDeFirma {
+  /** Hoja (base 1). */
+  hoja: number;
+  ubic: Ubicacion;
+}
 
 export interface Cabecera {
   titulo: string;
   archivo: string;
   instrucciones?: string;
-  /** Sugerencia del estudio para dónde firmar. */
+  /** Sugerencia del estudio: una firma en la última hoja o una en cada hoja. */
   alcance?: 'ultima' | 'todas';
+  /** Lugares de firma marcados por el estudio (uno por cada firma que hace el cliente). */
+  firmas?: LugarDeFirma[];
+  /** Si es true, el cliente no puede cambiar cuántas firmas ni en qué hojas (sí moverlas un poco). */
+  fijo?: boolean;
   creado: string;
 }
 

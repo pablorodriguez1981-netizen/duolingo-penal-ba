@@ -5,6 +5,7 @@
  */
 import { GlobalWorkerOptions, getDocument, type PDFDocumentProxy } from 'pdfjs-dist/legacy/build/pdf.mjs';
 import urlTrabajador from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs?url';
+import { mascaraDesdePixeles, type Mascara } from './autoubicar';
 
 GlobalWorkerOptions.workerSrc = urlTrabajador;
 
@@ -28,6 +29,7 @@ export async function abrirPdf(bytes: Uint8Array): Promise<PDFDocumentProxy> {
 
 export class Visor {
   private cache = new Map<number, Promise<string>>();
+  private mascaras = new Map<number, Mascara>();
   private cola: Promise<unknown> = Promise.resolve();
   private cerrado = false;
 
@@ -51,6 +53,17 @@ export class Visor {
     return p;
   }
 
+  /** Mapa de tinta de la hoja `n` (para ubicar la firma donde no tape nada). */
+  async mascara(n: number): Promise<Mascara> {
+    await this.imagen(n);
+    return this.mascaras.get(n)!;
+  }
+
+  /** Mapa de tinta si la hoja ya se dibujó. */
+  mascaraLista(n: number): Mascara | undefined {
+    return this.mascaras.get(n);
+  }
+
   private async dibujar(n: number): Promise<string> {
     if (this.cerrado) throw new Error('cerrado');
     const pagina = await this.doc.getPage(n);
@@ -60,11 +73,12 @@ export class Visor {
     const lienzo = document.createElement('canvas');
     lienzo.width = Math.ceil(vista.width);
     lienzo.height = Math.ceil(vista.height);
-    const ctx = lienzo.getContext('2d')!;
+    const ctx = lienzo.getContext('2d', { willReadFrequently: true })!;
     ctx.fillStyle = '#fff';
     ctx.fillRect(0, 0, lienzo.width, lienzo.height);
     await pagina.render({ canvas: lienzo, canvasContext: ctx, viewport: vista }).promise;
     pagina.cleanup();
+    this.mascaras.set(n, mascaraDesdePixeles(ctx.getImageData(0, 0, lienzo.width, lienzo.height).data, lienzo.width, lienzo.height));
     const blob = await new Promise<Blob>((ok, mal) =>
       lienzo.toBlob((b) => (b ? ok(b) : mal(new Error('No se pudo mostrar la hoja.'))), 'image/jpeg', 0.9),
     );
@@ -76,6 +90,7 @@ export class Visor {
     this.cerrado = true;
     for (const p of this.cache.values()) p.then((u) => URL.revokeObjectURL(u)).catch(() => undefined);
     this.cache.clear();
+    this.mascaras.clear();
     await this.doc.loadingTask.destroy();
   }
 }

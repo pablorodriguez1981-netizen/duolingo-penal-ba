@@ -7,51 +7,11 @@ import { GitHub, ErrorGitHub } from './github';
 import { cifrarDocumento, generarClave, generarId, type Cabecera } from './cifrado';
 import { crearEnlace, esRepoValido, repoDesdeUbicacion, rutaDocumento } from './enlace';
 import { PdfProtegidoError, leerInfoPdf } from './estampar';
+import { CLAVE_REPO, CLAVE_TOKEN, agregarLink, conexion, guardar, guardarLinks, leer, links, type LinkGuardado } from './almacen';
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 
-const CLAVE_TOKEN = 'firma-estudio:token';
-const CLAVE_REPO = 'firma-estudio:repo';
-const CLAVE_LINKS = 'firma-estudio:links';
 const TAMANO_MAXIMO = 40 * 1024 * 1024;
-
-interface LinkGuardado {
-  id: string;
-  titulo: string;
-  archivo: string;
-  link: string;
-  repo: string;
-  sha: string;
-  fecha: string;
-}
-
-const leer = (k: string) => {
-  try {
-    return localStorage.getItem(k);
-  } catch {
-    return null;
-  }
-};
-const guardar = (k: string, v: string | null) => {
-  try {
-    if (v === null) localStorage.removeItem(k);
-    else localStorage.setItem(k, v);
-  } catch {
-    /* almacenamiento no disponible */
-  }
-};
-
-function links(): LinkGuardado[] {
-  try {
-    return JSON.parse(leer(CLAVE_LINKS) ?? '[]') as LinkGuardado[];
-  } catch {
-    return [];
-  }
-}
-
-function guardarLinks(l: LinkGuardado[]) {
-  guardar(CLAVE_LINKS, JSON.stringify(l));
-}
 
 const repoPagina = repoDesdeUbicacion(location);
 const paginaCliente = new URL('../', location.href).href;
@@ -62,16 +22,10 @@ function estado(id: string, msg: string, tipo: 'ok' | 'error' | 'info' = 'info')
   el.dataset.tipo = tipo;
 }
 
-function cliente(): GitHub | null {
-  const token = leer(CLAVE_TOKEN);
-  const repo = leer(CLAVE_REPO);
-  return token && repo ? new GitHub(token, repo) : null;
-}
-
 /* ───────────── Conexión ───────────── */
 
 function mostrarConexion() {
-  const gh = cliente();
+  const gh = conexion();
   $('conexion-form').hidden = !!gh;
   $('conexion-ok').hidden = !gh;
   const chip = $('chip-conexion');
@@ -137,7 +91,7 @@ function elegir(lista: FileList | null | undefined) {
 }
 
 async function subir() {
-  const gh = cliente();
+  const gh = conexion();
   if (!gh) return estado('estado-subida', 'Primero conectá GitHub (paso 1).', 'error');
   if (!elegidos.length) return estado('estado-subida', 'Elegí al menos un PDF.', 'error');
   const boton = $<HTMLButtonElement>('subir');
@@ -177,7 +131,7 @@ async function subir() {
       const cifrado = await cifrarDocumento(pdf, cabecera, clave);
       const sha = await gh.subir(rutaDocumento(id), cifrado, `Documento para firmar ${id}`);
       const link = crearEnlace(paginaCliente, { id, clave, repo: gh.repo }, repoPagina);
-      guardarLinks([{ id, titulo, archivo: f.name, link, repo: gh.repo, sha, fecha: new Date().toISOString() }, ...links()]);
+      agregarLink({ id, titulo, archivo: f.name, link, repo: gh.repo, sha, fecha: new Date().toISOString() });
       hechos++;
       mostrarLista();
     }
@@ -247,7 +201,8 @@ function mostrarLista() {
       const t = document.createElement('strong');
       t.textContent = l.titulo;
       const f = document.createElement('small');
-      f.textContent = `${l.archivo} · ${new Date(l.fecha).toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' })}`;
+      const firmas = l.firmas ? ` · ${l.firmas === 1 ? '1 firma marcada' : `${l.firmas} firmas marcadas`}` : '';
+      f.textContent = `${l.archivo} · ${new Date(l.fecha).toLocaleString('es-AR', { dateStyle: 'short', timeStyle: 'short' })}${firmas}`;
       cab.append(t, f);
       const campo = document.createElement('input');
       campo.readOnly = true;

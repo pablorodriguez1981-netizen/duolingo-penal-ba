@@ -5,8 +5,6 @@
 import { PDFContentStream, PDFDocument, degrees, popGraphicsState, pushGraphicsState, type PDFPage } from 'pdf-lib';
 import { aCoordenadasPdf, tamanoVisible, ubicarEnHoja, type Tamano, type Ubicacion } from './ubicacion';
 
-export type Alcance = { tipo: 'una'; hoja: number } | { tipo: 'todas' };
-
 export interface InfoPdf {
   hojas: Tamano[];
   /** Tiene firmas digitales (certificado): al modificarlo dejan de verificarse. */
@@ -55,33 +53,33 @@ function aislarContenido(doc: PDFDocument, pagina: PDFPage) {
   pagina.node.wrapContentStreams(inicio, fin);
 }
 
-export interface OpcionesEstampado {
-  pdf: Uint8Array;
-  /** Imagen PNG de la firma con los datos. */
+export interface FirmaEnHoja {
+  /** Hoja (base 1). */
+  hoja: number;
+  /** Imagen PNG de esa firma con los datos. */
   png: Uint8Array;
   /** Ancho / alto de la imagen. */
   aspecto: number;
-  alcance: Alcance;
   ubicacion: Ubicacion;
 }
 
-/** Hojas (base 1) que se firman. */
-export function hojasAFirmar(alcance: Alcance, total: number): number[] {
-  if (alcance.tipo === 'todas') return Array.from({ length: total }, (_, i) => i + 1);
-  return [Math.min(Math.max(1, Math.round(alcance.hoja)), total)];
-}
-
-export async function estamparFirma({ pdf, png, aspecto, alcance, ubicacion }: OpcionesEstampado): Promise<Uint8Array> {
+/** Inserta cada firma (cada una con su propia imagen) en su hoja. */
+export async function estamparFirmas(pdf: Uint8Array, firmas: FirmaEnHoja[]): Promise<Uint8Array> {
   const doc = await cargar(pdf);
-  const imagen = await doc.embedPng(png);
   const paginas = doc.getPages();
-  for (const n of hojasAFirmar(alcance, paginas.length)) {
+  const aisladas = new Set<number>();
+  for (const f of firmas) {
+    const n = Math.min(Math.max(1, Math.round(f.hoja)), paginas.length);
     const pagina = paginas[n - 1];
+    if (!aisladas.has(n)) {
+      aislarContenido(doc, pagina);
+      aisladas.add(n);
+    }
+    const imagen = await doc.embedPng(f.png);
     const caja = pagina.getCropBox();
     const rotacion = pagina.getRotation().angle;
-    const rect = ubicarEnHoja(ubicacion, tamanoVisible(caja, rotacion), aspecto);
+    const rect = ubicarEnHoja(f.ubicacion, tamanoVisible(caja, rotacion), f.aspecto);
     const c = aCoordenadasPdf(caja, rotacion, rect);
-    aislarContenido(doc, pagina);
     pagina.drawImage(imagen, { x: c.x, y: c.y, width: c.width, height: c.height, rotate: degrees(c.rotate) });
   }
   doc.setModificationDate(new Date());

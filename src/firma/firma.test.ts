@@ -9,7 +9,9 @@ import {
   type Caja,
   type Rect,
 } from './ubicacion';
-import { estamparFirma, hojasAFirmar, leerInfoPdf, tieneFirmasDigitales } from './estampar';
+import { estamparFirmas, leerInfoPdf, tieneFirmasDigitales } from './estampar';
+import { finDelTexto, mascaraDesdePixeles, ubicarDebajoDelTexto, type Mascara } from './autoubicar';
+import { crc32, crearZip } from './zip';
 import { LinkInvalidoError, cifrarDocumento, descifrarDocumento, generarClave, generarId } from './cifrado';
 import { crearEnlace, leerEnlace, repoDesdeUbicacion, urlDocumento } from './enlace';
 
@@ -142,37 +144,143 @@ function imagenesDeHoja(doc: PDFDocument, i: number): number {
   return xobj ? xobj.keys().length : 0;
 }
 
-describe('estampar la firma en el PDF', () => {
+describe('estampar las firmas en el PDF', () => {
   it('firma una sola hoja', async () => {
     const pdf = await pdfDePrueba([0, 0, 0]);
-    const ubic = ubicacionAbajo('der', 200, { ancho: 595, alto: 842 });
-    const firmado = await estamparFirma({ pdf, png: PNG, aspecto: 2, alcance: { tipo: 'una', hoja: 3 }, ubicacion: ubic });
+    const ubicacion = ubicacionAbajo('der', 200, { ancho: 595, alto: 842 });
+    const firmado = await estamparFirmas(pdf, [{ hoja: 3, png: PNG, aspecto: 2, ubicacion }]);
     const doc = await PDFDocument.load(firmado);
     expect(doc.getPageCount()).toBe(3);
     expect([0, 1, 2].map((i) => imagenesDeHoja(doc, i))).toEqual([0, 0, 1]);
     expect(doc.getTitle()).toBe('Poder especial');
   });
 
-  it('firma todas las hojas, también las giradas', async () => {
+  it('una firma distinta en cada hoja, también en las giradas', async () => {
     const pdf = await pdfDePrueba([0, 90, 180, 270]);
-    const ubic = ubicacionAbajo('centro', 180, { ancho: 595, alto: 842 });
-    const firmado = await estamparFirma({ pdf, png: PNG, aspecto: 2, alcance: { tipo: 'todas' }, ubicacion: ubic });
+    const ubicacion = ubicacionAbajo('centro', 180, { ancho: 595, alto: 842 });
+    const firmas = [1, 2, 3, 4].map((hoja) => ({ hoja, png: PNG.slice(), aspecto: 2, ubicacion }));
+    const firmado = await estamparFirmas(pdf, firmas);
     const doc = await PDFDocument.load(firmado);
     expect([0, 1, 2, 3].map((i) => imagenesDeHoja(doc, i))).toEqual([1, 1, 1, 1]);
+    // Cada hoja tiene su propia imagen (no la misma repetida).
+    const refs = [0, 1, 2, 3].map((i) => {
+      const x = doc.getPage(i).node.Resources()!.lookup(PDFName.of('XObject'), PDFDict);
+      return String(x.get(x.keys()[0]));
+    });
+    expect(new Set(refs).size).toBe(4);
     const info = await leerInfoPdf(firmado);
     expect(info.hojas[1]).toEqual({ ancho: 842, alto: 595 });
     expect(info.firmasDigitales).toBe(false);
   });
 
-  it('elige hojas válidas', () => {
-    expect(hojasAFirmar({ tipo: 'todas' }, 3)).toEqual([1, 2, 3]);
-    expect(hojasAFirmar({ tipo: 'una', hoja: 9 }, 3)).toEqual([3]);
-    expect(hojasAFirmar({ tipo: 'una', hoja: 0 }, 3)).toEqual([1]);
+  it('varias firmas en la misma hoja', async () => {
+    const pdf = await pdfDePrueba([0, 0]);
+    const hoja = { ancho: 595, alto: 842 };
+    const firmado = await estamparFirmas(pdf, [
+      { hoja: 2, png: PNG, aspecto: 2, ubicacion: ubicacionAbajo('izq', 150, hoja) },
+      { hoja: 2, png: PNG.slice(), aspecto: 2, ubicacion: ubicacionAbajo('der', 150, hoja) },
+    ]);
+    const doc = await PDFDocument.load(firmado);
+    expect([0, 1].map((i) => imagenesDeHoja(doc, i))).toEqual([0, 2]);
   });
 
   it('detecta firmas digitales previas', () => {
     expect(tieneFirmasDigitales(new TextEncoder().encode('<< /Type /Sig /ByteRange [0 1 2 3] >>'))).toBe(true);
     expect(tieneFirmasDigitales(new TextEncoder().encode('%PDF-1.7'))).toBe(false);
+  });
+});
+
+/** Hoja de prueba (240 × 340 celdas, A4) con renglones de texto entre `desde` y `hasta` (fracciones). */
+function hojaConTexto(desde: number, hasta: number, extra?: (m: Mascara) => void): Mascara {
+  const ancho = 240;
+  const alto = 340;
+  const datos = new Uint8Array(ancho * alto);
+  for (let y = Math.round(desde * alto); y < hasta * alto; y += 5) {
+    for (const yy of [y, y + 1]) for (let x = 24; x < 216; x++) if (x % 7) datos[yy * ancho + x] = 1;
+  }
+  const m = { ancho, alto, datos };
+  extra?.(m);
+  return m;
+}
+
+describe('ubicación automática debajo del texto', () => {
+  const a4 = { ancho: 595, alto: 842 };
+
+  it('encuentra dónde termina el texto', () => {
+    expect(finDelTexto(hojaConTexto(0.1, 0.4))).toBeCloseTo(0.4, 1);
+    expect(finDelTexto({ ancho: 10, alto: 10, datos: new Uint8Array(100) })).toBeNull();
+  });
+
+  it('no cuenta el número de hoja del pie como texto', () => {
+    const m = hojaConTexto(0.1, 0.4, (m) => {
+      for (let y = 320; y < 324; y++) for (let x = 115; x < 125; x++) m.datos[y * m.ancho + x] = 1;
+    });
+    expect(finDelTexto(m)).toBeCloseTo(0.4, 1);
+  });
+
+  it('pone la firma justo debajo del texto', () => {
+    const m = hojaConTexto(0.1, 0.4);
+    const { ubic, libre } = ubicarDebajoDelTexto(m, a4, { anchoPt: 190, aspecto: 1.8, borde: 'der' });
+    expect(libre).toBe(true);
+    const r = ubicarEnHoja(ubic, a4, 1.8);
+    expect(r.v).toBeGreaterThan(0.4);
+    expect(r.v).toBeLessThan(0.45);
+    expect(r.w * a4.ancho).toBeCloseTo(190);
+    expect(r.u + r.w).toBeCloseTo(0.93, 2);
+  });
+
+  it('si no entra debajo, la achica o busca otro lugar libre', () => {
+    // Texto hasta casi el final, con un espacio libre en el medio.
+    const m = hojaConTexto(0.05, 0.95, (m) => {
+      for (let y = Math.round(0.45 * m.alto); y < 0.75 * m.alto; y++) m.datos.fill(0, y * m.ancho, (y + 1) * m.ancho);
+    });
+    const { ubic, libre } = ubicarDebajoDelTexto(m, a4, { anchoPt: 190, aspecto: 1.8, borde: 'centro' });
+    expect(libre).toBe(true);
+    const r = ubicarEnHoja(ubic, a4, 1.8);
+    expect(r.v).toBeGreaterThan(0.44);
+    expect(r.v + r.h).toBeLessThan(0.76);
+  });
+
+  it('avisa si no hay ningún lugar libre', () => {
+    const { libre } = ubicarDebajoDelTexto(hojaConTexto(0.03, 0.98), a4, { anchoPt: 190, aspecto: 1.8, borde: 'der' });
+    expect(libre).toBe(false);
+  });
+
+  it('no encima dos firmas en la misma hoja', () => {
+    const m = hojaConTexto(0.1, 0.3);
+    const primera = ubicarEnHoja(ubicarDebajoDelTexto(m, a4, { anchoPt: 190, aspecto: 1.8, borde: 'der' }).ubic, a4, 1.8);
+    const segunda = ubicarEnHoja(
+      ubicarDebajoDelTexto(m, a4, { anchoPt: 190, aspecto: 1.8, borde: 'der', evitar: [primera] }).ubic,
+      a4,
+      1.8,
+    );
+    expect(segunda.v).toBeGreaterThanOrEqual(primera.v + primera.h);
+  });
+
+  it('arma el mapa de tinta desde los píxeles (también con papel gris)', () => {
+    const ancho = 480;
+    const alto = 680;
+    const rgba = new Uint8ClampedArray(ancho * alto * 4).fill(205); // papel escaneado grisáceo
+    for (let y = 100; y < 104; y++) for (let x = 60; x < 400; x++) rgba.fill(40, (y * ancho + x) * 4, (y * ancho + x) * 4 + 3);
+    const m = mascaraDesdePixeles(rgba, ancho, alto);
+    expect(m.ancho).toBe(240);
+    expect(finDelTexto(m)).toBeCloseTo(104 / 680, 2);
+  });
+});
+
+describe('zip de las imágenes', () => {
+  it('calcula el CRC-32 estándar', () => {
+    expect(crc32(new TextEncoder().encode('123456789'))).toBe(0xcbf43926);
+  });
+
+  it('arma un zip con los archivos sin comprimir', () => {
+    const a = new TextEncoder().encode('hola');
+    const zip = crearZip([{ nombre: 'firma 1.png', datos: a }, { nombre: 'ñandú.png', datos: PNG }]);
+    const v = new DataView(zip.buffer);
+    expect(v.getUint32(0, true)).toBe(0x04034b50);
+    expect(v.getUint32(zip.length - 22, true)).toBe(0x06054b50);
+    expect(v.getUint16(zip.length - 12, true)).toBe(2);
+    expect(new TextDecoder().decode(zip.subarray(30, 41))).toBe('firma 1.png');
   });
 });
 
@@ -211,5 +319,21 @@ describe('documentos cifrados y links', () => {
     expect(urlDocumento('estudio/mi-repo', 'abc123')).toBe(
       'https://raw.githubusercontent.com/estudio/mi-repo/firmas-casos/casos/abc123.firma',
     );
+  });
+});
+
+describe('hoja llena', () => {
+  it('prefiere el margen de abajo (más chica) antes que arriba de todo', () => {
+    const a4 = { ancho: 595, alto: 842 };
+    // Título corto arriba a la izquierda, texto de 0.14 a 0.86 y número de hoja centrado abajo.
+    const m = hojaConTexto(0.14, 0.86, (m) => {
+      for (let y = 30; y < 34; y++) for (let x = 24; x < 120; x++) m.datos[y * m.ancho + x] = 1;
+      for (let y = 326; y < 329; y++) for (let x = 110; x < 130; x++) m.datos[y * m.ancho + x] = 1;
+    });
+    const { ubic, libre } = ubicarDebajoDelTexto(m, a4, { anchoPt: 190, aspecto: 1.6, borde: 'der' });
+    expect(libre).toBe(true);
+    const r = ubicarEnHoja(ubic, a4, 1.6);
+    expect(r.v).toBeGreaterThan(0.86);
+    expect(r.w * a4.ancho).toBeLessThan(190);
   });
 });

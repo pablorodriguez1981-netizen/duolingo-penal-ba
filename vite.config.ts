@@ -129,7 +129,7 @@ export default defineConfig({
           if (/node_modules\/(pdf-lib|@pdf-lib|pako)\//.test(id)) return 'firma-pdflib';
           if (/node_modules\/signature_pad\//.test(id)) return 'firma-trazo';
           // Sólo lo que comparten la página del cliente y el panel del estudio.
-          if (/\/src\/firma\/(cifrado|enlace|estampar|ubicacion)\.ts$|\/src\/firma\/firma\.css$/.test(id)) return 'firma-comun';
+          if (/\/src\/firma\/(cifrado|enlace|estampar|ubicacion|github|almacen)\.ts$|\/src\/firma\/firma\.css$/.test(id)) return 'firma-comun';
           if (/node_modules\/(react|react-dom|react-router|react-router-dom|scheduler)\//.test(id)) return 'react';
           if (/node_modules\/(framer-motion|motion-dom|motion-utils|canvas-confetti)\//.test(id)) return 'animacion';
           if (id.includes('/src/data/unidades/')) return 'unidades';

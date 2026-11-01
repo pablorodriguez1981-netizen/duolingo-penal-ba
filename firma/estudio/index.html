@@ -63,8 +63,17 @@
         <p id="estado-conexion" class="estado" role="status"></p>
       </section>
 
+      <section class="tarjeta destacada">
+        <h2><span class="num">2</span> Preparar un documento y marcar dónde firma</h2>
+        <p class="ayuda">
+          Elegís el PDF, decidís si el cliente firma una vez, en todas las hojas (una firma distinta por hoja) o donde vos
+          marques. Cada firma se ubica sola debajo del texto y la podés mover. Después generás el link.
+        </p>
+        <a class="boton principal grande" href="../#preparar">Preparar documento ›</a>
+      </section>
+
       <section class="tarjeta" id="subir-seccion">
-        <h2><span class="num">2</span> Subir documentos</h2>
+        <h2><span class="num">3</span> Subida rápida <small class="sub-h2">(sin marcar lugares: el cliente elige)</small></h2>
         <label class="soltar" id="soltar">
           <input type="file" id="archivos" accept="application/pdf,.pdf" multiple />
           <span class="soltar-icono" aria-hidden="true">📄</span>
@@ -83,8 +92,8 @@
         <fieldset class="campo">
           <legend>Dónde firmar <small>(sugerencia; el cliente lo puede cambiar)</small></legend>
           <div class="alcances">
-            <label class="alcance"><input type="radio" name="sugerencia" value="ultima" checked /><span><strong>Última hoja</strong></span></label>
-            <label class="alcance"><input type="radio" name="sugerencia" value="todas" /><span><strong>Todas las hojas</strong></span></label>
+            <label class="alcance"><input type="radio" name="sugerencia" value="ultima" checked /><span><strong>Una firma</strong><small>En la última hoja</small></span></label>
+            <label class="alcance"><input type="radio" name="sugerencia" value="todas" /><span><strong>Todas las hojas</strong><small>Una firma distinta en cada hoja</small></span></label>
           </div>
         </fieldset>
         <button type="button" class="boton principal grande" id="subir">Subir y generar link</button>
@@ -92,7 +101,7 @@
       </section>
 
       <section class="tarjeta">
-        <h2><span class="num">3</span> Links generados</h2>
+        <h2><span class="num">4</span> Links generados</h2>
         <p class="ayuda">
           Cada link abre su documento. La clave para leerlo está sólo en el link: si lo perdés, subí el PDF de nuevo. Cuando el
           cliente termine, podés borrarlo.

@@ -5,8 +5,8 @@
  */
 
 export interface OpcionesImagen {
-  /** Firma en SVG como data URL (de signature_pad), o null si no hay. */
-  svg: string | null;
+  /** Firma ya dibujada y recortada (de `rasterizarFirma`), o null si no hay. */
+  firma: HTMLCanvasElement | null;
   texto: string;
   fecha: string | null;
   color: string;
@@ -73,7 +73,8 @@ function recortar(lienzo: HTMLCanvasElement): HTMLCanvasElement | null {
   return out;
 }
 
-async function rasterizarFirma(svgUrl: string): Promise<HTMLCanvasElement | null> {
+/** Dibuja en alta resolución la firma (SVG de signature_pad) y la recorta a los trazos. */
+export async function rasterizarFirma(svgUrl: string): Promise<HTMLCanvasElement | null> {
   const img = await cargarImagen(svgUrl);
   const anchoSvg = img.naturalWidth || img.width;
   const altoSvg = img.naturalHeight || img.height;
@@ -119,8 +120,7 @@ function partirLineas(ctx: CanvasRenderingContext2D, texto: string, ancho: numbe
   return lineas;
 }
 
-export async function componerImagen({ svg, texto, fecha, color }: OpcionesImagen): Promise<ImagenFirma | null> {
-  const firma = svg ? await rasterizarFirma(svg) : null;
+export async function componerImagen({ firma, texto, fecha, color }: OpcionesImagen): Promise<ImagenFirma | null> {
   const medir = document.createElement('canvas').getContext('2d')!;
   const anchoUtil = ANCHO_MAX - 2 * MARGEN;
 
@@ -192,6 +192,16 @@ export async function componerImagen({ svg, texto, fecha, color }: OpcionesImage
     ancho: lienzo.width,
     alto: lienzo.height,
   };
+}
+
+/**
+ * Proporción aproximada (ancho / alto) de la imagen antes de que haya una
+ * firma dibujada, para reservarle lugar en la hoja.
+ */
+export function aspectoEstimado(texto: string, conFecha: boolean): number {
+  const lineas = texto.trim() ? texto.trim().split('\n').length : 0;
+  const alto = 2 * MARGEN + 230 + 20 + lineas * TAM_TEXTO * 1.28 + (conFecha ? 8 + TAM_FECHA * 1.3 : 0);
+  return 760 / alto;
 }
 
 export function fechaDeFirma(d = new Date()): string {

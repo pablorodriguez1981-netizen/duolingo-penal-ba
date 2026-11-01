@@ -50,8 +50,10 @@ export interface Colocacion {
 
 /** Máxima fracción de la hoja que puede ocupar la firma. */
 const MAXIMO = 0.96;
-/** Tolerancia (fracción del ancho/alto) para considerar que la firma está centrada. */
+/** Tolerancia (fracción del ancho) para considerar que la firma está centrada. */
 const TOLERANCIA_CENTRO = 0.08;
+/** Franja inferior de la hoja (fracción) donde la firma queda anclada al pie. */
+const PIE = 0.12;
 
 export function normalizarRotacion(grados: number): 0 | 90 | 180 | 270 {
   const r = (((Math.round(grados / 90) * 90) % 360) + 360) % 360;
@@ -97,19 +99,16 @@ export function ubicacionDesdeRect(rect: Rect, hoja: Tamano): Ubicacion {
   const w = rect.w * hoja.ancho;
   const h = rect.h * hoja.alto;
   const cx = rect.u + rect.w / 2;
-  const cy = rect.v + rect.h / 2;
   const horizontal: Ubicacion['h'] =
     Math.abs(cx - 0.5) < TOLERANCIA_CENTRO
       ? { borde: 'centro', margen: (cx - 0.5) * hoja.ancho }
       : cx < 0.5
         ? { borde: 'izq', margen: x }
         : { borde: 'der', margen: hoja.ancho - x - w };
+  // Verticalmente queda fijo el borde de arriba (si crece el texto, la firma
+  // crece hacia abajo y no tapa lo que está encima), salvo pegada al pie.
   const vertical: Ubicacion['v'] =
-    Math.abs(cy - 0.5) < TOLERANCIA_CENTRO
-      ? { borde: 'centro', margen: (cy - 0.5) * hoja.alto }
-      : cy < 0.5
-        ? { borde: 'arriba', margen: y }
-        : { borde: 'abajo', margen: hoja.alto - y - h };
+    rect.v + rect.h > 1 - PIE ? { borde: 'abajo', margen: hoja.alto - y - h } : { borde: 'arriba', margen: y };
   return { anchoPt: w, h: horizontal, v: vertical };
 }
 
