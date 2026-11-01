@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es-AR" data-tema="claro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Carpi Penal · CPPBA y Código Penal</title>
+    <meta name="description" content="Aprendé el Código Procesal Penal de la Provincia de Buenos Aires y el Código Penal con lecciones de 3 a 5 minutos, rachas, casos prácticos y repaso inteligente." />
+    <meta name="theme-color" content="#1f5fd6" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Carpi Penal" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <script>
+      // Evita el destello de tema claro al abrir en modo oscuro.
+      try {
+        var p = JSON.parse(localStorage.getItem('carpi-tema') || 'null');
+        var oscuro = p === 'oscuro' || ((p === null || p === 'sistema') && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.tema = oscuro ? 'oscuro' : 'claro';
+      } catch (e) {}
+    </script>
+    <style>
+      #splash {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: var(--fondo, #f4f7ff);
+        font-family: system-ui, sans-serif;
+        color: #1f5fd6;
+      }
+      [data-tema='oscuro'] #splash {
+        background: #10141f;
+        color: #9db9ff;
+      }
+      #splash div {
+        text-align: center;
+        font-weight: 800;
+      }
+      #splash span {
+        display: block;
+        font-size: 64px;
+        animation: rebote 1s ease-in-out infinite;
+      }
+      @keyframes rebote {
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+    </style>
+    <script type="module" crossorigin src="/duolingo-penal-ba/assets/index-ClhekAUw.js"></script>
+    <link rel="modulepreload" crossorigin href="/duolingo-penal-ba/assets/react-fUdF923D.js">
+    <link rel="modulepreload" crossorigin href="/duolingo-penal-ba/assets/animacion-CFi-IUln.js">
+    <link rel="modulepreload" crossorigin href="/duolingo-penal-ba/assets/unidades-BFIJTq2u.js">
+    <link rel="stylesheet" crossorigin href="/duolingo-penal-ba/assets/index-DnnnWOQA.css">
+  <link rel="manifest" href="/duolingo-penal-ba/manifest.webmanifest"></head>
+  <body>
+    <div id="splash"><div><span>⚖️</span>Cargando Carpi Penal…</div></div>
+    <div id="root"></div>
+    <noscript>Carpi Penal necesita JavaScript para funcionar.</noscript>
+  </body>
+</html>
